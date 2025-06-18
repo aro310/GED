@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultat</title>
+</head>
+<body>
+    <h1>Résultat de l'OCR</h1>
+    {% if texte %}
+        <h2>Texte extrait :</h2>
+        <pre>{{ texte }}</pre>
+    {% else %}
+        <p>Aucun texte extrait.</p>
+    {% endif %}
+    {% if document %}
+        <p>PDF généré : <a href="{{ document.fichier.url }}">{{ document.fichier.name }}</a></p>
+    {% else %}
+        <p>Aucun PDF généré.</p>
+    {% endif %}
+    {% if audio_url %}
+        <h2>Audio généré :</h2>
+        <audio controls>
+            <source src="{{ audio_url }}" type="audio/mpeg">
+            Votre navigateur ne supporte pas l'élément audio.
+        </audio>
+        <p><a href="{{ audio_url }}" download>Télécharger l'audio</a></p>
+    {% else %}
+        <p>Aucun audio généré.</p>
+    {% endif %}
+    <a href="{% url 'upload_image' %}">Retour</a>
+</body>
+</html>

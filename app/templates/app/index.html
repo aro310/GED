@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interface moderne de gestion électronique de documents - Université ESTI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+  <style>
+    /* Reset global */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #ebf0fd 0%, #f9fafc 100%);
+      color: #243b55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover, a:focus {
+      color: #4f46e5;
+      outline: none;
+    }
+    /* Layout */
+    .app-container {
+      display: flex;
+      flex: 1 1 auto;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+      box-shadow: inset 0 0 50px rgb(0 0 0 / 0.05);
+      border-radius: 20px;
+      margin: 16px 32px 32px;
+      background-color: white;
+      filter: drop-shadow(0 15px 20px rgb(100 100 150 / 0.1));
+    }
+    /* Sidebar */
+    aside {
+      width: 280px;
+      background: rgba(79,70,229,0.9);
+      color: #e0e7ff;
+      display: flex;
+      flex-direction: column;
+      padding: 32px 24px;
+      gap: 48px;
+      backdrop-filter: saturate(150%) blur(20px);
+      box-shadow: inset 0 2px 10px rgb(255 255 255 / 0.15);
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      user-select: none;
+      transition: box-shadow 0.3s ease;
+    }
+    aside:hover {
+      box-shadow: inset 0 6px 30px rgb(255 255 255 / 0.3);
+    }
+    aside .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: #c7d2fe;
+      user-select: text;
+      text-shadow: 0 0 8px rgb(199 210 254 / 0.7);
+      transition: color 0.3s ease;
+    }
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-weight: 600;
+      font-size: 1.15rem;
+      padding: 12px 16px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+      color: #c7d2fe;
+      user-select: none;
+      box-shadow: inset 0 0 0 2px transparent;
+    }
+    nav a:hover, nav a:focus-visible {
+      box-shadow: inset 0 0 30px 8px rgb(199 210 254 / 0.35);
+      color: white;
+      outline-offset: 4px;
+      outline: 3px solid transparent;
+    }
+    nav a.active {
+      background: #4338ca;
+      box-shadow: 0 6px 20px rgb(79 70 229 / 0.6);
+      color: white;
+      font-weight: 700;
+    }
+    nav a .material-icons {
+      font-size: 28px;
+      user-select: none;
+    }
+
+    /* Header */
+    header {
+      height: 64px;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      border-bottom: 2px solid #e5e7eb;
+      box-shadow: 0 2px 15px rgb(0 0 0 / 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #1e293b;
+      user-select: none;
+    }
+    /* Main */
+    main {
+      flex: 1 1 auto;
+      background: #f9fafb;
+      margin: 32px;
+      border-radius: 24px;
+      padding: 32px 48px;
+      box-shadow: 0 24px 36px rgb(0 0 80 / 0.08);
+      overflow-y: auto;
+      transition: background-color 0.3s ease;
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 32px;
+      font-weight: 800;
+      color: #334155;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      user-select: none;
+      text-shadow: 0 0 3px rgb(210 214 222 / 0.5);
+    }
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 48px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .tab {
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding-bottom: 12px;
+      border-bottom: 4px solid transparent;
+      transition: border-color 0.3s ease, color 0.3s ease;
+      color: #64748b;
+      letter-spacing: 0.02em;
+    }
+    .tab.active {
+      border-bottom-color: #4338ca;
+      color: #4338ca;
+      letter-spacing: 0.05em;
+    }
+
+    /* Search bar */
+    .search-bar {
+      margin-bottom: 40px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .search-bar input[type="text"] {
+      flex: 1 1 auto;
+      font-size: 1.1rem;
+      padding: 14px 20px;
+      border-radius: 20px;
+      border: 1.8px solid #c0c7d9;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 3px;
+      box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.015);
+      letter-spacing: 0.03em;
+      font-weight: 500;
+    }
+    .search-bar input[type="text"]:focus {
+      border-color: #4338ca;
+      box-shadow: 0 0 12px #9ca3ffae;
+    }
+    .btn-primary {
+      background-color: #4338ca;
+      color: white;
+      font-weight: 700;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 28px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 18px rgb(67 56 202 / 0.38);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+      user-select: none;
+      filter: drop-shadow(0 0 2px #4338caaa);
+    }
+    .btn-primary:hover, .btn-primary:focus-visible {
+      background-color: #5c4bd3;
+      box-shadow: 0 12px 28px rgb(92 75 211 / 0.5);
+      outline: none;
+      transform: scale(1.05);
+    }
+    .btn-primary .material-icons {
+      font-size: 22px;
+      user-select: none;
+    }
+    .btn-secondary {
+      background: #e2e8f0;
+      border-radius: 24px;
+      border: none;
+      padding: 14px 28px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #64748b;
+      box-shadow: 0 0 8px rgb(196 208 222 / 0.5);
+      transition: background-color 0.3s ease, filter 0.3s ease;
+      user-select: none;
+      letter-spacing: 0.05em;
+    }
+    .btn-secondary:hover, .btn-secondary:focus-visible {
+      background-color: #cbd5e1;
+      filter: drop-shadow(0 0 6px #64748bbb);
+      outline: none;
+    }
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 18px;
+      font-weight: 500;
+      color: #475569;
+      user-select: text;
+    }
+    thead th {
+      text-align: left;
+      color: #6b7280;
+      font-weight: 700;
+      font-size: 1rem;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #e4e7eb;
+      letter-spacing: 0.02em;
+    }
+    tbody tr {
+      background: white;
+      box-shadow: 0 6px 8px rgb(100 110 140 / 0.06);
+      border-radius: 16px;
+      transition: box-shadow 0.3s ease;
+      cursor: default;
+    }
+    tbody tr:hover, tbody tr:focus-within {
+      box-shadow: 0 12px 24px rgb(67 56 202 / 0.2);
+      outline-offset: 6px;
+      outline: 2.5px solid #4338caaa;
+    }
+    td {
+      padding: 16px 20px;
+      vertical-align: middle;
+      font-size: 0.93rem;
+      color: #334155;
+      max-width: 240px;
+      overflow-wrap: break-word;
+      line-height: 1.3;
+    }
+    td.actions {
+      display: flex;
+      gap: 22px;
+      justify-content: flex-start;
+      max-width: 140px;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn:hover, .icon-btn:focus-visible {
+      background-color: #4338ca22;
+      color: #4338ca;
+      outline: none;
+      box-shadow: 0 0 8px #4338ca99;
+    }
+    .icon-btn .material-icons {
+      font-size: 22px;
+    }
+    /* Form modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(36, 59, 85, 0.7);
+      backdrop-filter: saturate(200%) blur(20px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 110;
+      padding: 12px;
+    }
+    .modal-backdrop.show {
+      display: flex;
+    }
+    .modal {
+      background-color: white;
+      padding: 36px 48px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgb(67 56 202 / 0.3);
+      max-width: 540px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      user-select: none;
+    }
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 32px;
+      font-weight: 900;
+      color: #4338ca;
+      font-size: 1.9rem;
+      letter-spacing: 0.05em;
+      user-select: text;
+      text-shadow: 0 0 5px rgb(67 56 202 / 0.35);
+    }
+    .form-group {
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    label {
+      font-weight: 600;
+      color: #475569;
+      font-size: 1rem;
+      user-select: none;
+      letter-spacing: 0.02em;
+    }
+    input[type="text"], select, textarea, input[type="date"], input[type="file"] {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 1.05rem;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 1.8px solid #cbd5e1;
+      outline-offset: 3px;
+      box-shadow: inset 0 3px 8px rgb(0 0 0 / 0.025);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      letter-spacing: 0.03em;
+    }
+    input[type="text"]:focus, select:focus, textarea:focus, input[type="date"]:focus, input[type="file"]:focus {
+      border-color: #4338ca;
+      box-shadow: 0 0 12px #9ca3ffae;
+      outline: none;
+    }
+    textarea {
+      min-height: 120px;
+      max-height: 240px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    input[type="file"] {
+      cursor: pointer;
+    }
+    /* OCR status */
+    .ocr-progress {
+      margin-top: -8px;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+      color: #5a4bd8;
+      font-weight: 700;
+      user-select: none;
+      height: 20px;
+      overflow: hidden;
+    }
+    /* Responsive */
+    @media (max-width: 1024px) {
+      aside {
+        width: 220px;
+        padding: 28px 16px;
+        gap: 32px;
+      }
+      main {
+        margin: 24px 32px;
+        padding: 28px 36px;
+      }
+      .btn-primary {
+        padding: 12px 28px;
+        font-size: 1rem;
+      }
+    }
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+        height: auto;
+        margin: 8px 16px 24px;
+        box-shadow: none;
+        border-radius: 16px;
+      }
+      aside {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        align-items: center;
+        gap: 48px;
+        padding: 0 20px;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 4px 12px rgb(67 56 202 / 0.25);
+        background: rgba(79,70,229,0.9);
+      }
+      nav {
+        flex-direction: row;
+        gap: 32px;
+      }
+      main {
+        margin: 16px 0 0;
+        padding: 24px 24px 48px;
+        border-radius: 0 0 16px 16px;
+        box-shadow: none;
+        background: white;
+      }
+      table thead {
+        display: none;
+      }
+      table, tbody, tr, td {
+        display: block;
+        width: 100%;
+      }
+      tbody tr {
+        background: #f4f6fb;
+        box-shadow: none;
+        margin-bottom: 28px;
+        border-radius: 20px;
+        padding: 14px 24px;
+      }
+      tbody tr:hover, tbody tr:focus-within {
+        box-shadow: 0 12px 28px rgb(67 56 202 / 0.1);
+        outline: none;
+      }
+      tbody tr td {
+        text-align: right;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 10px 0;
+        color: #4338ca;
+        position: relative;
+        padding-left: 120px;
+        letter-spacing: 0.05em;
+      }
+      tbody tr td::before {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #64748b;
+        white-space: nowrap;
+      }
+      tbody tr td:nth-child(1)::before { content: "Titre"; }
+      tbody tr td:nth-child(2)::before { content: "Auteur"; }
+      tbody tr td:nth-child(3)::before { content: "Date"; }
+      tbody tr td:nth-child(4)::before { content: "Type"; }
+      tbody tr td:nth-child(5)::before { content: "Extrait contenu"; }
+      tbody tr td:nth-child(6)::before { content: "Actions"; }
+      td.actions {
+        padding-left: 16px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 14px;
+        color: #4338ca;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container" role="application">
+    <aside aria-label="Navigation principale">
+      <div class="logo" aria-label="Logo université ESTI">ESTI</div>
+      <nav role="navigation" aria-label="Menu principal">
+        <a href="#" class="nav-link active" data-tab="documents" tabindex="0" aria-current="page"><span class="material-icons" aria-hidden="true">folder</span> Documents</a>
+        <a href="#" class="nav-link" data-tab="users" tabindex="-1"><span class="material-icons" aria-hidden="true">people</span> Utilisateurs</a>
+        <a href="#" class="nav-link" data-tab="settings" tabindex="-1"><span class="material-icons" aria-hidden="true">settings</span> Paramètres</a>
+        <a href="#" class="nav-link" data-tab="help" tabindex="-1"><span class="material-icons" aria-hidden="true">help_outline</span> Aide</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header role="banner" aria-label="Bannière principale">
+        Interface de gestion électronique de documents - Université ESTI
+      </header>
+
+      <section id="tab-documents" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="documents-tab">
+        <h2>Documents</h2>
+        <div class="search-bar" role="search">
+          <input type="text" aria-label="Recherche des documents" placeholder="Rechercher un document..." id="searchDocuments" />
+          <button class="btn-primary" id="btnAddDocument" aria-label="Ajouter un document">
+            <span class="material-icons" aria-hidden="true">add</span> Nouveau document
+          </button>
+        </div>
+        <table aria-describedby="tableDocumentsDesc" id="documentsTable">
+          <caption id="tableDocumentsDesc" class="sr-only">Liste des documents disponibles dans la base de données</caption>
+          <thead>
+            <tr>
+              <th>Titre</th>
+              <th>Auteur</th>
+              <th>Date de création</th>
+              <th>Type</th>
+              <th>Extrait contenu</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="documentsTbody">
+          </tbody>
+        </table>
+      </section>
+
+      <section id="tab-users" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="users-tab" hidden>
+        <h2>Utilisateurs</h2>
+        <div class="search-bar" role="search">
+          <input type="text" aria-label="Recherche des utilisateurs" placeholder="Rechercher un utilisateur..." id="searchUsers" />
+          <button class="btn-primary" id="btnAddUser" aria-label="Ajouter un utilisateur">
+            <span class="material-icons" aria-hidden="true">person_add</span> Nouvel utilisateur
+          </button>
+        </div>
+        <table aria-describedby="tableUsersDesc" id="usersTable">
+          <caption id="tableUsersDesc" class="sr-only">Liste des utilisateurs inscrits</caption>
+          <thead>
+            <tr>
+              <th>Nom complet</th>
+              <th>Rôle</th>
+              <th>Email</th>
+              <th>Date d'inscription</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTbody">
+          </tbody>
+        </table>
+      </section>
+
+      <section id="tab-settings" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="settings-tab" hidden>
+        <h2>Paramètres</h2>
+        <p>Section des paramètres du système (fonctionnalités à implémenter)</p>
+      </section>
+
+      <section id="tab-help" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="help-tab" hidden>
+        <h2>Aide &amp; Support</h2>
+        <p>Pour toute assistance, veuillez contacter le support technique via le service informatique de l'université ESTI.</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal documents -->
+  <div class="modal-backdrop" id="modalDocument" role="dialog" aria-modal="true" aria-labelledby="modalDocumentTitle" tabindex="-1">
+    <div class="modal">
+      <h3 id="modalDocumentTitle">Ajouter un document</h3>
+      <form id="formDocument">
+        <div class="form-group">
+          <label for="docTitle">Titre du document</label>
+          <input type="text" id="docTitle" name="title" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="docAuthor">Auteur</label>
+          <input type="text" id="docAuthor" name="author" required autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="docType">Type de document</label>
+          <select id="docType" name="type" required>
+            <option value="" disabled selected>Choisir un type</option>
+            <option value="Rapport">Rapport</option>
+            <option value="Thèse">Thèse</option>
+            <option value="Article">Article</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="docDate">Date de création</label>
+          <input type="date" id="docDate" name="date" required />
+        </div>
+        <div class="form-group">
+          <label for="docFile">Fichier à scanner (image JPG, PNG)</label>
+          <input type="file" id="docFile" accept="image/*" aria-describedby="ocrStatus" />
+          <div class="ocr-progress" id="ocrStatus" aria-live="polite" aria-atomic="true"></div>
+        </div>
+        <div class="form-group">
+          <label for="docContent">Contenu extrait (modifiable)</label>
+          <textarea id="docContent" name="content" placeholder="Le contenu extrait par OCR apparaîtra ici..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelDocument">Annuler</button>
+          <button type="submit" class="btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal users -->
+  <div class="modal-backdrop" id="modalUser" role="dialog" aria-modal="true" aria-labelledby="modalUserTitle" tabindex="-1">
+    <div class="modal">
+      <h3 id="modalUserTitle">Ajouter un utilisateur</h3>
+      <form id="formUser">
+        <div
