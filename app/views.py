@@ -1,8 +1,11 @@
 import os
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from django.conf import settings
-from .forms import ImageUploadForm
-from .models import Document
+from .forms import ImageUploadForm, CustomLoginForm, CustomUserCreationForm
+from .models import Document, CustomUser
 from .ocr_utils import extraire_texte_depuis_image
 from PIL import Image
 from reportlab.pdfgen import canvas
@@ -114,3 +117,82 @@ def upload_image(request):
     else:
         form = ImageUploadForm()
     return render(request, 'app/upload.html', {'form': form})
+
+def login_view(request):
+    print(f"Utilisateur authentifié : {request.user.is_authenticated}")
+    print(f"Utilisateur : {request.user}")
+    print(f"Rôle : {getattr(request.user, 'role', 'Aucun rôle')}")
+    print(f"CSRF Cookie : {request.META.get('CSRF_COOKIE')}")
+    if request.method == 'POST':
+        form = CustomLoginForm(request, data=request.POST)
+        print(f"Formulaire valide : {form.is_valid()}, Erreurs : {form.errors}")
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            print(f"Authentification pour {username} : {user is not None}")
+            if user is not None:
+                login(request, user)
+                return redirect_by_role(user)
+    else:
+        form = CustomLoginForm()
+    return render(request, 'app/login.html', {'form': form})
+
+def register_view(request):
+    """Vue pour l'inscription d'un nouvel utilisateur."""
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Connecter l'utilisateur automatiquement après inscription
+            login(request, user)
+            return redirect_by_role(user)
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'app/register.html', {'form': form})
+
+def redirect_by_role(user):
+    """Redirige l'utilisateur selon son rôle."""
+    if user.role == 'admin':
+        return redirect('admin_dashboard')  # URL pour le tableau de bord admin
+    elif user.role == 'prof':
+        return redirect('prof_dashboard')   # URL pour le tableau de bord prof
+    elif user.role == 'secretariat':
+        return redirect('secretariat_dashboard')  # URL pour le tableau de bord secrétariat
+    elif user.role == 'etudiant':
+        return redirect('etudiant_dashboard')  # URL pour le tableau de bord étudiant
+    return redirect('upload_image')  # Redirection par défaut
+
+@login_required
+def update_user_password(request, username):
+    """Vue pour mettre à jour le mot de passe d'un utilisateur (uniquement pour les admins)."""
+    if not request.user.is_authenticated or request.user.role != 'admin':
+        return redirect('login')  # Redirige si l'utilisateur n'est pas un admin
+    
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        try:
+            user = CustomUser.objects.get(username=username)
+            user.password = make_password(new_password)
+            user.save()
+            return render(request, 'app/password_updated.html', {'message': f'Mot de passe mis à jour pour {username}'})
+        except CustomUser.DoesNotExist:
+            return render(request, 'app/password_updated.html', {'message': 'Utilisateur non trouvé'})
+    return render(request, 'app/update_password.html', {'username': username})
+
+# Autres vues existantes...
+@login_required
+def admin_dashboard(request):
+    return render(request, 'app/admin_dashboard.html', {'user': request.user})
+
+@login_required
+def prof_dashboard(request):
+    return render(request, 'app/prof_dashboard.html', {'user': request.user})
+
+@login_required
+def secretariat_dashboard(request):
+    return render(request, 'app/secretariat_dashboard.html', {'user': request.user})
+
+@login_required
+def etudiant_dashboard(request):
+    return render(request, 'app/etudiant_dashboard.html', {'user': request.user})
