@@ -115,7 +115,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+#STATIC_URL = 'static/'
+
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -124,9 +129,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'app.CustomUser'  
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY', 'sk_5539271c0127e0dc77028b416b7fb1b0230b6226c7e972de')
+ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY', 'sk_075ea7a3825735c5aaece2390843bcdfec25847f9b64e2c2')
