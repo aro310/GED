@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Face Authentication</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        :root {
+            --neon-blue: #08f;
+            --neon-pink: #f0f;
+            --neon-purple: #90f;
+            --neon-cyan: #0ff;
+            --dark-bg: #111122;
+            --darker-bg: #0a0a1a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        #threejs-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+            letter-spacing: 3px;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
+            to { text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px var(--neon-cyan), 0 0 40px var(--neon-purple); }
+        }
+        
+        .auth-box {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.3),
+                        inset 0 0 20px rgba(0, 136, 255, 0.2);
+            padding: 2rem;
+            width: 100%;
+            max-width: 800px;
+            backdrop-filter: blur(5px);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            z-index: -1;
+            border-radius: 12px;
+            animation: borderRotate 8s linear infinite;
+        }
+        
+        .auth-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 26, 0.8);
+            border-radius: 10px;
+            z-index: -1;
+        }
+        
+        @keyframes borderRotate {
+            0% { filter: blur(1px); transform: rotate(0deg); }
+            100% { filter: blur(1px); transform: rotate(360deg); }
+        }
+        
+        .camera-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+        
+        #video {
+            width: 100%;
+            display: block;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 8px;
+        }
+        
+        #canvas {
+            display: none;
+        }
+        
+        .btn {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3),
+                        inset 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+        
+        .btn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5),
+                        inset 0 0 20px rgba(0, 255, 255, 0.3);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .messages {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        
+        .message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+            background: rgba(255, 0, 255, 0.1);
+            border-left: 4px solid var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom, 
+                          transparent, 
+                          rgba(0, 255, 255, 0.8), 
+                          transparent);
+            animation: scan 4s linear infinite;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        .glow-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                          rgba(0, 136, 255, 0.2) 0%, 
+                          transparent 70%);
+            filter: blur(20px);
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .glow-circle:nth-child(2) {
+            background: radial-gradient(circle, 
+                          rgba(255, 0, 255, 0.2) 0%, 
+                          transparent 70%);
+            animation-delay: -2s;
+            width: 400px;
+            height: 400px;
+        }
+        
+        .glow-circle:nth-child(3) {
+            background: radial-gradient(circle, 
+                          rgba(0, 255, 255, 0.2) 0%, 
+                          transparent 70%);
+            animation-delay: -4s;
+            width: 200px;
+            height: 200px;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 50px); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .auth-box {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="threejs-bg"></div>
+    
+    <div class="glow-circle" style="top: 20%; left: 10%;"></div>
+    <div class="glow-circle" style="top: 60%; right: 15%;"></div>
+    <div class="glow-circle" style="bottom: 10%; left: 30%;"></div>
+    
+    <div class="container">
+        <h1>Neon Face Authentication</h1>
+        
+        <div class="auth-box">
+            <div class="scan-line"></div>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="message">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="camera-container">
+                <video id="video" width="640" height="480" autoplay playsinline></video>
+                <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+            </div>
+            
+            <form id="loginForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="image" id="imageInput">
+                <button type="button" class="btn" onclick="capture()">
+                    <span class="btn-text">Authenticate</span>
+                    <span class="btn-border"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Three.js Background
+        const bgContainer = document.getElementById('threejs-bg');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        bgContainer.appendChild(renderer.domElement);
+        
+        // Create neon grid
+        const gridHelper = new THREE.GridHelper(40, 40, 0x00ffff, 0x00ffff);
+        gridHelper.position.y = -5;
+        scene.add(gridHelper);
+        
+        // Create floating particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particleCount = 1000;
+        
+        const posArray = new Float32Array(particleCount * 3);
+        for(let i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 50;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.1,
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        camera.position.z = 20;
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            gridHelper.rotation.x += 0.0005;
+            gridHelper.rotation.z += 0.0005;
+            
+            particlesMesh.rotation.y += 0.0002;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Webcam and capture functionality
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => console.error("Error accessing webcam:", err));
+
+        function capture() {
+            // Add visual feedback
+            const btn = document.querySelector('.btn');
+            btn.innerHTML = '<div class="spinner"></div>Processing...';
+            btn.style.pointerEvents = 'none';
+            
+            // Flash effect
+            video.style.transition = 'box-shadow 0.3s ease';
+            video.style.boxShadow = '0 0 50px rgba(0, 255, 255, 0.8)';
+            
+            setTimeout(() => {
+                video.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.3)';
+            }, 300);
+            
+            // Capture image
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg');
+            const blob = dataURLtoBlob(dataUrl);
+            const formData = new FormData();
+            formData.append('image', blob, 'capture.jpg');
+            
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    btn.innerHTML = '<span class="btn-text">Authenticate</span><span class="btn-border"></span>';
+                    btn.style.pointerEvents = 'auto';
+                }
+            });
+        }
+
+        function dataURLtoBlob(dataurl) {
+            let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while(n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], {type: mime});
+        }
+    </script>
+</body>
+</html>

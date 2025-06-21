@@ -11,4 +11,6 @@ urlpatterns = [
     path('etudiant/dashboard/', views.etudiant_dashboard, name='etudiant_dashboard'),  # Exemple
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('register/', views.register_view, name='register'),
+    path('face/', views.face_view, name='face'),
 ]
+

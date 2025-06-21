@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, User
+from django.conf import settings
+
+
 
 # =============================
 # Utilisateur avec rôles
@@ -100,3 +103,11 @@ class Document(models.Model):
         if self.etudiant:
             return f"{self.etudiant} - {self.get_type_document_display()}"
         return f"Document Général - {self.get_type_document_display()}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)  # 👈 attention ici
+    face_landmarks = models.BinaryField(null=True, blank=True)  # Ajouté pour reconnaissance faciale
+
+    def __str__(self):
+        return self.user.username
