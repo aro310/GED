@@ -287,7 +287,7 @@ def face_view(request):
                             print(f"Comparaison avec {profile.user.username} - Différence: {diff}")
                             
                             # Seuil pour validation
-                            threshold = 0.25
+                            threshold = 0.1
                             passed_ratio = np.sum(diff < threshold) / len(diff)
                             print(f"Ratio de validation: {passed_ratio:.2f} (nécessaire > 0.8)")
                             

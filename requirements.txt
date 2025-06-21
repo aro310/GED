@@ -1,0 +1,8 @@
+Django
+opencv-python
+numpy
+mediapipe
+Pillow
+reportlab
+pytesseract
+elevenlabs
