@@ -1,6 +1,6 @@
 # GED
 
-Étape 1:  créer environnement virtuel via commande :python -m venv env 
+Étape 1:  créer environnement virtuel via commande :python -3.10 -m venv env 
           Puis pour l'activer il faut faire commande : .\env\Scripts\Activate.ps1
 
 Étape 2:  Installation des librairies python qui sont dans requirements.txt 
