@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des fichiers</title>
+</head>
+<body>
+    <h1>Fichiers disponibles</h1>
+    <ul>
+        {% for fichier in fichiers %}
+            <li><a href="{{ media_url }}{{ fichier.url }}">{{ fichier.nom }}</a></li>
+        {% empty %}
+            <li>Aucun fichier trouvé.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

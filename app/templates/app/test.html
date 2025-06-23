@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GED - Gestion Électronique de Documents</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .file-card {
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .file-icon {
+            font-size: 3rem;
+            color: #d63031;
+        }
+        .header-bg {
+            background-color: #2c3e50;
+            color: white;
+        }
+        a.card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        a.card-link:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <!-- En-tête -->
+        <header class="header-bg py-4 mb-4">
+            <div class="container">
+                <h1 class="display-4"><i class="bi bi-archive"></i> Gestion Électronique de Documents</h1>
+                <p class="lead">Consultez et gérez vos documents en ligne</p>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Barre de recherche et outils -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Rechercher un document...">
+                        <button class="btn btn-primary" type="button"><i class="bi bi-search"></i> Rechercher</button>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-success"><i class="bi bi-upload"></i> Ajouter un fichier</button>
+                </div>
+            </div>
+
+            <!-- Liste des fichiers -->
+            <div class="row">
+                {% if fichiers %}
+                    {% for fichier in fichiers %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <!-- Option 1: Toute la carte cliquable (ouvre le PDF) -->
+                        <a href="{{ media_url }}{{ fichier.url }}" class="card-link" target="_blank">
+                            <div class="card file-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-pdf file-icon"></i>
+                                    <h5 class="card-title mt-2 text-truncate">{{ fichier.nom }}</h5>
+                                    <p class="text-muted small mb-2">PDF • {{ fichier.taille|filesizeformat }}</p>
+                                </div>
+                                <div class="card-footer bg-transparent d-flex justify-content-between">
+                                    <small class="text-muted">Modifié le {{ fichier.date_modification|date:"d/m/Y" }}</small>
+                                    <!-- Option 2: Bouton de téléchargement séparé -->
+                                    <a href="{{ media_url }}{{ fichier.url }}" download class="btn btn-sm btn-outline-primary py-0">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Alternative: Juste l'icône et le titre cliquables -->
+                        <!--
+                        <div class="card file-card h-100">
+                            <div class="card-body text-center">
+                                <a href="{{ media_url }}{{ fichier.url }}" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf file-icon"></i>
+                                    <h5 class="card-title mt-2 text-truncate">{{ fichier.nom }}</h5>
+                                </a>
+                                <p class="text-muted small mb-2">PDF • {{ fichier.taille|filesizeformat }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent d-flex justify-content-between">
+                                <small class="text-muted">Modifié le {{ fichier.date_modification|date:"d/m/Y" }}</small>
+                                <a href="{{ media_url }}{{ fichier.url }}" download class="btn btn-sm btn-outline-primary py-0">
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            <i class="bi bi-info-circle-fill"></i> Aucun fichier trouvé dans la base de données.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Précédent</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Suivant</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Pied de page -->
+        <footer class="bg-light mt-5 py-3">
+            <div class="container text-center">
+                <p class="text-muted mb-0">GED © 2023 - Tous droits réservés</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

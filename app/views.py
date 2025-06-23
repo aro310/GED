@@ -211,11 +211,11 @@ face_mesh = mp_face_mesh.FaceMesh(
     refine_landmarks=True,
     min_detection_confidence=0.7,
     min_tracking_confidence=0.7,
-    static_image_mode=False  # Optimisé pour le flux vidéo
+    static_image_mode=False
 )
 
 def compute_landmark_distances(landmarks, img_shape=None):
-    """Calcule les distances normalisées entre les points clés du visage"""
+    """Calcule les distances normalisées entre les points clés du visage."""
     if not landmarks:
         return None
         
@@ -255,57 +255,75 @@ def compute_landmark_distances(landmarks, img_shape=None):
 def face_view(request):
     if request.method == 'POST':
         image_data = request.FILES.get('image')
-        if image_data:
-            print("Tentative de connexion reçue")
-            try:
-                # Conversion et prétraitement de l'image
-                nparr = np.frombuffer(image_data.read(), np.uint8)
-                img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-                img = cv2.flip(img, 1)  # Miroir pour un effet naturel
-                img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        if not image_data:
+            messages.error(request, "Aucune image téléversée.")
+            return redirect('face')
+        
+        # Validation de la taille et du format de l'image
+        max_size = 10 * 1024 * 1024  # 10 Mo
+        if image_data.size > max_size:
+            messages.error(request, "L'image dépasse la taille maximale de 10 Mo.")
+            return redirect('face')
+        
+        allowed_types = ['image/jpeg', 'image/png', 'image/gif']
+        if image_data.content_type not in allowed_types:
+            messages.error(request, "Format d'image non pris en charge. Utilisez JPEG, PNG ou GIF.")
+            return redirect('face')
+        
+        print("Tentative de connexion reçue")
+        try:
+            # Conversion et prétraitement de l'image
+            nparr = np.frombuffer(image_data.read(), np.uint8)
+            img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            if img is None:
+                raise ValueError("Échec du décodage de l'image.")
+            
+            img = cv2.flip(img, 1)  # Miroir pour un effet naturel
+            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            
+            # Détection des landmarks
+            results = face_mesh.process(img_rgb)
+            
+            if results.multi_face_landmarks:
+                landmarks = results.multi_face_landmarks[0].landmark
+                current_distances = compute_landmark_distances(landmarks, img.shape)
                 
-                # Détection des landmarks
-                results = face_mesh.process(img_rgb)
-                
-                if results.multi_face_landmarks:
-                    landmarks = results.multi_face_landmarks[0].landmark
-                    current_distances = compute_landmark_distances(landmarks, img.shape)
+                if current_distances is not None:
+                    print("Distances des landmarks:", current_distances)
                     
-                    if current_distances is not None:
-                        print("Distances des landmarks:", current_distances)
+                    best_match = None
+                    best_ratio = 0
+                    
+                    for profile in UserProfile.objects.all():
+                        if not profile.face_landmarks:
+                            continue
+                            
+                        stored_distances = pickle.loads(profile.face_landmarks)
+                        min_length = min(len(stored_distances), len(current_distances))
+                        diff = np.abs(stored_distances[:min_length] - current_distances[:min_length])
+                        passed_ratio = np.sum(diff < 0.06) / min_length  # Ratio de correspondance
                         
-                        for profile in UserProfile.objects.all():
-                            if not profile.face_landmarks:
-                                continue
-                                
-                            stored_distances = pickle.loads(profile.face_landmarks)
-                            
-                            # Comparaison des distances
-                            min_length = min(len(stored_distances), len(current_distances))
-                            diff = np.abs(stored_distances[:min_length] - current_distances[:min_length])
-                            
-                            print(f"Comparaison avec {profile.user.username} - Différence: {diff}")
-                            
-                            # Seuil pour validation
-                            threshold = 0.1
-                            passed_ratio = np.sum(diff < threshold) / len(diff)
-                            print(f"Ratio de validation: {passed_ratio:.2f} (nécessaire > 0.8)")
-                            
-                            if passed_ratio > 0.8:
-                                login(request, profile.user)
-                                messages.success(request, "Connexion réussie !")
-                                print(f"Connexion réussie pour {profile.user.username}")
-                                return redirect('upload_image')
+                        print(f"Comparaison avec {profile.user.username} - Ratio: {passed_ratio:.2f}")
                         
-                        messages.error(request, "Aucun profil ne correspond")
+                        if passed_ratio > best_ratio:
+                            best_ratio = passed_ratio
+                            best_match = profile.user
+                    
+                    if best_ratio > 0.95:  # Seuil de correspondance
+                        login(request, best_match)
+                        messages.success(request, f"Connexion réussie pour {best_match.username} !")
+                        print(f"Connexion réussie pour {best_match.username}")
+                        return redirect('upload_images')
                     else:
-                        messages.error(request, "Impossible de calculer les caractéristiques faciales")
+                        messages.error(request, "Aucun profil ne correspond avec une précision suffisante.")
                 else:
-                    messages.error(request, "Aucun visage détecté")
-                    
-            except Exception as e:
-                messages.error(request, f"Erreur lors du traitement: {str(e)}")
-                print("Erreur détaillée:", repr(e))
+                    messages.error(request, "Impossible de calculer les caractéristiques faciales.")
+            else:
+                messages.error(request, "Aucun visage détecté dans l'image.")
+                
+        except Exception as e:
+            messages.error(request, f"Erreur lors du traitement: {str(e)}")
+            print("Erreur détaillée:", repr(e))
         
         return redirect('face')
     
@@ -314,4 +332,21 @@ def face_view(request):
 def home_view(request):
     if not request.user.is_authenticated:
         return redirect('face')
-    return render(request, 'app/upload.html')
+    return render(request, 'app/upload.html', {'user': request.user})  # Passer l'utilisateur au contexte
+
+
+def liste_fichiers(request):
+    dossier = os.path.join(settings.MEDIA_ROOT, 'documents')
+
+    fichiers = []
+    fichiers_urls = []
+
+    if os.path.exists(dossier):
+        fichiers = sorted(os.listdir(dossier), key=lambda x: x.lower()) #non sensible a la casse  # Trie alphabétique croissant
+        fichiers_urls = [{'nom': f, 'url': os.path.join('documents', f)} for f in fichiers]
+
+    return render(request, 'app/liste_fichiers.html', {
+        'fichiers': fichiers_urls,
+        'media_url': settings.MEDIA_URL,
+    })
+
