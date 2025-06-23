@@ -202,7 +202,7 @@ def secretariat_dashboard(request):
 
 @login_required
 def etudiant_dashboard(request):
-    return render(request, 'app/etudiant_dashboard.html', {'user': request.user})
+    return render(request, 'app/etudiant_dashboard.html', {'user': request.user, 'request': request, 'form': ImageUploadForm()})
 
 # Configuration de MediaPipe FaceMesh
 mp_face_mesh = mp.solutions.face_mesh
