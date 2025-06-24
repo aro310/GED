@@ -21,6 +21,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.role})"
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)  # 👈 attention ici
+    face_landmarks = models.BinaryField(null=True, blank=True)  # Ajouté pour reconnaissance faciale
+
+    def __str__(self):
+        return self.user.username
 
 
 # =============================
@@ -105,9 +112,3 @@ class Document(models.Model):
         return f"Document Général - {self.get_type_document_display()}"
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)  # 👈 attention ici
-    face_landmarks = models.BinaryField(null=True, blank=True)  # Ajouté pour reconnaissance faciale
-
-    def __str__(self):
-        return self.user.username

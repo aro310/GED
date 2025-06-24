@@ -12,7 +12,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GED.settings')
 django.setup()
 
 from django.contrib.auth import get_user_model
-from app.models import UserProfile
+from app.models import UserProfile, CustomUser
 
 User = get_user_model()
 
@@ -25,7 +25,6 @@ face_mesh = mp_face_mesh.FaceMesh(
     min_tracking_confidence=0.7,
     static_image_mode=True
 )
-
 
 def compute_landmark_distances(landmarks, img_shape=None):
     if not landmarks:
@@ -61,16 +60,21 @@ def compute_landmark_distances(landmarks, img_shape=None):
     return np.array(distances) / (norm_factor + 1e-8)
 
 
-def register_face(username, image_path):
+def register_face(username, image_path=None):
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         print(f"L'utilisateur {username} n'existe pas.")
         return
 
-    img = cv2.imread(image_path)
-    if img is None:
-        print(f"Erreur de chargement de {image_path}")
+    # Utiliser l'image_path fourni
+    if image_path:
+        img = cv2.imread(image_path)
+        if img is None:
+            print(f"Erreur de chargement de {image_path}")
+            return
+    else:
+        print(f"Aucun image_path fourni, veuillez spécifier une image.")
         return
 
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -81,14 +85,17 @@ def register_face(username, image_path):
         distances = compute_landmark_distances(landmarks, img.shape)
         if distances is not None:
             profile, created = UserProfile.objects.get_or_create(user=user)
-            profile.face_landmarks = pickle.dumps(distances)
+            profile.face_landmarks = pickle.dumps(distances)  # Remplacer l'ancien ensemble
             profile.save()
-            print(f"Visage enregistré pour {username}")
+            print(f"Landmarks enregistrés pour {username} à partir de {image_path}")
         else:
             print("Erreur calcul distances")
     else:
         print("Aucun visage détecté")
 
-
 if __name__ == "__main__":
-    register_face("bebe", "image/Aro.jpeg")
+    print("Enregistrement pour tsito avec Aro.jpeg")
+    register_face("tsito", "image/Aro.jpeg")
+    print("Enregistrement pour bebe avec Bebe.jpeg")
+    register_face("bebe", "image/Bebe.jpeg")
+    print("Enregistrement terminé. Vérifiez la base de données.")

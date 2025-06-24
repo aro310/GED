@@ -29,13 +29,35 @@ pytesseract.pytesseract.tessdata_dir_config = r'--tessdata-dir "C:\Program Files
 # Initialiser le client ElevenLabs
 client = ElevenLabs(api_key=settings.ELEVENLABS_API_KEY)
 
+def liste_fichiers(request):
+    dossier = os.path.join(settings.MEDIA_ROOT, 'documents')
+
+    fichiers = []
+    fichiers_urls = []
+
+    if os.path.exists(dossier):
+        fichiers = sorted(os.listdir(dossier), key=lambda x: x.lower()) #non sensible a la casse  # Trie alphabétique croissant
+        fichiers_urls = [{'nom': f, 'url': os.path.join('documents', f)} for f in fichiers]
+
+    return render(request, 'app/liste_fichiers.html', {
+        'fichiers': fichiers_urls,
+        'media_url': settings.MEDIA_URL,
+    })
+
 # GED/app/views.py (extrait)
+@login_required
 def upload_image(request):
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            print("Données du formulaire :", form.cleaned_data)  # Débogage
+            print("Données du formulaire :", form.cleaned_data)
             image = form.cleaned_data['image']
+            
+            # Créer un dossier spécifique à l'utilisateur s'il n'existe pas
+            user_folder = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
+            os.makedirs(user_folder, exist_ok=True)
+            
+            # Chemin pour l'image temporaire
             image_path = os.path.join(settings.MEDIA_ROOT, 'temp', image.name)
             os.makedirs(os.path.dirname(image_path), exist_ok=True)
 
@@ -49,15 +71,17 @@ def upload_image(request):
                 with Image.open(image_path) as img:
                     texte = extraire_texte_depuis_image(image_path)
 
-                # Vérifier si du texte a été extrait
-                if not texte or texte.startswith("Erreur OCR"):
-                    raise Exception("Aucun texte extrait ou erreur OCR")
+                # Déterminer si c'est une erreur
+                is_error = texte.startswith("Erreur") if texte else False
+
+                if is_error or not texte:
+                    raise Exception(texte or "Aucun texte extrait ou erreur OCR")
 
                 # Créer un PDF avec le texte extrait
                 pdf_buffer = BytesIO()
                 pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
                 pdf.setFont("Helvetica", 12)
-                text_object = pdf.beginText(40, A4[1] - 40)  # Marge de 40 points
+                text_object = pdf.beginText(40, A4[1] - 40)
                 for line in texte.split('\n'):
                     text_object.textLine(line)
                 pdf.drawText(text_object)
@@ -65,16 +89,15 @@ def upload_image(request):
 
                 # Nom du fichier PDF
                 pdf_name = image.name.rsplit('.', 1)[0] + '.pdf'
-                pdf_path = os.path.join(settings.MEDIA_ROOT, 'documents', pdf_name)
-                os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
+                pdf_path = os.path.join(user_folder, pdf_name)
 
-                # Enregistrer le PDF sur le disque
+                # Enregistrer le PDF dans le dossier de l'utilisateur
                 with open(pdf_path, 'wb') as f:
                     f.write(pdf_buffer.getvalue())
 
                 # Générer l'audio avec ElevenLabs
                 audio_name = image.name.rsplit('.', 1)[0] + '.mp3'
-                audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', audio_name)
+                audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', request.user.username, audio_name)
                 os.makedirs(os.path.dirname(audio_path), exist_ok=True)
 
                 audio = client.text_to_speech.convert(
@@ -84,7 +107,6 @@ def upload_image(request):
                     output_format="mp3_44100_128",
                 )
 
-                # Enregistrer l'audio sur le disque
                 with open(audio_path, 'wb') as f:
                     for chunk in audio:
                         f.write(chunk)
@@ -92,16 +114,23 @@ def upload_image(request):
                 # Enregistrer le document dans le modèle Document
                 document = Document(
                     type_document=form.cleaned_data.get('type_document', 'autre'),
-                    fichier=f'documents/{pdf_name}',
-                    uploaded_by=request.user if request.user.is_authenticated else None,
+                    fichier=os.path.join(request.user.username, 'documents', pdf_name),
+                    uploaded_by=request.user,
                     etudiant=form.cleaned_data.get('etudiant')
                 )
                 document.save()
 
-                # Fermer le buffer PDF
                 pdf_buffer.close()
 
-                # Supprimer le fichier temporaire
+                # Récupérer la liste des fichiers de l'utilisateur (comme dans liste_fichiers)
+                user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
+                user_files = []
+                user_files_urls = []
+                if os.path.exists(user_folder_path):
+                    user_files = [f for f in os.listdir(user_folder_path) if os.path.isfile(os.path.join(user_folder_path, f))]
+                    user_files = sorted(user_files, key=lambda x: x.lower())  # Tri insensible à la casse
+                    user_files_urls = [{'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)} for f in user_files]
+
                 try:
                     if os.path.exists(image_path):
                         os.remove(image_path)
@@ -111,7 +140,9 @@ def upload_image(request):
                 return render(request, 'app/resultat.html', {
                     'document': document,
                     'texte': texte,
-                    'audio_url': f'{settings.MEDIA_URL}audio/{audio_name}'
+                    'audio_url': os.path.join(settings.MEDIA_URL, 'audio', request.user.username, audio_name),
+                    'user_files': user_files_urls,  # Utilisation de la structure {nom, url}
+                    'is_error': is_error
                 })
             except Exception as e:
                 if os.path.exists(image_path):
@@ -120,10 +151,10 @@ def upload_image(request):
                     except PermissionError:
                         print(f"Impossible de supprimer le fichier temporaire : {image_path}")
                 print(traceback.format_exc())
-                return render(request, 'app/resultat.html', {'texte': f"Erreur : {str(e)}"})
+                return render(request, 'app/resultat.html', {'texte': str(e), 'is_error': True})
     else:
         form = ImageUploadForm()
-    return render(request, 'app/upload.html', {'form': form, 'request': request})  # Passer 'request' au contexte
+    return render(request, 'app/upload.html', {'form': form, 'request': request})
 
 def login_view(request):
     print(f"Utilisateur authentifié : {request.user.is_authenticated}")
@@ -309,11 +340,12 @@ def face_view(request):
                             best_ratio = passed_ratio
                             best_match = profile.user
                     
+                    print(f"Meilleur match: {best_match.username if best_match else 'Aucun'} avec ratio: {best_ratio:.2f}")
                     if best_ratio > 0.95:  # Seuil de correspondance
                         login(request, best_match)
                         messages.success(request, f"Connexion réussie pour {best_match.username} !")
                         print(f"Connexion réussie pour {best_match.username}")
-                        return redirect('upload_images')
+                        return redirect_by_role(best_match)
                     else:
                         messages.error(request, "Aucun profil ne correspond avec une précision suffisante.")
                 else:
@@ -329,24 +361,25 @@ def face_view(request):
     
     return render(request, 'app/face.html')
 
+
+def redirect_by_role(user):
+    """Redirige l'utilisateur selon son rôle."""
+    if hasattr(user, 'role'):  # Vérifie si l'attribut role existe
+        if user.role == 'admin':
+            return redirect('admin_dashboard')
+        elif user.role == 'prof':
+            return redirect('prof_dashboard')
+        elif user.role == 'secretariat':
+            return redirect('secretariat_dashboard')
+        elif user.role == 'etudiant':
+            return redirect('etudiant_dashboard')
+    return redirect('upload_image')  # Redirection par défaut si aucun rôle ou rôle inconnu
+
 def home_view(request):
     if not request.user.is_authenticated:
         return redirect('face')
     return render(request, 'app/upload.html', {'user': request.user})  # Passer l'utilisateur au contexte
 
 
-def liste_fichiers(request):
-    dossier = os.path.join(settings.MEDIA_ROOT, 'documents')
 
-    fichiers = []
-    fichiers_urls = []
-
-    if os.path.exists(dossier):
-        fichiers = sorted(os.listdir(dossier), key=lambda x: x.lower()) #non sensible a la casse  # Trie alphabétique croissant
-        fichiers_urls = [{'nom': f, 'url': os.path.join('documents', f)} for f in fichiers]
-
-    return render(request, 'app/liste_fichiers.html', {
-        'fichiers': fichiers_urls,
-        'media_url': settings.MEDIA_URL,
-    })
 
