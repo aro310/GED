@@ -1,6 +1,7 @@
 import os
 import cv2
 import numpy as np
+import face_recognition
 import mediapipe as mp
 import pickle
 from django.contrib.auth.models import User
@@ -309,50 +310,43 @@ def face_view(request):
             if img is None:
                 raise ValueError("Échec du décodage de l'image.")
             
-            img = cv2.flip(img, 1)  # Miroir pour un effet naturel
             img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             
-            # Détection des landmarks
-            results = face_mesh.process(img_rgb)
-            
-            if results.multi_face_landmarks:
-                landmarks = results.multi_face_landmarks[0].landmark
-                current_distances = compute_landmark_distances(landmarks, img.shape)
-                
-                if current_distances is not None:
-                    print("Distances des landmarks:", current_distances)
-                    
-                    best_match = None
-                    best_ratio = 0
-                    
-                    for profile in UserProfile.objects.all():
-                        if not profile.face_landmarks:
-                            continue
-                            
-                        stored_distances = pickle.loads(profile.face_landmarks)
-                        min_length = min(len(stored_distances), len(current_distances))
-                        diff = np.abs(stored_distances[:min_length] - current_distances[:min_length])
-                        passed_ratio = np.sum(diff < 0.06) / min_length  # Ratio de correspondance
-                        
-                        print(f"Comparaison avec {profile.user.username} - Ratio: {passed_ratio:.2f}")
-                        
-                        if passed_ratio > best_ratio:
-                            best_ratio = passed_ratio
-                            best_match = profile.user
-                    
-                    print(f"Meilleur match: {best_match.username if best_match else 'Aucun'} avec ratio: {best_ratio:.2f}")
-                    if best_ratio > 0.95:  # Seuil de correspondance
-                        login(request, best_match)
-                        messages.success(request, f"Connexion réussie pour {best_match.username} !")
-                        print(f"Connexion réussie pour {best_match.username}")
-                        return redirect_by_role(best_match)
-                    else:
-                        messages.error(request, "Aucun profil ne correspond avec une précision suffisante.")
-                else:
-                    messages.error(request, "Impossible de calculer les caractéristiques faciales.")
-            else:
+            # Détecter les visages et extraire l'embedding
+            face_locations = face_recognition.face_locations(img_rgb)
+            if not face_locations:
                 messages.error(request, "Aucun visage détecté dans l'image.")
+                return redirect('face')
+            
+            current_encoding = face_recognition.face_encodings(img_rgb, face_locations)[0]
+            
+            best_match = None
+            best_distance = float('inf')
+            
+            for profile in UserProfile.objects.all():
+                if not profile.face_embedding:
+                    continue
                 
+                stored_encoding = pickle.loads(profile.face_embedding)
+                # Calculer la distance entre les embeddings
+                distance = np.linalg.norm(np.array(stored_encoding) - np.array(current_encoding))
+                print(f"Comparaison avec {profile.user.username} - Distance: {distance:.2f}")
+                
+                # Mettre à jour le meilleur match uniquement si la distance est inférieure au seuil
+                if distance < best_distance and distance < 0.6:
+                    best_distance = distance
+                    best_match = profile.user
+            
+            print(f"Meilleur match: {best_match.username if best_match else 'Aucun'} avec distance: {best_distance:.2f}")
+            if best_match and best_distance < 0.4:
+                login(request, best_match)
+                messages.success(request, f"Connexion réussie pour {best_match.username} !")
+                print(f"Connexion réussie pour {best_match.username}")
+                return redirect_by_role(best_match)
+            else:
+                messages.error(request, "Aucune correspondance valide trouvée.")
+                return redirect('face')  # Redirection par défaut si pas de match
+            
         except Exception as e:
             messages.error(request, f"Erreur lors du traitement: {str(e)}")
             print("Erreur détaillée:", repr(e))
@@ -360,7 +354,6 @@ def face_view(request):
         return redirect('face')
     
     return render(request, 'app/face.html')
-
 
 def redirect_by_role(user):
     """Redirige l'utilisateur selon son rôle."""

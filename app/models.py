@@ -17,18 +17,17 @@ class CustomUser(AbstractUser):
     ]
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    photo = models.ImageField(upload_to="photos_utilisateurs/", blank=True, null=True)  # Pour reconnaissance faciale
+    photo = models.ImageField(upload_to="photos_utilisateurs/", blank=True, null=True)
 
     def __str__(self):
         return f"{self.username} ({self.role})"
-    
+
 class UserProfile(models.Model):
-    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)  # 👈 attention ici
-    face_landmarks = models.BinaryField(null=True, blank=True)  # Ajouté pour reconnaissance faciale
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    face_embedding = models.BinaryField(null=True, blank=True)  # Stocker l'embedding facial sérialisé
 
     def __str__(self):
-        return self.user.username
-
+        return f"Profil de {self.user.username}"
 
 # =============================
 # Niveau d'étude (L1, M1, etc.)
