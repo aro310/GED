@@ -1,19 +1,85 @@
-<!-- votre_app/templates/votre_app/admin_dashboard.html -->
+<!-- app/templates/app/profs_dashboard.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Tableau de bord - Prof</title>
+    <title>Tableau de bord - Professeur</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .card-header {
+            background-color: #f0f0f0;
+        }
+        .file-path {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Bienvenue, {{ user.username }} (Prof)</h1>
+    <div class="dashboard-container">
+        <h1>Bienvenue, {{ user.username }} (Professeur)</h1>
         <p>Ceci est votre tableau de bord.</p>
-        <form action="{% url 'logout' %}" method="post">
+
+        <!-- Formulaire de déconnexion -->
+        <form action="{% url 'logout' %}" method="post" class="mb-3">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Se déconnecter</button>
         </form>
+
+        <!-- Liste des demandes de partage -->
+        {% if sharing_requests %}
+            <div class="file-list">
+                <h3>Demandes de partage reçues :</h3>
+                {% for request in sharing_requests %}
+                    <div class="card mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <strong>{{ request.sender.username }} - {{ request.document_path }}</strong>
+                            <span class="badge bg-{% if request.status == 'accepted' %}success{% elif request.status == 'rejected' %}danger{% else %}warning{% endif %}">{{ request.status }}</span>
+                        </div>
+                        {% if request.status == 'pending' %}
+                            <div class="card-body">
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                                    <button type="submit" name="accept_request" class="btn btn-success btn-sm me-2">Accepter</button>
+                                    <button type="submit" name="reject_request" class="btn btn-danger btn-sm">Rejeter</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">Aucune demande de partage en attente.</div>
+        {% endif %}
+
+        <!-- Liste des fichiers acceptés -->
+        {% if accepted_files %}
+            <div class="file-list mt-4">
+                <h3>Fichiers acceptés :</h3>
+                {% for file_path in accepted_files %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <a href="{{ media_url }}documents/{{ file_path }}" target="_blank" class="text-decoration-none">
+                                <i class="bi bi-file-earmark-pdf"></i> {{ file_path|slice:":50" }}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">Aucun fichier accepté pour le moment.</div>
+        {% endif %}
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

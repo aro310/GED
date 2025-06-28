@@ -1,9 +1,11 @@
 import os
+from os import walk, path
 import cv2
 import numpy as np
 import face_recognition
 import mediapipe as mp
 import pickle
+from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -13,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 from .forms import ImageUploadForm, CustomLoginForm, CustomUserCreationForm
-from .models import Document, CustomUser, UserProfile
+from .models import Document, CustomUser, UserProfile,DocumentSharingRequest, User
 from .ocr_utils import extraire_texte_depuis_image
 from PIL import Image
 from reportlab.pdfgen import canvas
@@ -237,8 +239,38 @@ def admin_dashboard(request):
     return render(request, 'app/admin_dashboard.html', {'user': request.user})
 
 @login_required
-def prof_dashboard(request):
-    return render(request, 'app/prof_dashboard.html', {'user': request.user})
+def profs_dashboard(request):
+    if request.user.role != 'prof':
+        return HttpResponseForbidden("Accès refusé : seuls les professeurs peuvent accéder à cette page.")
+
+    sharing_requests = DocumentSharingRequest.objects.filter(receiver=request.user).order_by('-created_at')
+    accepted_files = [req.document_path for req in sharing_requests if req.status == 'accepted']
+
+    if request.method == 'POST' and 'accept_request' in request.POST:
+        request_id = request.POST.get('request_id')
+        try:
+            request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+            request_obj.status = 'accepted'
+            request_obj.save()
+        except DocumentSharingRequest.DoesNotExist:
+            print("Demande non trouvée")
+
+    if request.method == 'POST' and 'reject_request' in request.POST:
+        request_id = request.POST.get('request_id')
+        try:
+            request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+            request_obj.status = 'rejected'
+            request_obj.save()
+        except DocumentSharingRequest.DoesNotExist:
+            print("Demande non trouvé")
+
+    return render(request, 'app/prof_dashboard.html', {
+        'user': request.user,
+        'request': request,
+        'sharing_requests': sharing_requests,
+        'accepted_files': accepted_files,
+        'media_url': settings.MEDIA_URL,
+    })
 
 @login_required
 def secretariat_dashboard(request):
@@ -248,26 +280,50 @@ from collections import defaultdict
 
 @login_required
 def etudiant_dashboard(request):
-    user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
+    user_folder_path = path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
     grouped_files = defaultdict(list)
     query = request.GET.get('q', '').strip()
 
-    if os.path.exists(user_folder_path):
-        for root, dirs, files in os.walk(user_folder_path):
-            for file in files:
-                if file.lower().endswith('.pdf'):
-                    full_path = os.path.join(root, file)
-                    if os.path.isfile(full_path):
-                        rel_path = os.path.relpath(full_path, user_folder_path)
-                        # Extraire le "dossier" (ex: 'CV', 'Releves', etc.)
-                        parts = rel_path.split(os.sep)
-                        folder = parts[0] if len(parts) > 1 else ".."
-                        
-                        if not query or query.lower() in rel_path.lower():
-                            grouped_files[folder].append({
-                                'nom': file,
-                                'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, *parts),
-                            })
+    if path.exists(user_folder_path):
+        try:
+            for root, dirs, files in walk(user_folder_path):
+                for file in files:
+                    if file.lower().endswith('.pdf'):
+                        full_path = path.join(root, file)
+                        if path.isfile(full_path):
+                            rel_path = path.relpath(full_path, user_folder_path)
+                            parts = rel_path.split(path.sep)
+                            folder = parts[0] if len(parts) > 1 else "Autres"
+                            if not query or query.lower() in rel_path.lower():
+                                grouped_files[folder].append({
+                                    'nom': file,
+                                    'url': path.join(settings.MEDIA_URL, 'documents', request.user.username, *parts),
+                                    'rel_path': rel_path
+                                })
+        except Exception as e:
+            print(f"Error walking through directory: {e}")
+
+    if request.method == 'POST' and 'share_document' in request.POST:
+        document_path = request.POST.get('document_path')
+        receiver_id = request.POST.get('receiver')
+        if document_path and receiver_id:
+            try:
+                # Utiliser get_user_model() pour obtenir le modèle utilisateur personnalisé
+                from django.contrib.auth import get_user_model
+                CustomUser = get_user_model()
+                receiver = CustomUser.objects.get(id=receiver_id)
+                DocumentSharingRequest.objects.create(
+                    document_path=document_path,
+                    sender=request.user,
+                    receiver=receiver
+                )
+            except CustomUser.DoesNotExist:
+                print("Utilisateur destinataire non trouvé")
+
+    # Filtrer les professeurs en utilisant le modèle personnalisé
+    from django.contrib.auth import get_user_model
+    CustomUser = get_user_model()
+    professors = CustomUser.objects.filter(role='prof')
 
     return render(request, 'app/etudiant_dashboard.html', {
         'user': request.user,
@@ -276,9 +332,9 @@ def etudiant_dashboard(request):
         'grouped_files': dict(grouped_files),
         'media_url': settings.MEDIA_URL,
         'query': query,
-        'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]]
+        'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]],
+        'professors': professors
     })
-
 
 # Configuration de MediaPipe FaceMesh
 mp_face_mesh = mp.solutions.face_mesh

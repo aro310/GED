@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
         ('etudiant', 'Étudiant'),
     ]
 
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=20, choices=[('etudiant', 'Étudiant'), ('prof', 'Professeur')], default='etudiant')
     photo = models.ImageField(upload_to="photos_utilisateurs/", blank=True, null=True)
 
     def __str__(self):
@@ -110,4 +110,12 @@ class Document(models.Model):
             return f"{self.etudiant} - {self.get_type_document_display()}"
         return f"Document Général - {self.get_type_document_display()}"
 
+class DocumentSharingRequest(models.Model):
+    document_path = models.CharField(max_length=255)  # Chemin relatif du PDF
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_requests')
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_requests')
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=[('pending', 'En attente'), ('accepted', 'Accepté'), ('rejected', 'Rejeté')], default='pending')
 
+    def __str__(self):
+        return f"{self.sender.username} -> {self.receiver.username}: {self.document_path}"
