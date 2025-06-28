@@ -23,6 +23,7 @@ from io import BytesIO
 import pytesseract
 import traceback
 from elevenlabs.client import ElevenLabs
+from collections import defaultdict
 
 # Configurer Tesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -55,9 +56,11 @@ def upload_image(request):
             print("Données du formulaire :", form.cleaned_data)
             image = form.cleaned_data['image']
             
-            # Créer un dossier spécifique à l'utilisateur s'il n'existe pas
+            # Créer un dossier spécifique à l'utilisateur et au type de document
             user_folder = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
-            os.makedirs(user_folder, exist_ok=True)
+            type_folder = form.cleaned_data.get('type_document', 'autre')  # Récupérer le type de document
+            full_folder_path = os.path.join(user_folder, type_folder)
+            os.makedirs(full_folder_path, exist_ok=True)
             
             # Chemin pour l'image temporaire
             image_path = os.path.join(settings.MEDIA_ROOT, 'temp', image.name)
@@ -91,7 +94,7 @@ def upload_image(request):
 
                 # Nom du fichier PDF
                 pdf_name = image.name.rsplit('.', 1)[0] + '.pdf'
-                pdf_path = os.path.join(user_folder, pdf_name)
+                pdf_path = os.path.join(full_folder_path, pdf_name)  # Sauvegarde dans le sous-dossier
 
                 # Enregistrer le PDF dans le dossier de l'utilisateur
                 with open(pdf_path, 'wb') as f:
@@ -115,8 +118,8 @@ def upload_image(request):
 
                 # Enregistrer le document dans le modèle Document
                 document = Document(
-                    type_document=form.cleaned_data.get('type_document', 'autre'),
-                    fichier=os.path.join(request.user.username, 'documents', pdf_name),
+                    type_document=type_folder,
+                    fichier=os.path.join('documents', request.user.username, type_folder, pdf_name),  # Chemin relatif avec sous-dossier
                     uploaded_by=request.user,
                     etudiant=form.cleaned_data.get('etudiant')
                 )
@@ -124,14 +127,22 @@ def upload_image(request):
 
                 pdf_buffer.close()
 
-                # Récupérer la liste des fichiers de l'utilisateur (comme dans liste_fichiers)
+                # Récupérer la liste des fichiers de l'utilisateur (y compris les sous-dossiers)
                 user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
                 user_files = []
                 user_files_urls = []
                 if os.path.exists(user_folder_path):
-                    user_files = [f for f in os.listdir(user_folder_path) if os.path.isfile(os.path.join(user_folder_path, f))]
+                    for root, dirs, files in os.walk(user_folder_path):
+                        for file in files:
+                            full_path = os.path.join(root, file)
+                            if os.path.isfile(full_path):
+                                rel_path = os.path.relpath(full_path, user_folder_path)
+                                user_files.append(rel_path)
                     user_files = sorted(user_files, key=lambda x: x.lower())  # Tri insensible à la casse
-                    user_files_urls = [{'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)} for f in user_files]
+                    user_files_urls = [
+                        {'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)}
+                        for f in user_files
+                    ]
 
                 try:
                     if os.path.exists(image_path):
@@ -235,7 +246,7 @@ def secretariat_dashboard(request):
 
 @login_required
 def etudiant_dashboard(request):
-    # Récupérer les fichiers spécifiques à l'utilisateur
+    # Récupérer les fichiers spécifiques à l'utilisateur dans les sous-dossiers
     user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
     user_files = []
     user_files_urls = []
@@ -244,22 +255,32 @@ def etudiant_dashboard(request):
     query = request.GET.get('q', '').strip()  # Récupère la valeur de la recherche, vide par défaut
     
     if os.path.exists(user_folder_path):
-        user_files = [f for f in os.listdir(user_folder_path) if os.path.isfile(os.path.join(user_folder_path, f))]
+        for root, dirs, files in os.walk(user_folder_path):
+            for file in files:
+                if file.lower().endswith('.pdf'):  # Filtrer uniquement les PDF
+                    full_path = os.path.join(root, file)
+                    if os.path.isfile(full_path):
+                        rel_path = os.path.relpath(full_path, user_folder_path)
+                        user_files.append(rel_path)
         user_files = sorted(user_files, key=lambda x: x.lower())  # Tri insensible à la casse
         
         # Filtrer les fichiers si une recherche est présente
         if query:
             user_files = [f for f in user_files if query.lower() in f.lower()]
         
-        user_files_urls = [{'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)} for f in user_files]
+        user_files_urls = [
+            {'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)}
+            for f in user_files
+        ]
 
     return render(request, 'app/etudiant_dashboard.html', {
         'user': request.user,
         'request': request,
         'form': ImageUploadForm(),
-        'fichiers': user_files_urls,  # Passer les fichiers au template
-        'media_url': settings.MEDIA_URL,  # Passer MEDIA_URL si nécessaire
-        'query': query  # Passer le terme de recherche pour le conserver dans le formulaire
+        'fichiers': user_files_urls,  # Passer les fichiers PDF au template
+        'media_url': settings.MEDIA_URL,
+        'query': query,
+        'all_files': user_files  # Passer la liste complète pour les suggestions
     })
 
 # Configuration de MediaPipe FaceMesh

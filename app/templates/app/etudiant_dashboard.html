@@ -69,6 +69,10 @@
         .file-list {
             margin-top: 20px;
         }
+        .file-path {
+            font-size: 0.9em;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -120,20 +124,21 @@
             </form>
         </div>
 
-        <!-- Liste des fichiers -->
+        <!-- Liste des fichiers avec sous-dossiers -->
         {% if fichiers %}
             <div class="file-list">
-                <h3>Vos fichiers :</h3>
+                <h3>Vos fichiers PDF :</h3>
                 <ul class="list-group">
                     {% for file in fichiers %}
                         <li class="list-group-item">
                             <a href="{{ file.url }}" target="_blank" class="text-decoration-none">{{ file.nom|slice:":50" }}</a>
+                            <div class="file-path">Chemin : {{ file.nom|slice:"0:-4" }}</div> <!-- Affiche le chemin sans l'extension -->
                         </li>
                     {% endfor %}
                 </ul>
             </div>
         {% else %}
-            <div class="alert alert-info">Aucun fichier trouvé pour cet utilisateur.</div>
+            <div class="alert alert-info">Aucun fichier PDF trouvé pour cet utilisateur.</div>
         {% endif %}
 
     </div>
