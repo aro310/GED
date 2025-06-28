@@ -25,6 +25,50 @@
         .form-label {
             font-weight: bold;
         }
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .search-bar input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 70%;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .suggestion-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background-color: #f1f1f1;
+        }
+        .file-list {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +110,82 @@
                 </div>
             </div>
         </div>
+
+        <!-- Barre de recherche avec suggestions -->
+        <div class="search-bar">
+            <form method="GET" action="">
+                <input type="text" name="q" id="searchInput" placeholder="Rechercher un fichier..." value="{{ query }}">
+                <button type="submit">Rechercher</button>
+                <div class="suggestions" id="suggestions"></div>
+            </form>
+        </div>
+
+        <!-- Liste des fichiers -->
+        {% if fichiers %}
+            <div class="file-list">
+                <h3>Vos fichiers :</h3>
+                <ul class="list-group">
+                    {% for file in fichiers %}
+                        <li class="list-group-item">
+                            <a href="{{ file.url }}" target="_blank" class="text-decoration-none">{{ file.nom|slice:":50" }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="alert alert-info">Aucun fichier trouvé pour cet utilisateur.</div>
+        {% endif %}
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('searchInput');
+            const suggestionsDiv = document.getElementById('suggestions');
+            const allFilesData = document.getElementById('allFilesData');
+            const allFiles = JSON.parse(allFilesData.textContent);
+
+            if (!input || !suggestionsDiv || !allFilesData) {
+                console.error('Éléments searchInput, suggestions ou allFilesData non trouvés');
+                return;
+            }
+
+            function showSuggestions() {
+                const query = input.value.toLowerCase();
+                suggestionsDiv.innerHTML = '';
+
+                if (query) {
+                    const filteredSuggestions = allFiles.filter(file => file.toLowerCase().startsWith(query));
+                    
+                    if (filteredSuggestions.length > 0) {
+                        filteredSuggestions.forEach(suggestion => {
+                            const div = document.createElement('div');
+                            div.className = 'suggestion-item';
+                            div.textContent = suggestion;
+                            div.onclick = () => {
+                                input.value = suggestion;
+                                suggestionsDiv.style.display = 'none';
+                                document.querySelector('form').submit();
+                            };
+                            suggestionsDiv.appendChild(div);
+                        });
+                        suggestionsDiv.style.display = 'block';
+                    } else {
+                        suggestionsDiv.style.display = 'none';
+                    }
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            }
+
+            input.addEventListener('input', showSuggestions);
+
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.search-bar')) {
+                    suggestionsDiv.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

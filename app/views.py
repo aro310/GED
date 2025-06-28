@@ -235,7 +235,32 @@ def secretariat_dashboard(request):
 
 @login_required
 def etudiant_dashboard(request):
-    return render(request, 'app/etudiant_dashboard.html', {'user': request.user, 'request': request, 'form': ImageUploadForm()})
+    # Récupérer les fichiers spécifiques à l'utilisateur
+    user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
+    user_files = []
+    user_files_urls = []
+    
+    # Récupérer le terme de recherche
+    query = request.GET.get('q', '').strip()  # Récupère la valeur de la recherche, vide par défaut
+    
+    if os.path.exists(user_folder_path):
+        user_files = [f for f in os.listdir(user_folder_path) if os.path.isfile(os.path.join(user_folder_path, f))]
+        user_files = sorted(user_files, key=lambda x: x.lower())  # Tri insensible à la casse
+        
+        # Filtrer les fichiers si une recherche est présente
+        if query:
+            user_files = [f for f in user_files if query.lower() in f.lower()]
+        
+        user_files_urls = [{'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)} for f in user_files]
+
+    return render(request, 'app/etudiant_dashboard.html', {
+        'user': request.user,
+        'request': request,
+        'form': ImageUploadForm(),
+        'fichiers': user_files_urls,  # Passer les fichiers au template
+        'media_url': settings.MEDIA_URL,  # Passer MEDIA_URL si nécessaire
+        'query': query  # Passer le terme de recherche pour le conserver dans le formulaire
+    })
 
 # Configuration de MediaPipe FaceMesh
 mp_face_mesh = mp.solutions.face_mesh
