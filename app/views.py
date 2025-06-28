@@ -4,6 +4,7 @@ import numpy as np
 import face_recognition
 import mediapipe as mp
 import pickle
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -284,6 +285,7 @@ def compute_landmark_distances(landmarks, img_shape=None):
     
     return np.array(distances) / (norm_factor + 1e-8)  # Évite la division par zéro
 
+@csrf_exempt
 def face_view(request):
     if request.method == 'POST':
         image_data = request.FILES.get('image')
@@ -338,7 +340,7 @@ def face_view(request):
                     best_match = profile.user
             
             print(f"Meilleur match: {best_match.username if best_match else 'Aucun'} avec distance: {best_distance:.2f}")
-            if best_match and best_distance < 0.4:
+            if best_match and best_distance < 0.5:
                 login(request, best_match)
                 messages.success(request, f"Connexion réussie pour {best_match.username} !")
                 print(f"Connexion réussie pour {best_match.username}")
