@@ -111,11 +111,15 @@ class Document(models.Model):
         return f"Document Général - {self.get_type_document_display()}"
 
 class DocumentSharingRequest(models.Model):
-    document_path = models.CharField(max_length=255)  # Chemin relatif du PDF
+    document = models.ForeignKey(Document, on_delete=models.CASCADE, null=True, blank=True)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_requests')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_requests')
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=[('pending', 'En attente'), ('accepted', 'Accepté'), ('rejected', 'Rejeté')], default='pending')
+    status = models.CharField(
+        max_length=20,
+        choices=[('pending', 'En attente'), ('accepted', 'Accepté'), ('rejected', 'Rejeté')],
+        default='pending'
+    )
 
     def __str__(self):
-        return f"{self.sender.username} -> {self.receiver.username}: {self.document_path}"
+        return f"{self.sender.username} -> {self.receiver.username}: {self.document.fichier.name if self.document else 'Aucun document'}"

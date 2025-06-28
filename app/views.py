@@ -9,12 +9,12 @@ from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
-from .forms import ImageUploadForm, CustomLoginForm, CustomUserCreationForm
+from .forms import ImageUploadForm, CustomLoginForm, CustomUserCreationForm,UserUpdateForm
 from .models import Document, CustomUser, UserProfile,DocumentSharingRequest, User
 from .ocr_utils import extraire_texte_depuis_image
 from PIL import Image
@@ -236,33 +236,47 @@ def update_user_password(request, username):
 # Autres vues existantes...
 @login_required
 def admin_dashboard(request):
-    return render(request, 'app/admin_dashboard.html', {'user': request.user})
+    if request.user.role != 'admin':
+        return HttpResponseForbidden("Accès réservé à l'administrateur.")
+
+    CustomUser = get_user_model()
+    users = CustomUser.objects.exclude(id=request.user.id)  # éviter d'afficher l'admin lui-même
+
+    return render(request, 'app/admin_dashboard.html', {
+        'users': users,
+    })
 
 @login_required
 def profs_dashboard(request):
     if request.user.role != 'prof':
         return HttpResponseForbidden("Accès refusé : seuls les professeurs peuvent accéder à cette page.")
 
-    sharing_requests = DocumentSharingRequest.objects.filter(receiver=request.user).order_by('-created_at')
-    accepted_files = [req.document_path for req in sharing_requests if req.status == 'accepted']
+    sharing_requests = DocumentSharingRequest.objects.select_related('document').filter(receiver=request.user).order_by('-created_at')
 
-    if request.method == 'POST' and 'accept_request' in request.POST:
-        request_id = request.POST.get('request_id')
-        try:
-            request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
-            request_obj.status = 'accepted'
-            request_obj.save()
-        except DocumentSharingRequest.DoesNotExist:
-            print("Demande non trouvée")
+    accepted_files = [
+        {
+            'url': req.document.fichier.url,
+            'name': os.path.basename(req.document.fichier.name)
+        }
+        for req in sharing_requests if req.status == 'accepted' and req.document and req.document.fichier
+    ]
 
-    if request.method == 'POST' and 'reject_request' in request.POST:
+    if request.method == 'POST':
         request_id = request.POST.get('request_id')
-        try:
-            request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
-            request_obj.status = 'rejected'
-            request_obj.save()
-        except DocumentSharingRequest.DoesNotExist:
-            print("Demande non trouvé")
+        if 'accept_request' in request.POST:
+            try:
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                request_obj.status = 'accepted'
+                request_obj.save()
+            except DocumentSharingRequest.DoesNotExist:
+                print("Demande non trouvée")
+        elif 'reject_request' in request.POST:
+            try:
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                request_obj.status = 'rejected'
+                request_obj.save()
+            except DocumentSharingRequest.DoesNotExist:
+                print("Demande non trouvée")
 
     return render(request, 'app/prof_dashboard.html', {
         'user': request.user,
@@ -306,17 +320,26 @@ def etudiant_dashboard(request):
     if request.method == 'POST' and 'share_document' in request.POST:
         document_path = request.POST.get('document_path')
         receiver_id = request.POST.get('receiver')
+
         if document_path and receiver_id:
             try:
-                # Utiliser get_user_model() pour obtenir le modèle utilisateur personnalisé
                 from django.contrib.auth import get_user_model
                 CustomUser = get_user_model()
                 receiver = CustomUser.objects.get(id=receiver_id)
-                DocumentSharingRequest.objects.create(
-                    document_path=document_path,
-                    sender=request.user,
-                    receiver=receiver
-                )
+
+                # Recherche du Document correspondant
+                document_relative_path = path.join('documents', request.user.username, document_path)
+                document = Document.objects.filter(fichier=document_relative_path).first()
+
+                if document:
+                    DocumentSharingRequest.objects.create(
+                        document=document,
+                        sender=request.user,
+                        receiver=receiver
+                    )
+                else:
+                    print(f"Document introuvable : {document_relative_path}")
+
             except CustomUser.DoesNotExist:
                 print("Utilisateur destinataire non trouvé")
 
@@ -475,5 +498,42 @@ def home_view(request):
     return render(request, 'app/upload.html', {'user': request.user})  # Passer l'utilisateur au contexte
 
 
+from django.shortcuts import redirect
+
+@login_required
+def delete_user(request, user_id):
+    if request.user.role != 'admin':
+        return HttpResponseForbidden("Accès refusé.")
+
+    CustomUser = get_user_model()
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        if user != request.user:  # sécurité : ne pas supprimer soi-même
+            user.delete()
+    except CustomUser.DoesNotExist:
+        pass
+
+    return redirect('admin_dashboard')
+
+@login_required
+def edit_user(request, user_id):
+    if request.user.role != 'admin':
+        return HttpResponseForbidden("Accès interdit.")
+
+    CustomUser = get_user_model()
+    user = get_object_or_404(CustomUser, id=user_id)
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_dashboard')
+    else:
+        form = UserUpdateForm(instance=user)
+
+    return render(request, 'app/edit_user.html', {
+        'form': form,
+        'user_to_edit': user
+    })
 
 

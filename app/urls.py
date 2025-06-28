@@ -14,5 +14,7 @@ urlpatterns = [
     path('face/', views.face_view, name='face'),
     path('upload', views.home_view, name='upload_images'),
     path('fichiers/', views.liste_fichiers, name="liste_fichiers"),
+    path('admin/delete_user/<int:user_id>', views.delete_user, name='delete_user'),
+    path('admin/edit_user/<int:user_id>/', views.edit_user, name='edit_user'),
 ]
 

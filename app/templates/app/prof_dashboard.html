@@ -42,7 +42,7 @@
                 {% for request in sharing_requests %}
                     <div class="card mb-3">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <strong>{{ request.sender.username }} - {{ request.document_path }}</strong>
+                            <strong>{{ request.sender.username }} - {{ request.document.fichier.name }}</strong>
                             <span class="badge bg-{% if request.status == 'accepted' %}success{% elif request.status == 'rejected' %}danger{% else %}warning{% endif %}">{{ request.status }}</span>
                         </div>
                         {% if request.status == 'pending' %}
@@ -66,14 +66,14 @@
         {% if accepted_files %}
             <div class="file-list mt-4">
                 <h3>Fichiers acceptés :</h3>
-                {% for file_path in accepted_files %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <a href="{{ media_url }}documents/{{ file_path }}" target="_blank" class="text-decoration-none">
-                                <i class="bi bi-file-earmark-pdf"></i> {{ file_path|slice:":50" }}
-                            </a>
-                        </div>
+                {% for file in accepted_files %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <a href="{{ file.url }}" target="_blank" class="text-decoration-none">
+                            <i class="bi bi-file-earmark-pdf"></i> {{ file.name }}
+                        </a>
                     </div>
+                </div>
                 {% endfor %}
             </div>
         {% else %}

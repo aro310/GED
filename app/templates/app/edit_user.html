@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <h2>Modifier l'utilisateur : {{ user_to_edit.username }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</body>
+</html>
