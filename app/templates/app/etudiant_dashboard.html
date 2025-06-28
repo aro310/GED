@@ -125,21 +125,35 @@
         </div>
 
         <!-- Liste des fichiers avec sous-dossiers -->
-        {% if fichiers %}
-            <div class="file-list">
-                <h3>Vos fichiers PDF :</h3>
-                <ul class="list-group">
-                    {% for file in fichiers %}
-                        <li class="list-group-item">
-                            <a href="{{ file.url }}" target="_blank" class="text-decoration-none">{{ file.nom|slice:":50" }}</a>
-                            <div class="file-path">Chemin : {{ file.nom|slice:"0:-4" }}</div> <!-- Affiche le chemin sans l'extension -->
-                        </li>
-                    {% endfor %}
-                </ul>
+        {% if grouped_files %}
+    <div class="file-list">
+        <h3>Vos fichiers organisés :</h3>
+        {% for folder, files in grouped_files.items %}
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>{{ folder }}</strong>
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false">
+                        📂 Voir les fichiers
+                    </button>
+                </div>
+                <div id="collapse{{ forloop.counter }}" class="collapse">
+                    <ul class="list-group list-group-flush">
+                        {% for file in files %}
+                            <li class="list-group-item">
+                                <a href="{{ file.url }}" target="_blank" class="text-decoration-none">
+                                    📄 {{ file.nom|slice:":50" }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-        {% else %}
-            <div class="alert alert-info">Aucun fichier PDF trouvé pour cet utilisateur.</div>
-        {% endif %}
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">Aucun fichier PDF trouvé pour cet utilisateur.</div>
+{% endif %}
+
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

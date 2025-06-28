@@ -244,44 +244,41 @@ def prof_dashboard(request):
 def secretariat_dashboard(request):
     return render(request, 'app/secretariat_dashboard.html', {'user': request.user})
 
+from collections import defaultdict
+
 @login_required
 def etudiant_dashboard(request):
-    # Récupérer les fichiers spécifiques à l'utilisateur dans les sous-dossiers
     user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
-    user_files = []
-    user_files_urls = []
-    
-    # Récupérer le terme de recherche
-    query = request.GET.get('q', '').strip()  # Récupère la valeur de la recherche, vide par défaut
-    
+    grouped_files = defaultdict(list)
+    query = request.GET.get('q', '').strip()
+
     if os.path.exists(user_folder_path):
         for root, dirs, files in os.walk(user_folder_path):
             for file in files:
-                if file.lower().endswith('.pdf'):  # Filtrer uniquement les PDF
+                if file.lower().endswith('.pdf'):
                     full_path = os.path.join(root, file)
                     if os.path.isfile(full_path):
                         rel_path = os.path.relpath(full_path, user_folder_path)
-                        user_files.append(rel_path)
-        user_files = sorted(user_files, key=lambda x: x.lower())  # Tri insensible à la casse
-        
-        # Filtrer les fichiers si une recherche est présente
-        if query:
-            user_files = [f for f in user_files if query.lower() in f.lower()]
-        
-        user_files_urls = [
-            {'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)}
-            for f in user_files
-        ]
+                        # Extraire le "dossier" (ex: 'CV', 'Releves', etc.)
+                        parts = rel_path.split(os.sep)
+                        folder = parts[0] if len(parts) > 1 else ".."
+                        
+                        if not query or query.lower() in rel_path.lower():
+                            grouped_files[folder].append({
+                                'nom': file,
+                                'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, *parts),
+                            })
 
     return render(request, 'app/etudiant_dashboard.html', {
         'user': request.user,
         'request': request,
         'form': ImageUploadForm(),
-        'fichiers': user_files_urls,  # Passer les fichiers PDF au template
+        'grouped_files': dict(grouped_files),
         'media_url': settings.MEDIA_URL,
         'query': query,
-        'all_files': user_files  # Passer la liste complète pour les suggestions
+        'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]]
     })
+
 
 # Configuration de MediaPipe FaceMesh
 mp_face_mesh = mp.solutions.face_mesh
