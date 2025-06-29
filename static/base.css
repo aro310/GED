@@ -1,0 +1,191 @@
+:root {
+    --pharma-blue: #3399ff;
+    --bg-dark: #0a0a1a;
+    --text-light: #ffffff;
+    --transition-speed: 0.4s;
+}
+
+/* Base globale */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at bottom, var(--bg-dark) 0%, #000000 100%);
+    color: var(--text-light);
+    overflow-x: hidden;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+/* Bouton menu */
+.menu-btn {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background: #1f2937;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 1001;
+    cursor: pointer;
+}
+
+/* Sidebar principale */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 0 20px 20px 0;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 204, 255, 0.2);
+    overflow-y: auto;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.sidebar .logo img {
+    width: 80px;
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 204, 255, 0.2);
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sidebar .logo img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 204, 255, 0.4);
+}
+
+
+.sidebar.active {
+    transform: translateX(-260px);
+}
+
+.sidebar .user-img img {
+    width: 60px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 8px; /* contrôle précis de l’espacement */
+}
+
+.sidebar ul li {
+    width: 100%;
+    text-align: center;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    width: 100%;
+    transition: color var(--transition-speed), background-color var(--transition-speed);
+    border-radius: 8px;
+}
+
+.sidebar ul li a i {
+    margin-right: 8px;
+    color: #999;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+    background-color: #1a1a2a;
+    color: var(--pharma-blue);
+}
+
+
+/* Main Content */
+.main-content {
+    margin-left: 270px;
+    padding: 2rem;
+    transition: margin-left var(--transition-speed);
+}
+
+.sidebar.active ~ .main-content {
+    margin-left: 20px;
+}
+
+/* Effet pluie */
+.rain {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.drop {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, var(--pharma-blue));
+    bottom: 100%;
+    animation: rain 0.5s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes rain {
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+/* Conteneur login */
+.login-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Sous-menu */
+.sub-menu {
+    background-color: #1a1a2a;
+    border-left: 2px solid var(--pharma-blue);
+}
+
+.sub-menu a {
+    color: #bbb;
+}
+
+.sub-menu a:hover {
+    color: var(--pharma-blue);
+}
+
+/* Footer / credits */
+.credits {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--text-light);
+    padding: 2rem;
+}

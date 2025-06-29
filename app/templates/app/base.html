@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Mon Application{% endblock %}</title>
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="{% static 'base.css' %}" />
+    
+    <!-- Bootstrap + Phosphor Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    {% block extra_css %}{% endblock %}
+    
+</head>
+
+<body>
+    <!-- Pluie -->
+    <div class="rain" id="rain"></div>
+
+    <!-- Bouton Toggle -->
+    <div class="menu-btn">
+        <i class="ph-bold ph-list"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="{% static 'logo/logo.png' %}" alt="Logo">
+        </div>
+    
+        <ul>
+            <li><a href="{% url 'face' %}" class="nav-link"><i class="bi bi-person-bounding-box"></i> Reconnaissance Faciale</a></li>
+        <li>
+            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-link btn btn-link"><i class="bi bi-box-arrow-right"></i> Déconnexion</button>
+            </form>
+        </li>
+            <!-- autres liens -->
+        </ul>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="main-content">
+        {% block main_content %}
+        <h1>Bienvenue dans le tableau de bord</h1>
+        {% endblock %}
+    </div>
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Génère des gouttes de pluie
+        $(document).ready(function () {
+            const rainContainer = $('#rain');
+            const dropCount = 150;
+            for (let i = 0; i < dropCount; i++) {
+                const drop = $('<div class="drop"></div>');
+                drop.css({
+                    left: Math.random() * 100 + 'vw',
+                    animationDuration: (Math.random() * 1 + 0.5) + 's',
+                    animationDelay: (Math.random() * 2) + 's',
+                    height: (Math.random() * 20 + 10) + 'px',
+                    opacity: Math.random() * 0.4 + 0.2
+                });
+                rainContainer.append(drop);
+            }
+
+            // Toggle Sidebar
+            $('.menu-btn').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

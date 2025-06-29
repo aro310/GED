@@ -7,6 +7,7 @@ import mediapipe as mp
 import pickle
 from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
@@ -239,12 +240,44 @@ def admin_dashboard(request):
     if request.user.role != 'admin':
         return HttpResponseForbidden("Accès réservé à l'administrateur.")
 
+    # --- 1. Charger les utilisateurs ---
     CustomUser = get_user_model()
     users = CustomUser.objects.exclude(id=request.user.id)  # éviter d'afficher l'admin lui-même
 
+    # --- 2. Gérer l’exploration de /media/documents/ ---
+    base_path = os.path.join(settings.MEDIA_ROOT, 'documents')
+    os.makedirs(base_path, exist_ok=True)
+
+    current_path = request.GET.get('path', '')
+    abs_path = os.path.abspath(os.path.join(base_path, current_path))
+
+    # Sécurité : empêcher l'accès hors du dossier autorisé
+    if not abs_path.startswith(base_path):
+        return HttpResponseForbidden("Chemin non autorisé.")
+
+    folders = []
+    files = []
+
+    try:
+        for name in os.listdir(abs_path):
+            full_path = os.path.join(abs_path, name)
+            rel_path = os.path.relpath(full_path, base_path).replace("\\", "/")
+            if os.path.isdir(full_path):
+                folders.append({'name': name, 'path': rel_path})
+            elif os.path.isfile(full_path):
+                files.append({'name': name, 'path': rel_path})
+    except Exception as e:
+        print("Erreur lecture documents :", e)
+
     return render(request, 'app/admin_dashboard.html', {
+        'user': request.user,
         'users': users,
+        'folders': folders,
+        'files': files,
+        'current_path': current_path,
+        'MEDIA_URL': settings.MEDIA_URL,
     })
+
 
 @login_required
 def profs_dashboard(request):
@@ -535,5 +568,27 @@ def edit_user(request, user_id):
         'form': form,
         'user_to_edit': user
     })
+
+@require_POST
+@login_required
+def delete_entry(request):
+    if request.user.role != 'admin':
+        return HttpResponseForbidden("Accès refusé.")
+
+    rel_path = request.POST.get('path')
+    target_path = os.path.join(settings.MEDIA_ROOT, 'documents', rel_path)
+
+    if os.path.exists(target_path):
+        if os.path.isfile(target_path):
+            os.remove(target_path)
+        elif os.path.isdir(target_path):
+            import shutil
+            shutil.rmtree(target_path)
+        messages.success(request, "Élément supprimé.")
+    else:
+        messages.error(request, "Fichier ou dossier introuvable.")
+
+    return redirect('admin_dashboard')
+
 
 
