@@ -51,59 +51,74 @@ def liste_fichiers(request):
     })
 
 # GED/app/views.py (extrait)
+from django.shortcuts import render
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from .forms import ImageUploadForm
+from .models import Document
+from PIL import Image
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+import os
+import traceback
+
 @login_required
 def upload_image(request):
     if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
+        form = ImageUploadForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-            print("Données du formulaire :", form.cleaned_data)
             image = form.cleaned_data['image']
-            
-            # Créer un dossier spécifique à l'utilisateur et au type de document
-            user_folder = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
-            type_folder = form.cleaned_data.get('type_document', 'autre')  # Récupérer le type de document
-            full_folder_path = os.path.join(user_folder, type_folder)
-            os.makedirs(full_folder_path, exist_ok=True)
-            
-            # Chemin pour l'image temporaire
-            image_path = os.path.join(settings.MEDIA_ROOT, 'temp', image.name)
-            os.makedirs(os.path.dirname(image_path), exist_ok=True)
+            type_folder = form.cleaned_data.get('type_document', 'autre')
+            convertir_pdf = form.cleaned_data.get('convertir_en_pdf', True)
 
-            # Enregistrer l'image temporairement
+            # Chemin de base
+            user_folder = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username, type_folder)
+            os.makedirs(user_folder, exist_ok=True)
+
+            # Enregistrement temporaire de l’image
+            temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp')
+            os.makedirs(temp_dir, exist_ok=True)
+            image_path = os.path.join(temp_dir, image.name)
             with open(image_path, 'wb+') as f:
                 for chunk in image.chunks():
                     f.write(chunk)
 
             try:
-                # Extraire le texte avec Tesseract
                 with Image.open(image_path) as img:
                     texte = extraire_texte_depuis_image(image_path)
 
-                # Déterminer si c'est une erreur
                 is_error = texte.startswith("Erreur") if texte else False
-
                 if is_error or not texte:
-                    raise Exception(texte or "Aucun texte extrait ou erreur OCR")
+                    raise Exception(texte or "Aucun texte extrait.")
 
-                # Créer un PDF avec le texte extrait
-                pdf_buffer = BytesIO()
-                pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
-                pdf.setFont("Helvetica", 12)
-                text_object = pdf.beginText(40, A4[1] - 40)
-                for line in texte.split('\n'):
-                    text_object.textLine(line)
-                pdf.drawText(text_object)
-                pdf.save()
+                # --- Création du fichier PDF si demandé ---
+                if convertir_pdf:
+                    pdf_buffer = BytesIO()
+                    pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
+                    pdf.setFont("Helvetica", 12)
+                    text_object = pdf.beginText(40, A4[1] - 40)
+                    for line in texte.split('\n'):
+                        text_object.textLine(line)
+                    pdf.drawText(text_object)
+                    pdf.save()
 
-                # Nom du fichier PDF
-                pdf_name = image.name.rsplit('.', 1)[0] + '.pdf'
-                pdf_path = os.path.join(full_folder_path, pdf_name)  # Sauvegarde dans le sous-dossier
+                    pdf_name = image.name.rsplit('.', 1)[0] + '.pdf'
+                    pdf_path = os.path.join(user_folder, pdf_name)
 
-                # Enregistrer le PDF dans le dossier de l'utilisateur
-                with open(pdf_path, 'wb') as f:
-                    f.write(pdf_buffer.getvalue())
+                    with open(pdf_path, 'wb') as f:
+                        f.write(pdf_buffer.getvalue())
+                    fichier_final = os.path.join('documents', request.user.username, type_folder, pdf_name)
 
-                # Générer l'audio avec ElevenLabs
+                    pdf_buffer.close()
+                else:
+                    # Si on ne convertit pas en PDF, on garde l'image originale
+                    final_image_path = os.path.join(user_folder, image.name)
+                    with open(final_image_path, 'wb+') as f:
+                        f.write(open(image_path, 'rb').read())
+                    fichier_final = os.path.join('documents', request.user.username, type_folder, image.name)
+
+                # --- Génération Audio ---
                 audio_name = image.name.rsplit('.', 1)[0] + '.mp3'
                 audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', request.user.username, audio_name)
                 os.makedirs(os.path.dirname(audio_path), exist_ok=True)
@@ -114,63 +129,57 @@ def upload_image(request):
                     model_id="eleven_multilingual_v2",
                     output_format="mp3_44100_128",
                 )
-
                 with open(audio_path, 'wb') as f:
                     for chunk in audio:
                         f.write(chunk)
 
-                # Enregistrer le document dans le modèle Document
+                # --- Enregistrement en base de données ---
                 document = Document(
                     type_document=type_folder,
-                    fichier=os.path.join('documents', request.user.username, type_folder, pdf_name),  # Chemin relatif avec sous-dossier
-                    uploaded_by=request.user,
-                    etudiant=form.cleaned_data.get('etudiant')
+                    fichier=fichier_final,
+                    uploaded_by=request.user
                 )
+                # Ajout de l'étudiant si c’est un personnel (champ présent dans le formulaire)
+                if 'etudiant' in form.cleaned_data and form.cleaned_data['etudiant']:
+                    document.etudiant = form.cleaned_data['etudiant']
                 document.save()
 
-                pdf_buffer.close()
+                # Nettoyage du fichier temporaire
+                if os.path.exists(image_path):
+                    os.remove(image_path)
 
-                # Récupérer la liste des fichiers de l'utilisateur (y compris les sous-dossiers)
-                user_folder_path = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
-                user_files = []
+                # Préparation des fichiers de l’utilisateur
                 user_files_urls = []
-                if os.path.exists(user_folder_path):
-                    for root, dirs, files in os.walk(user_folder_path):
+                user_root = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
+                if os.path.exists(user_root):
+                    for root, dirs, files in os.walk(user_root):
                         for file in files:
-                            full_path = os.path.join(root, file)
-                            if os.path.isfile(full_path):
-                                rel_path = os.path.relpath(full_path, user_folder_path)
-                                user_files.append(rel_path)
-                    user_files = sorted(user_files, key=lambda x: x.lower())  # Tri insensible à la casse
-                    user_files_urls = [
-                        {'nom': f, 'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, f)}
-                        for f in user_files
-                    ]
-
-                try:
-                    if os.path.exists(image_path):
-                        os.remove(image_path)
-                except PermissionError as e:
-                    print(f"Impossible de supprimer le fichier temporaire : {e}")
+                            rel_path = os.path.relpath(os.path.join(root, file), user_root)
+                            user_files_urls.append({
+                                'nom': rel_path,
+                                'url': os.path.join(settings.MEDIA_URL, 'documents', request.user.username, rel_path)
+                            })
 
                 return render(request, 'app/resultat.html', {
                     'document': document,
                     'texte': texte,
                     'audio_url': os.path.join(settings.MEDIA_URL, 'audio', request.user.username, audio_name),
-                    'user_files': user_files_urls,  # Utilisation de la structure {nom, url}
-                    'is_error': is_error
+                    'user_files': sorted(user_files_urls, key=lambda x: x['nom'].lower()),
+                    'is_error': False
                 })
+
             except Exception as e:
                 if os.path.exists(image_path):
                     try:
                         os.remove(image_path)
                     except PermissionError:
-                        print(f"Impossible de supprimer le fichier temporaire : {image_path}")
+                        pass
                 print(traceback.format_exc())
                 return render(request, 'app/resultat.html', {'texte': str(e), 'is_error': True})
     else:
-        form = ImageUploadForm()
-    return render(request, 'app/upload.html', {'form': form, 'request': request})
+        form = ImageUploadForm(user=request.user)
+
+    return render(request, 'app/upload.html', {'form': form})
 
 def login_view(request):
     print(f"Utilisateur authentifié : {request.user.is_authenticated}")
@@ -335,7 +344,7 @@ def etudiant_dashboard(request):
         try:
             for root, dirs, files in walk(user_folder_path):
                 for file in files:
-                    if file.lower().endswith('.pdf'):
+                    if file.lower().endswith(('.pdf', '.jpg', '.jpeg', '.png', '.gif')):
                         full_path = path.join(root, file)
                         if path.isfile(full_path):
                             rel_path = path.relpath(full_path, user_folder_path)

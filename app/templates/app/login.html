@@ -4,51 +4,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block extra_css %}
-<style>
-    .login-wrapper {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        width: 100%;
-    }
-
-    .login-container {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(15px);
-        border-radius: 12px;
-        padding: 2rem;
-        max-width: 400px;
-        width: 100%;
-        box-shadow: 0 0 25px rgba(0, 204, 255, 0.3);
-    }
-
-    .login-container h2,
-    .login-container label,
-    .login-container input {
-        color: white !important;
-    }
-
-    .login-container .form-control {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: white;
-    }
-
-    .login-container .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    .login-container button {
-        background: #007bff;
-        border: none;
-    }
-
-    .login-container button:hover {
-        background: #0056b3;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'login.css' %}">
 {% endblock %}
 
 {% block main_content %}

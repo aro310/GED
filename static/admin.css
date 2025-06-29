@@ -1,0 +1,220 @@
+:root {
+    --pharma-blue: #3399ff;
+    --bg-dark: #0a0a1a;
+    --text-light: #ffffff;
+    --transition-speed: 0.4s;
+}
+
+body {
+    background: radial-gradient(ellipse at bottom, var(--bg-dark) 0%, #000000 100%);
+    color: var(--text-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.dashboard-container {
+    max-width: 1000px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 204, 255, 0.2);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.dashboard-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 204, 255, 0.3);
+}
+
+.dashboard-container h2 {
+    font-size: 2rem;
+    color: var(--pharma-blue);
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+}
+
+.dashboard-container h4 {
+    font-size: 1.5rem;
+    color: var(--text-light);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.dashboard-container p {
+    color: #ccc;
+    font-size: 1.1rem;
+}
+
+/* Boutons */
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    border-radius: 8px;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.btn-danger:hover {
+    background-color: #b02a37;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--text-light);
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(0, 204, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Tableau */
+.table {
+background-color: transparent !important;
+color: #ffffff !important;
+border-radius: 8px;
+box-shadow: none;
+}
+
+.table th,
+.table td {
+background-color: transparent !important;
+color: #e0e0e0 !important;
+border: none !important;
+padding: 1rem;
+}
+
+.table thead {
+background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.table tbody tr:hover {
+background-color: rgba(0, 204, 255, 0.08) !important;
+}
+
+.table a {
+color: var(--pharma-blue);
+text-decoration: none;
+}
+
+.table a:hover {
+color: #1f7ad0;
+}
+
+
+/* Liste des dossiers et fichiers */
+.file-list {
+    margin-top: 2rem;
+}
+
+.file-entry {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.file-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 204, 255, 0.2);
+}
+
+.file-entry a {
+    color: var(--pharma-blue);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.file-entry a:hover {
+    color: #1f7ad0;
+}
+
+.file-entry i {
+    margin-right: 0.5rem;
+}
+
+.file-entry .btn-sm {
+    padding: 5px 10px;
+}
+
+.bi-folder-fill,
+.bi-file-earmark-fill,
+.bi-file-earmark-pdf-fill {
+    font-size: 1.2rem;
+    color: var(--pharma-blue);
+}
+
+.bi-folder-fill.text-warning {
+    color: #ffc107;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+
+    .file-entry {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .file-entry .btn {
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+}

@@ -80,6 +80,7 @@ class Document(models.Model):
         ('cv', 'CV'),
         ('paiement', 'Justificatif de paiement'),
         ('facture', 'Facture'),
+        ('devoir', 'Devoir'),
         ('autre', 'Autre'),
     ]
 

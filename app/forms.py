@@ -1,19 +1,32 @@
 from django import forms
-from .models import Etudiant, Document
-from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model
+from .models import Document
+
+CustomUser = get_user_model()
+
 
 class ImageUploadForm(forms.Form):
     image = forms.ImageField(label="Image à scanner (JPG, PNG...)")
-    etudiant = forms.ModelChoiceField(
-        queryset=Etudiant.objects.all(),
-        required=False,
-        label="Associer à un étudiant (facultatif)"
-    )
     type_document = forms.ChoiceField(
         choices=Document.TYPE_CHOICES,
         label="Type de document"
     )
+    convertir_en_pdf = forms.BooleanField(
+        label="Convertir en PDF",
+        required=False,
+        initial=True
+    )
+
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Récupère l'utilisateur si fourni
+        super().__init__(*args, **kwargs)
+
+        # Si l'utilisateur est un étudiant, on retire le champ "etudiant"
+        if user and user.groups.filter(name='Étudiants').exists():
+            self.fields.pop('etudiant')
+
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -27,19 +40,18 @@ class CustomLoginForm(AuthenticationForm):
         fields = ['username', 'password']
 
 
-CustomUser = get_user_model()
-
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(choices=CustomUser.ROLE_CHOICES)
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password1', 'password2', 'role', 'email')  # Ajoutez 'email' si utilisé
+        fields = ('username', 'password1', 'password2', 'role', 'email')  # Inclut 'email' si nécessaire
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for fieldname in ['username', 'password1', 'password2', 'role', 'email']:
-            self.fields[fieldname].help_text = None
+            if fieldname in self.fields:
+                self.fields[fieldname].help_text = None
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -47,7 +59,8 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
+
+
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
