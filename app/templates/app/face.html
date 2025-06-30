@@ -5,23 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Face ID</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'face.css' %}">
+
+    <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <link rel="stylesheet" href="{% static 'face.css' %}">
 </head>
 <body>
-    <div id="threejs-bg"></div>
     
+    <!-- ===== Sidebar from base.html (manually integrated) ===== -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'logo/logo.png' %}" alt="Logo">
+        </div>
+    
+        <ul>
+            <li><a href="{% url 'face' %}" class="nav-link"><i class="bi bi-person-bounding-box"></i> Reconnaissance Faciale</a></li>
+            <li><a href="{% url 'login' %}" class="nav-link"><i class="bi bi-box-arrow-right"></i> Login</a></li>
+        <li>
+            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-link btn btn-link"><i class="bi bi-box-arrow-right"></i> Déconnexion</button>
+            </form>
+        </li>
+            <!-- autres liens -->
+        </ul>
+    </div>
+
+    <!-- ========================================================= -->
+
+    <div id="threejs-bg"></div>
     <div class="glow-circle" style="top: 20%; left: 10%;"></div>
     <div class="glow-circle" style="top: 60%; right: 15%;"></div>
     <div class="glow-circle" style="bottom: 10%; left: 30%;"></div>
-    
+
     <div class="container">
         <h1>Face ID!</h1>
         
         <div class="auth-box">
             <div class="scan-line"></div>
-            
+
             {% if messages %}
             <div class="messages">
                 {% for message in messages %}
@@ -32,7 +58,7 @@
             
             <div class="camera-container">
                 <video id="video" width="640" height="480" autoplay playsinline></video>
-                <canvas id="canvas" width="640" height="480"></canvas> <!-- Afficher le canvas pour débogage -->
+                <canvas id="canvas" width="640" height="480"></canvas>
             </div>
             
             <form id="loginForm" method="POST" enctype="multipart/form-data">
@@ -47,31 +73,23 @@
     </div>
 
     <script>
-        // Three.js Background
+        // Three.js and webcam logic (inchangé)
         const bgContainer = document.getElementById('threejs-bg');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        
         renderer.setSize(window.innerWidth, window.innerHeight);
         bgContainer.appendChild(renderer.domElement);
-        
-        // Create neon grid
         const gridHelper = new THREE.GridHelper(40, 40, 0x00ffff, 0x00ffff);
         gridHelper.position.y = -5;
         scene.add(gridHelper);
-        
-        // Create floating particles
         const particlesGeometry = new THREE.BufferGeometry();
         const particleCount = 1000;
-        
         const posArray = new Float32Array(particleCount * 3);
         for(let i = 0; i < particleCount * 3; i++) {
             posArray[i] = (Math.random() - 0.5) * 50;
         }
-        
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        
         const particlesMaterial = new THREE.PointsMaterial({
             size: 0.1,
             color: 0x00ffff,
@@ -79,34 +97,23 @@
             opacity: 0.8,
             blending: THREE.AdditiveBlending
         });
-        
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
-        
         camera.position.z = 20;
-        
-        // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-            
             gridHelper.rotation.x += 0.0005;
             gridHelper.rotation.z += 0.0005;
-            
             particlesMesh.rotation.y += 0.0002;
-            
             renderer.render(scene, camera);
         }
-        
         animate();
-        
-        // Handle window resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Webcam and capture functionality
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const context = canvas.getContext('2d');
@@ -118,26 +125,19 @@
             .catch(err => console.error("Error accessing webcam:", err));
 
         function capture() {
-            // Add visual feedback
             const btn = document.querySelector('.btn');
             btn.innerHTML = '<div class="spinner"></div>Processing...';
             btn.style.pointerEvents = 'none';
-            
-            // Flash effect
             video.style.transition = 'box-shadow 0.3s ease';
             video.style.boxShadow = '0 0 50px rgba(0, 255, 255, 0.8)';
-            
             setTimeout(() => {
                 video.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.3)';
             }, 300);
-            
-            // Capture image
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             const dataUrl = canvas.toDataURL('image/jpeg');
             const blob = dataURLtoBlob(dataUrl);
             const formData = new FormData();
             formData.append('image', blob, 'capture.jpg');
-            
             fetch('', {
                 method: 'POST',
                 body: formData,

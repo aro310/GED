@@ -59,7 +59,7 @@ def register_face(username, image_path=None):
 
 if __name__ == "__main__":
     register_face("tsito", "image/Aro.jpeg")
-    register_face("bebe", "image/Bebe.jpeg")
     register_face("hery", "image/Hery.jpeg")
+    register_face("aro321", "image/Admin.jpg")
 
     print("Enregistrement terminé. Vérifiez la base de données.")
