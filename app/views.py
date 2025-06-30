@@ -243,6 +243,13 @@ def update_user_password(request, username):
     return render(request, 'app/update_password.html', {'username': username})
 
 # Autres vues existantes...
+import os
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import render
+from django.contrib.auth import get_user_model
+
 @login_required
 def admin_dashboard(request):
     if request.user.role != 'admin':
@@ -250,7 +257,7 @@ def admin_dashboard(request):
 
     # --- 1. Charger les utilisateurs ---
     CustomUser = get_user_model()
-    users = CustomUser.objects.exclude(id=request.user.id)  # éviter d'afficher l'admin lui-même
+    users = CustomUser.objects.exclude(id=request.user.id)  # ne pas afficher l'admin lui-même
 
     # --- 2. Gérer l’exploration de /media/documents/ ---
     base_path = os.path.join(settings.MEDIA_ROOT, 'documents')
@@ -259,7 +266,7 @@ def admin_dashboard(request):
     current_path = request.GET.get('path', '')
     abs_path = os.path.abspath(os.path.join(base_path, current_path))
 
-    # Sécurité : empêcher l'accès hors du dossier autorisé
+    # Sécurité : empêcher l'accès hors dossier autorisé
     if not abs_path.startswith(base_path):
         return HttpResponseForbidden("Chemin non autorisé.")
 
@@ -277,6 +284,16 @@ def admin_dashboard(request):
     except Exception as e:
         print("Erreur lecture documents :", e)
 
+    # --- 3. Gestion AJAX ---
+    if request.GET.get('ajax') == '1' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data = {
+            'folders': folders,
+            'files': files,
+            'current_path': current_path,
+        }
+        return JsonResponse(data)
+
+    # --- 4. Rendre la page complète ---
     return render(request, 'app/admin_dashboard.html', {
         'user': request.user,
         'users': users,
@@ -285,6 +302,7 @@ def admin_dashboard(request):
         'current_path': current_path,
         'MEDIA_URL': settings.MEDIA_URL,
     })
+
 
 
 @login_required

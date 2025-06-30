@@ -7,11 +7,28 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'prof.css' %}">
+<style>
+    .user-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    }
+
+</style>
 {% endblock %}
 
 {% block main_content %}
 <div class="dashboard-container">
-    <h1>Bienvenue, {{ user.username }} (Professeur)</h1>
+    <div class="d-flex align-items-center mb-4">
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Photo de profil" class="user-photo me-3">
+        {% else %}
+            <img src="{% static 'default-avatar.png' %}" alt="Avatar par défaut" class="user-photo me-3">
+        {% endif %}
+        <h1 class="m-0">Bienvenue, {{ user.username }} (Professeur)</h1>
+    </div>
     <p>Ceci est votre tableau de bord.</p>
     <!-- Liste des demandes de partage -->
     {% if sharing_requests %}
