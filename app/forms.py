@@ -40,12 +40,15 @@ class CustomLoginForm(AuthenticationForm):
         fields = ['username', 'password']
 
 
+CustomUser = get_user_model()
+
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(choices=CustomUser.ROLE_CHOICES)
+    photo = forms.ImageField(required=False, label="Photo de profil")
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password1', 'password2', 'role', 'email')  # Inclut 'email' si nécessaire
+        fields = ('username', 'password1', 'password2', 'role', 'email', 'photo')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,13 +56,26 @@ class CustomUserCreationForm(UserCreationForm):
             if fieldname in self.fields:
                 self.fields[fieldname].help_text = None
 
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        if photo:
+            valid_extensions = ['jpg', 'jpeg', 'png']
+            extension = photo.name.split('.')[-1].lower()
+            if extension not in valid_extensions:
+                raise forms.ValidationError("L'image doit être au format JPG ou PNG.")
+            if photo.size > 5 * 1024 * 1024:  # 5 Mo
+                raise forms.ValidationError("L'image ne doit pas dépasser 5 Mo.")
+        return photo
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.role = self.cleaned_data['role']
+        photo = self.cleaned_data.get('photo')
+        print("Photo reçue dans cleaned_data:", photo)  # Débogage
+        user.photo = photo
         if commit:
             user.save()
         return user
-
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:

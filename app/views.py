@@ -204,10 +204,11 @@ def login_view(request):
 def register_view(request):
     """Vue pour l'inscription d'un nouvel utilisateur."""
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            return redirect(admin_dashboard)
+        form = CustomUserCreationForm(request.POST, request.FILES)  # Inclure request.FILES
+        if  form.is_valid():
+            form.save()
+        else:
+            print("Erreurs du formulaire:", form.errors)  # Débogage des erreurs
     else:
         form = CustomUserCreationForm()
     return render(request, 'app/register.html', {'form': form})
