@@ -14,16 +14,17 @@
     <h1>Bienvenue, {{ user.username }} (Étudiant)</h1>
     <p>Ceci est votre tableau de bord.</p>
 
+    <!-- Bouton upload -->
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#uploadModal">
         Téléverser 
     </button>
 
     <!-- Modal Upload -->
-    <div class="modal fade" id="uploadModal" data-bs-backdrop="false" ... >
+    <div class="modal fade" id="uploadModal" data-bs-backdrop="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="uploadModalLabel">Téléverser une image</h1>
+                    <h1 class="modal-title fs-5">Téléverser une image</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
@@ -43,12 +44,12 @@
         </div>
     </div>
 
-    <!-- Modal Share -->
-    <div class="modal fade" id="shareModal" data-bs-backdrop="false" ... >
+    <!-- Modal Partage Document -->
+    <div class="modal fade" id="shareModal" data-bs-backdrop="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="shareModalLabel">Partager un document</h1>
+                    <h1 class="modal-title fs-5">Partager un document</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
@@ -72,7 +73,36 @@
         </div>
     </div>
 
-    <!-- Search bar -->
+    <!-- Modal Partage Audio -->
+    <div class="modal fade" id="shareAudioModal" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Partager un fichier audio</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="share_audio" value="true">
+                        <input type="hidden" id="audio_path" name="audio_path">
+                        <div class="mb-3">
+                            <label for="audio_receiver" class="form-label">Choisir un professeur :</label>
+                            <select name="receiver" id="audio_receiver" class="form-select" required>
+                                <option value="">Sélectionner un professeur</option>
+                                {% for prof in professors %}
+                                    <option value="{{ prof.id }}">{{ prof.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barre de recherche -->
     <div class="search-bar">
         <form method="GET" action="">
             <input type="text" name="q" id="searchInput" placeholder="Rechercher un fichier..." value="{{ query }}">
@@ -81,9 +111,10 @@
         </form>
     </div>
 
+    <!-- Affichage des fichiers PDF -->
     {% if grouped_files %}
         <div class="file-list">
-            <h3>Vos fichiers organisés :</h3>
+            <h3>Vos fichiers PDF :</h3>
             {% for folder, files in grouped_files.items %}
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -110,78 +141,75 @@
     {% else %}
         <div class="alert alert-info">Aucun fichier PDF trouvé pour cet utilisateur.</div>
     {% endif %}
+
+    <!-- Bloc fichiers audio -->
+    {% if grouped_audio_files %}
+        <div class="mt-5">
+            <h3>Vos fichiers audio :</h3>
+            {% for dossier, fichiers in grouped_audio_files.items %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <strong>{{ dossier }}</strong>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for fichier in fichiers %}
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>{{ fichier.nom }}</span>
+                                    <button class="btn btn-sm btn-info share-audio-btn" data-path="{{ fichier.rel_path }}">Partager</button>
+                                </div>
+                                <audio controls class="mt-2 w-100">
+                                    <source src="{{ fichier.url }}" type="audio/mpeg">
+                                    Votre navigateur ne supporte pas l'élément <code>audio</code>.
+                                </audio>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4">Aucun fichier audio trouvé.</div>
+    {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- ✅ Important : charger Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('searchInput');
-        const suggestionsDiv = document.getElementById('suggestions');
-        const allFilesData = document.getElementById('allFilesData');
-        let allFiles = [];
-        if (allFilesData && allFilesData.textContent) {
-            allFiles = JSON.parse(allFilesData.textContent);
-        } else {
-            console.warn('allFilesData est vide ou inexistant');
-        }
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('searchInput');
+    const suggestionsDiv = document.getElementById('suggestions');
+    const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
+    const shareAudioModal = new bootstrap.Modal(document.getElementById('shareAudioModal'));
 
-        const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
-
-        if (input && suggestionsDiv) {
-            input.addEventListener('input', function() {
-                const query = input.value.toLowerCase();
-                suggestionsDiv.innerHTML = '';
-                if (query) {
-                    const filtered = allFiles.filter(f => f.toLowerCase().startsWith(query));
-                    if (filtered.length > 0) {
-                        filtered.forEach(s => {
-                            const div = document.createElement('div');
-                            div.className = 'suggestion-item';
-                            div.textContent = s;
-                            div.onclick = () => {
-                                input.value = s;
-                                suggestionsDiv.style.display = 'none';
-                                document.querySelector('.search-bar form').submit();
-                            };
-                            suggestionsDiv.appendChild(div);
-                        });
-                        suggestionsDiv.style.display = 'block';
-                    } else {
-                        suggestionsDiv.style.display = 'none';
-                    }
-                } else {
-                    suggestionsDiv.style.display = 'none';
-                }
+    // Suggestions de recherche
+    document.querySelectorAll('.share-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const path = this.getAttribute('data-path');
+            document.getElementById('document_path').value = path;
+            document.querySelectorAll('.collapse.show').forEach(collapse => {
+                bootstrap.Collapse.getInstance(collapse).hide();
             });
-        }
-
-        document.addEventListener('click', e => {
-            if (!e.target.closest('.search-bar')) {
-                suggestionsDiv.style.display = 'none';
-            }
-        });
-
-        document.querySelectorAll('.share-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation(); // Empêche la propagation de l'événement
-                const path = this.getAttribute('data-path');
-                document.getElementById('document_path').value = path;
-                
-                // Ferme d'abord tous les collapses ouverts
-                document.querySelectorAll('.collapse.show').forEach(collapse => {
-                    bootstrap.Collapse.getInstance(collapse).hide();
-                });
-                
-                // Ouvre le modal
-                const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
-                shareModal.show();
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    shareModal.show();
+                }, 300);
         });
     });
+
+    document.querySelectorAll('.share-audio-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const path = this.getAttribute('data-path');
+            document.getElementById('audio_path').value = path;
+            shareAudioModal.show();
+        });
+    });
+});
 </script>
 {% endblock %}

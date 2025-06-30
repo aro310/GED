@@ -113,6 +113,7 @@ class Document(models.Model):
 
 class DocumentSharingRequest(models.Model):
     document = models.ForeignKey(Document, on_delete=models.CASCADE, null=True, blank=True)
+    audio_path = models.CharField(max_length=500, blank=True, null=True, help_text="Chemin du fichier audio si applicable")
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_requests')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_requests')
     created_at = models.DateTimeField(auto_now_add=True)

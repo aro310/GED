@@ -207,9 +207,7 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Connecter l'utilisateur automatiquement après inscription
-            login(request, user)
-            return redirect_by_role(user)
+            return redirect(admin_dashboard)
     else:
         form = CustomUserCreationForm()
     return render(request, 'app/register.html', {'form': form})
@@ -303,6 +301,14 @@ def profs_dashboard(request):
         for req in sharing_requests if req.status == 'accepted' and req.document and req.document.fichier
     ]
 
+    accepted_audio = [
+    {
+        'url': os.path.join(settings.MEDIA_URL, req.audio_path).replace('\\', '/'),
+        'name': os.path.basename(req.audio_path)
+    }
+    for req in sharing_requests if req.status == 'accepted' and req.audio_path
+    ]
+
     if request.method == 'POST':
         request_id = request.POST.get('request_id')
         if 'accept_request' in request.POST:
@@ -325,7 +331,123 @@ def profs_dashboard(request):
         'request': request,
         'sharing_requests': sharing_requests,
         'accepted_files': accepted_files,
+        'accepted_audio': accepted_audio,
         'media_url': settings.MEDIA_URL,
+    })
+
+@login_required
+def etudiant_dashboard(request):
+    user = request.user
+    query = request.GET.get('q', '').strip()
+
+    grouped_files = defaultdict(list)
+    grouped_audio_files = defaultdict(list)
+    audio_extensions = ('.mp3', '.wav', '.ogg')
+
+    # ---------------------
+    # 1. Documents (PDF, images, audio dans /documents/)
+    user_doc_path = path.join(settings.MEDIA_ROOT, 'documents', user.username)
+    if path.exists(user_doc_path):
+        try:
+            for root, dirs, files in walk(user_doc_path):
+                for file in files:
+                    full_path = path.join(root, file)
+                    if not path.isfile(full_path):
+                        continue
+
+                    rel_path = path.relpath(full_path, user_doc_path)
+                    parts = rel_path.split(path.sep)
+                    folder = parts[0] if len(parts) > 1 else "Autres"
+                    file_url = path.join(settings.MEDIA_URL, 'documents', user.username, *parts).replace('\\', '/')
+
+                    if not query or query.lower() in rel_path.lower():
+                        # Catégorie : PDF/images
+                        if file.lower().endswith(('.pdf', '.jpg', '.jpeg', '.png', '.gif')):
+                            grouped_files[folder].append({
+                                'nom': file,
+                                'url': file_url,
+                                'rel_path': rel_path
+                            })
+                        # Catégorie : audio dans documents/
+                        elif file.lower().endswith(audio_extensions):
+                            grouped_audio_files[folder].append({
+                                'nom': file,
+                                'url': file_url,
+                                'rel_path': rel_path
+                            })
+        except Exception as e:
+            print(f"Erreur lors de l'exploration de /documents : {e}")
+
+    # ---------------------
+    # 2. Fichiers audio dans /audio/<username>/
+    audio_dir = os.path.join(settings.MEDIA_ROOT, 'audio', user.username)
+    if os.path.exists(audio_dir):
+        try:
+            for root, _, files in os.walk(audio_dir):
+                folder = os.path.relpath(root, audio_dir)
+                folder = folder if folder != '.' else 'Racine'
+                for f in files:
+                    if f.lower().endswith(audio_extensions):
+                        abs_path = os.path.join(root, f)
+                        rel_path = os.path.relpath(abs_path, settings.MEDIA_ROOT)
+                        grouped_audio_files[folder].append({
+                            'nom': f,
+                            'url': os.path.join(settings.MEDIA_URL, rel_path).replace('\\', '/'),
+                            'rel_path': os.path.relpath(abs_path, path.join(settings.MEDIA_ROOT, 'audio', user.username))
+                        })
+        except Exception as e:
+            print(f"Erreur lors de l'exploration de /audio : {e}")
+
+    # ---------------------
+    # 3. Partage de document
+    if request.method == 'POST' and 'share_document' in request.POST:
+        document_path = request.POST.get('document_path')
+        receiver_id = request.POST.get('receiver')
+
+        if document_path and receiver_id:
+            try:
+                receiver = get_user_model().objects.get(id=receiver_id)
+                document_relative_path = path.join('documents', user.username, document_path)
+                document = Document.objects.filter(fichier=document_relative_path).first()
+
+                if document:
+                    DocumentSharingRequest.objects.create(
+                        document=document,
+                        sender=user,
+                        receiver=receiver
+                    )
+                else:
+                    print(f"Document introuvable : {document_relative_path}")
+            except get_user_model().DoesNotExist:
+                print("Utilisateur destinataire non trouvé")
+    elif 'share_audio' in request.POST:
+        audio_path = request.POST.get('audio_path')
+        receiver_id = request.POST.get('receiver')
+        if audio_path and receiver_id:
+            try:
+                receiver = get_user_model().objects.get(id=receiver_id)
+                DocumentSharingRequest.objects.create(
+                    audio_path=os.path.join('audio', user.username, audio_path),
+                    sender=user,
+                    receiver=receiver
+                )
+            except get_user_model().DoesNotExist:
+                print("Professeur non trouvé pour partage audio")
+
+    # ---------------------
+    # 4. Préparer le contexte
+    professors = get_user_model().objects.filter(role='prof')
+
+    return render(request, 'app/etudiant_dashboard.html', {
+        'user': user,
+        'request': request,
+        'form': ImageUploadForm(),
+        'grouped_files': dict(grouped_files),
+        'grouped_audio_files': dict(grouped_audio_files),
+        'media_url': settings.MEDIA_URL,
+        'query': query,
+        'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]],
+        'professors': professors
     })
 
 @login_required
@@ -334,73 +456,8 @@ def secretariat_dashboard(request):
 
 from collections import defaultdict
 
-@login_required
-def etudiant_dashboard(request):
-    user_folder_path = path.join(settings.MEDIA_ROOT, 'documents', request.user.username)
-    grouped_files = defaultdict(list)
-    query = request.GET.get('q', '').strip()
 
-    if path.exists(user_folder_path):
-        try:
-            for root, dirs, files in walk(user_folder_path):
-                for file in files:
-                    if file.lower().endswith(('.pdf', '.jpg', '.jpeg', '.png', '.gif')):
-                        full_path = path.join(root, file)
-                        if path.isfile(full_path):
-                            rel_path = path.relpath(full_path, user_folder_path)
-                            parts = rel_path.split(path.sep)
-                            folder = parts[0] if len(parts) > 1 else "Autres"
-                            if not query or query.lower() in rel_path.lower():
-                                grouped_files[folder].append({
-                                    'nom': file,
-                                    'url': path.join(settings.MEDIA_URL, 'documents', request.user.username, *parts),
-                                    'rel_path': rel_path
-                                })
-        except Exception as e:
-            print(f"Error walking through directory: {e}")
-
-    if request.method == 'POST' and 'share_document' in request.POST:
-        document_path = request.POST.get('document_path')
-        receiver_id = request.POST.get('receiver')
-
-        if document_path and receiver_id:
-            try:
-                from django.contrib.auth import get_user_model
-                CustomUser = get_user_model()
-                receiver = CustomUser.objects.get(id=receiver_id)
-
-                # Recherche du Document correspondant
-                document_relative_path = path.join('documents', request.user.username, document_path)
-                document = Document.objects.filter(fichier=document_relative_path).first()
-
-                if document:
-                    DocumentSharingRequest.objects.create(
-                        document=document,
-                        sender=request.user,
-                        receiver=receiver
-                    )
-                else:
-                    print(f"Document introuvable : {document_relative_path}")
-
-            except CustomUser.DoesNotExist:
-                print("Utilisateur destinataire non trouvé")
-
-    # Filtrer les professeurs en utilisant le modèle personnalisé
-    from django.contrib.auth import get_user_model
-    CustomUser = get_user_model()
-    professors = CustomUser.objects.filter(role='prof')
-
-    return render(request, 'app/etudiant_dashboard.html', {
-        'user': request.user,
-        'request': request,
-        'form': ImageUploadForm(),
-        'grouped_files': dict(grouped_files),
-        'media_url': settings.MEDIA_URL,
-        'query': query,
-        'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]],
-        'professors': professors
-    })
-
+    
 # Configuration de MediaPipe FaceMesh
 mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(

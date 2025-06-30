@@ -13,13 +13,6 @@
 <div class="dashboard-container">
     <h1>Bienvenue, {{ user.username }} (Professeur)</h1>
     <p>Ceci est votre tableau de bord.</p>
-
-    <!-- Formulaire de déconnexion -->
-    <form action="{% url 'logout' %}" method="post" class="mb-3">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Se déconnecter</button>
-    </form>
-
     <!-- Liste des demandes de partage -->
     {% if sharing_requests %}
         <div class="file-list">
@@ -64,6 +57,21 @@
     {% else %}
         <div class="alert alert-info">Aucun fichier accepté pour le moment.</div>
     {% endif %}
+
+    {% if accepted_audio %}
+    <h3>Audios partagés</h3>
+    <ul>
+    {% for audio in accepted_audio %}
+        <li>
+            {{ audio.name }}<br>
+            <audio controls>
+                <source src="{{ audio.url }}" type="audio/mpeg">
+            </audio>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 </div>
 {% endblock %}
 
