@@ -125,7 +125,7 @@ def upload_image(request):
 
                 audio = client.text_to_speech.convert(
                     text=texte,
-                    voice_id="pNInz6obpgDQGcFmaJgB",
+                    voice_id="SOYHLrjzK2X1ezoPC6cr",
                     model_id="eleven_multilingual_v2",
                     output_format="mp3_44100_128",
                 )
@@ -476,55 +476,6 @@ def secretariat_dashboard(request):
 from collections import defaultdict
 
 
-    
-# Configuration de MediaPipe FaceMesh
-mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh(
-    max_num_faces=1,
-    refine_landmarks=True,
-    min_detection_confidence=0.7,
-    min_tracking_confidence=0.7,
-    static_image_mode=False
-)
-
-def compute_landmark_distances(landmarks, img_shape=None):
-    """Calcule les distances normalisées entre les points clés du visage."""
-    if not landmarks:
-        return None
-        
-    # Points clés (yeux, nez, bouche, contour visage)
-    key_points = [33, 133, 362, 263, 1, 168, 199, 4, 5, 195, 197]
-    distances = []
-    
-    # Conversion en coordonnées pixels si l'image est fournie
-    if img_shape:
-        h, w = img_shape[:2]
-        landmarks = [(lm.x * w, lm.y * h) for lm in landmarks]
-    
-    # Calcul des distances euclidiennes
-    for i in range(len(key_points)):
-        for j in range(i + 1, len(key_points)):
-            p1 = landmarks[key_points[i]]
-            p2 = landmarks[key_points[j]]
-            
-            if img_shape:
-                dist = np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
-            else:
-                dist = np.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
-            
-            distances.append(dist)
-    
-    # Normalisation par la distance inter-oculaire
-    if img_shape:
-        left_eye = landmarks[33]
-        right_eye = landmarks[263]
-        norm_factor = np.sqrt((left_eye[0] - right_eye[0])**2 + (left_eye[1] - right_eye[1])**2)
-    else:
-        norm_factor = np.sqrt((landmarks[33].x - landmarks[263].x)**2 + 
-                              (landmarks[33].y - landmarks[263].y)**2)
-    
-    return np.array(distances) / (norm_factor + 1e-8)  # Évite la division par zéro
-
 @csrf_exempt
 def face_view(request):
     if request.method == 'POST':
@@ -677,3 +628,109 @@ def delete_entry(request):
 
 
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from .models import Document, Niveau, Filiere, Etudiant, DocumentSharingRequest
+import logging
+
+# Configurer le logging
+logger = logging.getLogger(__name__)
+
+@login_required
+def gemini_chat(request):
+    response_text = None
+    user = request.user
+
+    if request.method == "POST":
+        user_input = request.POST.get("message", "").lower().strip()
+        logger.info(f"Utilisateur {user.username} a envoyé : {user_input}")
+
+        # 1. Présentation et rôle
+        if any(phrase in user_input for phrase in ["que faites vous", "qui êtes vous", "présentez vous", "votre rôle"]):
+            role_message = (
+                f"Salut {user.username} ! Je suis GEDbot, ton assistant numérique dédié à l'application GED de l'ESTI. "
+                "Je suis ici pour t’aider à gérer tes documents, partager des fichiers avec tes professeurs, et répondre à tes questions sur la vie à l'ESTI. Comment puis-je t’assister aujourd’hui ?"
+            )
+            response_text = role_message
+
+        # 2. Liste des utilisateurs
+        elif "liste des utilisateurs" in user_input or "qui utilise" in user_input:
+            CustomUser = get_user_model()
+            users = CustomUser.objects.all()
+            if users.exists():
+                user_list = "\n".join(f"- {u.username} ({u.role})" for u in users)
+                response_text = f"Voici les utilisateurs enregistrés à l'ESTI :\n{user_list}"
+            else:
+                response_text = "Oups ! Il semble qu’il n’y ait aucun utilisateur enregistré pour le moment. Peut-être un petit bug à signaler à l’admin ?"
+
+        elif "bonjour" in user_input or "salut" in user_input:
+            response_text= f"Bonjour {user.username}😄"
+            
+
+        elif "reglement" in user_input:
+            response_text = f"""📘 Explication des règles du Système LMD adoptées à l’ESTI – Année Universitaire 2024-2025
+
+                                ✔️ **Admis** : Toutes les Unités d’Enseignements (UE) sont validées.
+
+                                🟡 **Admissible** : Passage en classe supérieure mais il existe encore une ou plusieurs UE (ou matières dans une ou plusieurs UE) à rattraper.
+
+                                🔁 **Redoublement** : Si la moyenne générale est inférieure ou égale à 10/20.
+
+                                📌 Une UE est validée si la moyenne obtenue pour cette UE, compte tenu des coefficients, est supérieure ou égale à 10/20. 
+                                Le coefficient d’une matière est pris égal au nombre de crédits alloués à cette matière.
+
+                                ⚠️ Même si la moyenne d’une UE est suffisante, l’obtention d’une **note éliminatoire (< 05/20)** entraîne l’annulation de la validation de l’UE.
+
+                                📈 Le passage en classe supérieure (L2 ou L3) nécessite une moyenne générale annuelle de **10/20** ou plus.
+
+                                🔍 **IMPORTANT** :
+                                Réfléchissez dès maintenant au **choix du parcours** à suivre en L2 et précisez-le dans la fiche d’inscription :
+
+                                🎓 Deux parcours sont disponibles dès la 2ᵉ année :
+                                ➔ Parcours « Réseaux et Systèmes » (RSI)
+                                ➔ Parcours « Intégration et Développement » (IDev)
+
+                                📄 Le règlement pédagogique de l’ESTI vous sera communiqué prochainement.
+                                """
+
+
+        # 3. Documents récents
+        elif "documents récents" in user_input or "derniers fichiers" in user_input:
+            docs = Document.objects.filter(uploaded_by=user).order_by("-date_ajout")[:5]
+            if docs.exists():
+                doc_list = "\n".join(
+                    f"- {d.fichier.name.split('/')[-1]} ({d.date_ajout.strftime('%d/%m/%Y')}) [{d.get_type_document_display()}]"
+                    for d in docs
+                )
+                response_text = f"Voici tes documents les plus récents à l'ESTI :\n{doc_list}\nBesoin d’en partager un ?"
+            else:
+                response_text = "Tu n’as pas encore téléversé de documents. Pourquoi ne pas commencer avec un CV ou un relevé de notes ?"
+
+        elif "partager" in user_input or "demande de partage" in user_input:
+            requests = DocumentSharingRequest.objects.filter(sender=user).order_by("-created_at")
+            if requests.exists():
+                req_list = "\n".join(
+                    f"- {req.receiver.username} ({req.status}) [{req.document.fichier.name.split('/')[-1] if req.document else req.audio_path}]"
+                    for req in requests
+                )
+                response_text = f"Tes dernières demandes de partage à l'ESTI :\n{req_list}"
+            else:
+                response_text = "Tu n’as pas encore partagé de documents. Prêt à envoyer un fichier à un prof ?"
+
+        # 7. Réponse par défaut (simulation de Gemini)
+        else:
+            # Simulation de l'appel à Gemini (remplacé par une réponse générique)
+            gemini_response = (
+                f"Hmm, {user.username}, je ne suis pas sûr de comprendre '{user_input}'. "
+                "Je suis GEDbot, pas un devin ! 😄 Peux-tu me donner plus de détails ? "
+                "Par exemple, veux-tu parler de tes documents, de tes profs, ou de quelque chose d’autre à l'ESTI ?"
+            ).replace("Gemini", "GEDbot").replace("Google", "ESTI")
+            response_text = gemini_response
+            logger.info(f"Réponse générique envoyée : {response_text}")
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'response': response_text})
+
+    return render(request, "app/gemini_chat.html", {"response": response_text})

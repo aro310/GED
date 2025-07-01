@@ -43,6 +43,11 @@
                   <i class="bi bi-door-open"></i> Login
                 </a>
               </li>
+              <li>
+                <a href="{% url 'bot' %}" class="nav-link">
+                  <i class="bi bi-robot"></i> Ged-bot
+                </a>
+            </li>
         <li>
             <form action="{% url 'logout' %}" method="post" class="d-inline">
                 {% csrf_token %}

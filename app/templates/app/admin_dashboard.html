@@ -42,10 +42,33 @@
     <a href="{% url 'register' %}" class="btn btn-success mb-3">Ajouter un utilisateur</a>
 
     <table class="table table-striped">
-        <!-- ... contenu inchangé ... -->
+        <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <a href="{% url 'edit_user' user.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form method="POST" action="{% url 'delete_user' user.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
-    <h2>Fichiers dans Documents/</h2>
+    <h2>Documents</h2>
     <button id="root-btn" class="btn btn-secondary mb-3"><i class="bi bi-house-fill"></i> Racine</button>
 
     <div id="current-path">
@@ -55,7 +78,7 @@
     </div>
 
     <div class="file-list">
-        <h4><i class="bi bi-folder-fill"></i> Dossiers</h4>
+        <h4><i class="bi bi-folder-fill"></i> Étudiants</h4>
         <div id="folders-container">
             {% for folder in folders %}
                 <div class="file-entry">
