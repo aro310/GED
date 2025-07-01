@@ -638,97 +638,135 @@ import logging
 # Configurer le logging
 logger = logging.getLogger(__name__)
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from .models import Document, DocumentSharingRequest
+from .gemini_api import chat_with_gemini
+from .keywords import recent_doc_keywords, sharing_keywords, regulation_keywords, greeting_keywords, presentation_keywords, user_list_keywords, features_keywords, admin_keywords, normalize_text  # Importation des mots-clésimport logging
+import os
+from collections import defaultdict
+import unicodedata
+
+# Configurer le logging
+logger = logging.getLogger(__name__)
+
 @login_required
 def gemini_chat(request):
     response_text = None
     user = request.user
 
+    # Vérifier si c'est la première interaction
+    if 'first_interaction' not in request.session:
+        request.session['first_interaction'] = True
+    is_first_interaction = request.session.get('first_interaction', False)
+
     if request.method == "POST":
-        user_input = request.POST.get("message", "").lower().strip()
-        logger.info(f"Utilisateur {user.username} a envoyé : {user_input}")
+        user_input = request.POST.get("message", "").lower().strip()  # Déjà en minuscules
+        normalized_input = normalize_text(user_input)  # Normalisation supplémentaire
+        logger.info(f"Utilisateur {user.username} (rôle: {user.role}) a envoyé : {user_input} (normalisé: {normalized_input})")
 
-        # 1. Présentation et rôle
-        if any(phrase in user_input for phrase in ["que faites vous", "qui êtes vous", "présentez vous", "votre rôle"]):
-            role_message = (
-                f"Salut {user.username} ! Je suis GEDbot, ton assistant numérique dédié à l'application GED de l'ESTI. "
-                "Je suis ici pour t’aider à gérer tes documents, partager des fichiers avec tes professeurs, et répondre à tes questions sur la vie à l'ESTI. Comment puis-je t’assister aujourd’hui ?"
-            )
-            response_text = role_message
+        # Mettre à jour le statut après la première interaction
+        if is_first_interaction:
+            request.session['first_interaction'] = False
 
-        # 2. Liste des utilisateurs
-        elif "liste des utilisateurs" in user_input or "qui utilise" in user_input:
+        # Préparer le contexte de base pour l'IA
+        if is_first_interaction:
+            context = f"Tu es GEDbot, un assistant IA amical et utile de l'application GED de l'ESTI. C'est la première interaction avec {user.username} ({user.role}). Accueille-le chaleureusement avec 'Salut' ou 'Bonjour' et réponds en français, de manière engageante. Si la question est hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD'). Question : {user_input}"
+        else:
+            context = f"Tu es GEDbot, un assistant IA utile de l'application GED de l'ESTI. Réponds à {user.username} ({user.role}) en français, de manière engageante, sans salutation répétitive. Si la question est hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD'). Question : {user_input}"
+
+        # Enrichir le contexte selon l'intention détectée
+        if any(keyword in normalized_input for keyword in greeting_keywords):
+            context += "\nContexte : L'utilisateur te salue. Réponds avec un accueil chaleureux."
+
+        elif any(keyword in normalized_input for keyword in presentation_keywords):
+            if is_first_interaction:
+                context += "\nContexte : L'utilisateur te demande de te présenter lors de la première interaction. Décris ton rôle à l'ESTI avec un 'Salut'."
+            else:
+                context += "\nContexte : L'utilisateur te demande de te présenter. Décris ton rôle à l'ESTI sans salutation."
+
+        elif any(keyword in normalized_input for keyword in user_list_keywords):
             CustomUser = get_user_model()
             users = CustomUser.objects.all()
             if users.exists():
                 user_list = "\n".join(f"- {u.username} ({u.role})" for u in users)
-                response_text = f"Voici les utilisateurs enregistrés à l'ESTI :\n{user_list}"
+                context += f"\nDonnées : Liste des utilisateurs enregistrés à l'ESTI :\n{user_list}"
             else:
-                response_text = "Oups ! Il semble qu’il n’y ait aucun utilisateur enregistré pour le moment. Peut-être un petit bug à signaler à l’admin ?"
+                context += "\nDonnées : Aucun utilisateur enregistré pour l’instant."
 
-        elif "bonjour" in user_input or "salut" in user_input:
-            response_text= f"Bonjour {user.username}😄"
-            
-
-        elif "reglement" in user_input:
-            response_text = f"""📘 Explication des règles du Système LMD adoptées à l’ESTI – Année Universitaire 2024-2025
-
-                                ✔️ **Admis** : Toutes les Unités d’Enseignements (UE) sont validées.
-
-                                🟡 **Admissible** : Passage en classe supérieure mais il existe encore une ou plusieurs UE (ou matières dans une ou plusieurs UE) à rattraper.
-
-                                🔁 **Redoublement** : Si la moyenne générale est inférieure ou égale à 10/20.
-
-                                📌 Une UE est validée si la moyenne obtenue pour cette UE, compte tenu des coefficients, est supérieure ou égale à 10/20. 
-                                Le coefficient d’une matière est pris égal au nombre de crédits alloués à cette matière.
-
-                                ⚠️ Même si la moyenne d’une UE est suffisante, l’obtention d’une **note éliminatoire (< 05/20)** entraîne l’annulation de la validation de l’UE.
-
-                                📈 Le passage en classe supérieure (L2 ou L3) nécessite une moyenne générale annuelle de **10/20** ou plus.
-
-                                🔍 **IMPORTANT** :
-                                Réfléchissez dès maintenant au **choix du parcours** à suivre en L2 et précisez-le dans la fiche d’inscription :
-
-                                🎓 Deux parcours sont disponibles dès la 2ᵉ année :
-                                ➔ Parcours « Réseaux et Systèmes » (RSI)
-                                ➔ Parcours « Intégration et Développement » (IDev)
-
-                                📄 Le règlement pédagogique de l’ESTI vous sera communiqué prochainement.
-                                """
-
-
-        # 3. Documents récents
-        elif "documents récents" in user_input or "derniers fichiers" in user_input:
+        elif any(keyword in normalized_input for keyword in recent_doc_keywords):
             docs = Document.objects.filter(uploaded_by=user).order_by("-date_ajout")[:5]
             if docs.exists():
                 doc_list = "\n".join(
-                    f"- {d.fichier.name.split('/')[-1]} ({d.date_ajout.strftime('%d/%m/%Y')}) [{d.get_type_document_display()}]"
+                    f"- {os.path.basename(d.fichier.name)} ({d.date_ajout.strftime('%d/%m/%Y')}) [{d.get_type_document_display()}]"
                     for d in docs
                 )
-                response_text = f"Voici tes documents les plus récents à l'ESTI :\n{doc_list}\nBesoin d’en partager un ?"
+                context += f"\nDonnées : Les documents récents de {user.username} sont :\n{doc_list}"
             else:
-                response_text = "Tu n’as pas encore téléversé de documents. Pourquoi ne pas commencer avec un CV ou un relevé de notes ?"
+                context += f"\nDonnées : {user.username} n'a pas encore de documents récents."
 
-        elif "partager" in user_input or "demande de partage" in user_input:
+        elif any(keyword in normalized_input for keyword in sharing_keywords):
             requests = DocumentSharingRequest.objects.filter(sender=user).order_by("-created_at")
             if requests.exists():
                 req_list = "\n".join(
-                    f"- {req.receiver.username} ({req.status}) [{req.document.fichier.name.split('/')[-1] if req.document else req.audio_path}]"
-                    for req in requests
+                    f"- {req.receiver.username} ({req.status}) [{os.path.basename(req.document.fichier.name) if req.document else req.audio_path}]"
+                    for req in requests if req.document or req.audio_path
                 )
-                response_text = f"Tes dernières demandes de partage à l'ESTI :\n{req_list}"
+                context += f"\nDonnées : Les demandes de partage de {user.username} sont :\n{req_list}"
             else:
-                response_text = "Tu n’as pas encore partagé de documents. Prêt à envoyer un fichier à un prof ?"
+                context += f"\nDonnées : {user.username} n'a pas encore de demandes de partage."
 
-        # 7. Réponse par défaut (simulation de Gemini)
-        else:
-            # Simulation de l'appel à Gemini (remplacé par une réponse générique)
-            gemini_response = (
-                f"Hmm, {user.username}, je ne suis pas sûr de comprendre '{user_input}'. "
-                "Je suis GEDbot, pas un devin ! 😄 Peux-tu me donner plus de détails ? "
-                "Par exemple, veux-tu parler de tes documents, de tes profs, ou de quelque chose d’autre à l'ESTI ?"
-            ).replace("Gemini", "GEDbot").replace("Google", "ESTI")
-            response_text = gemini_response
-            logger.info(f"Réponse générique envoyée : {response_text}")
+        elif any(keyword in normalized_input for keyword in regulation_keywords):
+            context += (
+                "\nDonnées : Règles LMD à l’ESTI 2024-2025 :\n"
+                "✔️ Admis : Toutes les UE validées.\n"
+                "🟡 Admissible : Passage avec UE à rattraper.\n"
+                "🔁 Redoublement : Moyenne ≤ 10/20.\n"
+                "📌 UE validée si moyenne ≥ 10/20 (coefficient = crédits).\n"
+                "⚠️ Note < 5/20 annule la validation.\n"
+                "📈 Passage L2/L3 : Moyenne ≥ 10/20.\n"
+                "🎓 Parcours L2 : Réseaux/Systèmes ou Intégration/Développement."
+            )
+
+        elif any(keyword in normalized_input for keyword in features_keywords):
+            context += "\nContexte : L'utilisateur te demande tes fonctionnalités. Réponds avec : Je propose la reconnaissance faciale, réservée à l'admin qui est M. Finoana, la transformation d'images en PDF et audio par les élèves, qui peuvent ensuite être partagés avec les professeurs au choix, et les profs peuvent accepter ou refuser. Ajoute une invitation à demander de l'aide si pertinent."
+
+        elif any(keyword in normalized_input for keyword in admin_keywords):
+            context += "\nContexte : L'utilisateur te demande qui est l'admin. Réponds avec : L'admin est M. Finoana."
+
+        # Appel à l'IA pour générer la réponse (toujours exécuté)
+        response_text = chat_with_gemini(context)
+        logger.info(f"Réponse générée par chat_with_gemini : {response_text}")
+
+        # Vérification et secours si la réponse IA est vide ou hors sujet
+        if not response_text or any(phrase in response_text.lower() for phrase in ["je ne sais pas", "hors sujet", "erreur"]):
+            # Simulation de NLP : analyser le sentiment et proposer une réponse
+            positive_words = ["merci", "super", "bien", "cool"]
+            negative_words = ["problème", "erreur", "aide", "bug"]
+            sentiment = "neutre"
+            if any(word in normalized_input for word in positive_words):
+                sentiment = "positif"
+            elif any(word in normalized_input for word in negative_words):
+                sentiment = "négatif"
+
+            if sentiment == "positif":
+                response_text = (
+                    f"Content que tu sois de bonne humeur, {user.username} ! 😄 Je n’ai pas compris '{user_input}', "
+                    "mais dis-m’en plus sur tes docs ou tes profs !"
+                )
+            elif sentiment == "négatif":
+                response_text = (
+                    f"Oups, {user.username}, un souci avec '{user_input}' ? Je suis là pour aider ! "
+                    "Parle-moi de tes documents ou d’un problème."
+                )
+            else:
+                response_text = (
+                    f"Hmm, {user.username}, '{user_input}' me laisse perplexe. Je suis GEDbot, ton IA à l’ESTI ! "
+                    "Essaie 'documents récents', 'partager', ou les 'règles LMD' !"
+                )
+            logger.warning(f"Réponse IA invalide, secours activé (sentiment: {sentiment})")
 
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'response': response_text})

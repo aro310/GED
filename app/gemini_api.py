@@ -1,4 +1,4 @@
-# gestion/gemini_api.py
+# app/gemini_api.py
 
 import google.generativeai as genai
 
