@@ -777,7 +777,7 @@ def gemini_chat(request):
 
         # Enrichir le contexte selon l'intention détectée
         if any(keyword in normalized_input for keyword in greeting_keywords):
-            context += "\nContexte : L'utilisateur te salue. Réponds avec un accueil chaleureux."
+            context += f"\nContexte : L'utilisateur te salue avec '{user_input}'. Réponds avec une salutation personnalisée comme 'Salut {user.username} !' ou 'Hey {user.username}, ravi de te voir !', en restant naturel et engageant."
 
         elif any(keyword in normalized_input for keyword in presentation_keywords):
             if is_first_interaction:
