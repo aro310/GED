@@ -125,3 +125,12 @@ class DocumentSharingRequest(models.Model):
 
     def __str__(self):
         return f"{self.sender.username} -> {self.receiver.username}: {self.document.fichier.name if self.document else 'Aucun document'}"
+
+class DocumentRemark(models.Model):
+    sharing_request = models.ForeignKey(DocumentSharingRequest, on_delete=models.CASCADE, related_name='remarks')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(max_length=1000, help_text="Remarque sur le document partagé")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Remarque de {self.author.username} sur {self.sharing_request}"

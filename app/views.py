@@ -125,7 +125,7 @@ def upload_image(request):
 
                 audio = client.text_to_speech.convert(
                     text=texte,
-                    voice_id="SOYHLrjzK2X1ezoPC6cr",
+                    voice_id="pNInz6obpgDQGcFmaJgB",
                     model_id="eleven_multilingual_v2",
                     output_format="mp3_44100_128",
                 )
@@ -249,6 +249,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
+from .models import DocumentRemark
 
 @login_required
 def admin_dashboard(request):
@@ -303,7 +304,8 @@ def admin_dashboard(request):
         'MEDIA_URL': settings.MEDIA_URL,
     })
 
-
+def is_ajax(request):
+    return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
 @login_required
 def profs_dashboard(request):
@@ -315,35 +317,109 @@ def profs_dashboard(request):
     accepted_files = [
         {
             'url': req.document.fichier.url,
-            'name': os.path.basename(req.document.fichier.name)
+            'name': os.path.basename(req.document.fichier.name),
+            'id': req.id
         }
         for req in sharing_requests if req.status == 'accepted' and req.document and req.document.fichier
     ]
 
     accepted_audio = [
-    {
-        'url': os.path.join(settings.MEDIA_URL, req.audio_path).replace('\\', '/'),
-        'name': os.path.basename(req.audio_path)
-    }
-    for req in sharing_requests if req.status == 'accepted' and req.audio_path
+        {
+            'url': os.path.join(settings.MEDIA_URL, req.audio_path).replace('\\', '/'),
+            'name': os.path.basename(req.audio_path),
+            'id': req.id
+        }
+        for req in sharing_requests if req.status == 'accepted' and req.audio_path
     ]
 
     if request.method == 'POST':
-        request_id = request.POST.get('request_id')
-        if 'accept_request' in request.POST:
+        # Gestion des requêtes AJAX
+        if is_ajax(request):
+            response_data = {'success': False, 'message': 'Erreur inconnue.'}
+            request_id = request.POST.get('request_id')
+
+            # Vérifier si la demande existe et éviter les doubles soumissions
             try:
                 request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+            except DocumentSharingRequest.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'Demande non trouvée.'})
+
+            if 'accept_request' in request.POST and request_obj.status == 'pending':
                 request_obj.status = 'accepted'
                 request_obj.save()
-            except DocumentSharingRequest.DoesNotExist:
-                print("Demande non trouvée")
-        elif 'reject_request' in request.POST:
-            try:
-                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                response_data = {
+                    'success': True,
+                    'message': 'Demande acceptée avec succès.',
+                    'status': 'accepted'
+                }
+            elif 'reject_request' in request.POST and request_obj.status == 'pending':
                 request_obj.status = 'rejected'
                 request_obj.save()
+                response_data = {
+                    'success': True,
+                    'message': 'Demande rejetée.',
+                    'status': 'rejected'
+                }
+            elif 'add_remark' in request.POST:
+                remark_content = request.POST.get('remark_content')
+                if remark_content:
+                    remark = DocumentRemark.objects.create(
+                        sharing_request=request_obj,
+                        author=request.user,
+                        content=remark_content
+                    )
+                    response_data = {
+                        'success': True,
+                        'message': 'Remarque ajoutée avec succès.',
+                        'author': remark.author.username,
+                        'content': remark.content,
+                        'created_at': remark.created_at.strftime('%d/%m/%Y %H:%M')
+                    }
+                else:
+                    response_data = {'success': False, 'message': 'Le contenu de la remarque est vide.'}
+            return JsonResponse(response_data)
+
+        # Gestion des requêtes non-AJAX (pour compatibilité)
+        if 'accept_request' in request.POST:
+            try:
+                request_id = request.POST.get('request_id')
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                if request_obj.status == 'pending':
+                    request_obj.status = 'accepted'
+                    request_obj.save()
+                    messages.success(request, "Demande acceptée avec succès.")
+                else:
+                    messages.error(request, "La demande a déjà été traitée.")
             except DocumentSharingRequest.DoesNotExist:
-                print("Demande non trouvée")
+                messages.error(request, "Demande non trouvée.")
+        elif 'reject_request' in request.POST:
+            try:
+                request_id = request.POST.get('request_id')
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                if request_obj.status == 'pending':
+                    request_obj.status = 'rejected'
+                    request_obj.save()
+                    messages.error(request, "Demande rejetée.")
+                else:
+                    messages.error(request, "La demande a déjà été traitée.")
+            except DocumentSharingRequest.DoesNotExist:
+                messages.error(request, "Demande non trouvée.")
+        elif 'add_remark' in request.POST:
+            request_id = request.POST.get('request_id')
+            remark_content = request.POST.get('remark_content')
+            try:
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                if remark_content:
+                    DocumentRemark.objects.create(
+                        sharing_request=request_obj,
+                        author=request.user,
+                        content=remark_content
+                    )
+                    messages.success(request, "Remarque ajoutée avec succès.")
+                else:
+                    messages.error(request, "Le contenu de la remarque est vide.")
+            except DocumentSharingRequest.DoesNotExist:
+                messages.error(request, "Demande non trouvée.")
 
     return render(request, 'app/prof_dashboard.html', {
         'user': request.user,
@@ -358,6 +434,8 @@ def profs_dashboard(request):
 def etudiant_dashboard(request):
     user = request.user
     query = request.GET.get('q', '').strip()
+
+    messages.get_messages(request).used = True
 
     grouped_files = defaultdict(list)
     grouped_audio_files = defaultdict(list)
@@ -417,6 +495,8 @@ def etudiant_dashboard(request):
         except Exception as e:
             print(f"Erreur lors de l'exploration de /audio : {e}")
 
+    sent_requests = DocumentSharingRequest.objects.filter(sender=user).select_related('document', 'receiver').order_by('-created_at')
+
     # ---------------------
     # 3. Partage de document
     if request.method == 'POST' and 'share_document' in request.POST:
@@ -466,7 +546,20 @@ def etudiant_dashboard(request):
         'media_url': settings.MEDIA_URL,
         'query': query,
         'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]],
-        'professors': professors
+        'professors': professors,
+        'sent_requests': sent_requests,
+    })
+
+@login_required
+def notifications(request):
+    user = request.user
+    # Récupérer les demandes de partage envoyées par l'étudiant
+    messages.get_messages(request).used = True
+    sent_requests = DocumentSharingRequest.objects.filter(sender=user).select_related('document', 'receiver').order_by('-created_at')
+
+    return render(request, 'app/notifications.html', {
+        'user': user,
+        'sent_requests': sent_requests,
     })
 
 @login_required
