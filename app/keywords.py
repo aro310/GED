@@ -1,5 +1,3 @@
-# app/keywords.py
-
 # Fonction pour normaliser le texte (insensible à la casse et aux accents)
 def normalize_text(text):
     if not isinstance(text, str):
@@ -36,7 +34,7 @@ recent_doc_keywords = [
 
 sharing_keywords = [
     "partager",
-    "partagés"
+    "partagés",
     "demande de partage",
     "partage de fichier",
     "envoyer doc",
@@ -137,11 +135,10 @@ user_list_keywords = [
 ]
 
 features_keywords = [
-    "quels sont vos fonctionnalités",
+    "quels sont vos fonctionnalitéeeees",
     "fonctionnalités",
     "que pouvez vous faire",
     "vos capacités",
-    "que faites vous",
     "quelles sont vos fonctions",
     "vos competences",
     "que sais tu faire",
@@ -150,8 +147,9 @@ features_keywords = [
     "what can you do",
     "your features",
     "capabilities",
-    "what are your skills",
-    "available functions"
+    "what are your skills",#
+    "available functions",
+    "OCR",
 ]
 
 admin_keywords = [
@@ -167,4 +165,35 @@ admin_keywords = [
     "administrator",
     "who manages",
     "main admin"
+]
+
+# Nouveaux mots-clés pour les remarques
+remark_keywords = [
+    "remarques",
+    "remarque",
+    "commentaires",
+    "profs",
+    "professeur",
+    "commentaires profs",
+    "remarques professeurs",
+    "avis profs",
+    "notes profs",
+    "feedback profs",
+    "commentaires enseignants",
+    "remarques enseignants"
+]
+
+# Nouveaux mots-clés pour introduire une fonction
+function_intro_keywords = [
+    "introduire fonction",
+    "nouvelle fonction",
+    "ajouter fonction",
+    "nouveau feature",
+    "introduire feature",
+    "nouvelle capacité",
+    "ajouter capacité",
+    "new function",
+    "introduce function",
+    "add feature",
+    "new capability"
 ]

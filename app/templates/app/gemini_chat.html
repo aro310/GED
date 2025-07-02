@@ -21,10 +21,10 @@
     }
     
     .chat-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     .chat-header {
@@ -185,12 +185,23 @@
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
 
-        function addMessage(content, isUser) {
+        function addMessage(content, isUser, callback) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
-            messageDiv.textContent = content;
             chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            typeWriter(messageDiv, content, 0, () => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                if (callback) callback();
+            });
+        }
+
+        function typeWriter(element, text, index, callback) {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                setTimeout(() => typeWriter(element, text, index + 1, callback), 17); // 50ms par caractère
+            } else if (callback) {
+                callback();
+            }
         }
 
         function showTypingIndicator() {

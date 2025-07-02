@@ -721,32 +721,37 @@ def delete_entry(request):
 
 
 
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from .models import Document, Niveau, Filiere, Etudiant, DocumentSharingRequest
 import logging
-
-# Configurer le logging
-logger = logging.getLogger(__name__)
-
+import os
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Document, DocumentSharingRequest
+from .models import Document, DocumentSharingRequest, DocumentRemark
 from .gemini_api import chat_with_gemini
-from .keywords import recent_doc_keywords, sharing_keywords, regulation_keywords, greeting_keywords, presentation_keywords, user_list_keywords, features_keywords, admin_keywords, normalize_text  # Importation des mots-clésimport logging
-import os
-from collections import defaultdict
-import unicodedata
+from .keywords import (
+    recent_doc_keywords, sharing_keywords, regulation_keywords, greeting_keywords,
+    presentation_keywords, user_list_keywords, features_keywords, admin_keywords,
+    remark_keywords, function_intro_keywords, normalize_text
+)
+from time import time
 
-# Configurer le logging
+# Configurer le logging avec rotation
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] [User: %(username)s] - %(message)s',
+    handlers=[
+        logging.handlers.RotatingFileHandler(
+            'gedbot.log', maxBytes=1024*1024, backupCount=5, encoding='utf-8'
+        ),
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
 
 @login_required
 def gemini_chat(request):
+    start_time = time()  # Début du chronométrage
     response_text = None
     user = request.user
 
@@ -756,9 +761,9 @@ def gemini_chat(request):
     is_first_interaction = request.session.get('first_interaction', False)
 
     if request.method == "POST":
-        user_input = request.POST.get("message", "").lower().strip()  # Déjà en minuscules
-        normalized_input = normalize_text(user_input)  # Normalisation supplémentaire
-        logger.info(f"Utilisateur {user.username} (rôle: {user.role}) a envoyé : {user_input} (normalisé: {normalized_input})")
+        user_input = request.POST.get("message", "").lower().strip()
+        normalized_input = normalize_text(user_input)
+        logger.info(f"Utilisateur {user.username} (rôle: {user.role}) a envoyé : {user_input} (normalisé: {normalized_input})", extra={'username': user.username})
 
         # Mettre à jour le statut après la première interaction
         if is_first_interaction:
@@ -766,9 +771,9 @@ def gemini_chat(request):
 
         # Préparer le contexte de base pour l'IA
         if is_first_interaction:
-            context = f"Tu es GEDbot, un assistant IA amical et utile de l'application GED de l'ESTI. C'est la première interaction avec {user.username} ({user.role}). Accueille-le chaleureusement avec 'Salut' ou 'Bonjour' et réponds en français, de manière engageante. Si la question est hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD'). Question : {user_input}"
+            context = f"Tu es GEDbot, un assistant IA amical de l'application GED de l'ESTI. C'est la première interaction avec {user.username} ({user.role}). Accueille avec 'Salut' ou 'Bonjour' et réponds en français, de manière engageante. Si hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD', 'remarques profs', 'introduire fonction'). Question : {user_input}"
         else:
-            context = f"Tu es GEDbot, un assistant IA utile de l'application GED de l'ESTI. Réponds à {user.username} ({user.role}) en français, de manière engageante, sans salutation répétitive. Si la question est hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD'). Question : {user_input}"
+            context = f"Tu es GEDbot, un assistant IA utile de l'application GED de l'ESTI. Réponds à {user.username} ({user.role}) en français, de manière engageante, sans salutation répétitive. Si hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD', 'remarques profs', 'introduire fonction'). Question : {user_input}"
 
         # Enrichir le contexte selon l'intention détectée
         if any(keyword in normalized_input for keyword in greeting_keywords):
@@ -776,7 +781,7 @@ def gemini_chat(request):
 
         elif any(keyword in normalized_input for keyword in presentation_keywords):
             if is_first_interaction:
-                context += "\nContexte : L'utilisateur te demande de te présenter lors de la première interaction. Décris ton rôle à l'ESTI avec un 'Salut'."
+                context += "\nContexte : L'utilisateur te demande de te présenter. Décris ton rôle à l'ESTI avec un 'Salut'."
             else:
                 context += "\nContexte : L'utilisateur te demande de te présenter. Décris ton rôle à l'ESTI sans salutation."
 
@@ -824,18 +829,42 @@ def gemini_chat(request):
             )
 
         elif any(keyword in normalized_input for keyword in features_keywords):
-            context += "\nContexte : L'utilisateur te demande tes fonctionnalités. Réponds avec : Je propose la reconnaissance faciale, réservée à l'admin qui est M. Finoana, la transformation d'images en PDF et audio par les élèves, qui peuvent ensuite être partagés avec les professeurs au choix, et les profs peuvent accepter ou refuser. Ajoute une invitation à demander de l'aide si pertinent."
+            context += (
+                "\nContexte : L'utilisateur te demande tes fonctionnalités. Réponds : L'application GED est réputée pour la reconnaissance faciale par utilisateur, "
+                "mais cela nécessite l'approbation de l'admin, M. Finoana. De plus, elle peut transformer des images en PDF via OCR. Invite à demander de l'aide si pertinent."
+            )
 
         elif any(keyword in normalized_input for keyword in admin_keywords):
             context += "\nContexte : L'utilisateur te demande qui est l'admin. Réponds avec : L'admin est M. Finoana."
 
-        # Appel à l'IA pour générer la réponse (toujours exécuté)
+        elif any(keyword in normalized_input for keyword in remark_keywords):
+            prof_remarks = DocumentRemark.objects.filter(
+                sharing_request__sender=user,
+                sharing_request__receiver__role='prof',
+                author__role='prof'
+            ).order_by('-created_at')[:3]
+            if prof_remarks.exists():
+                remark_list = "\n".join(
+                    f"- {r.author.username} ({r.created_at.strftime('%d/%m/%Y')}) : {r.content[:50]}..."
+                    for r in prof_remarks
+                )
+                context += f"\nDonnées : Remarques des profs sur les partages de {user.username} :\n{remark_list}"
+            else:
+                context += f"\nDonnées : Aucun commentaire de profs sur les partages de {user.username}."
+
+        elif any(keyword in normalized_input for keyword in function_intro_keywords):
+            context += (
+                "\nContexte : L'utilisateur demande à introduire une fonction. Réponds : Je peux introduire une nouvelle fonctionnalité ! "
+                "Par exemple, une fonction de recherche avancée de documents est en cours de développement. Elle te permettra de trouver rapidement tes fichiers par mot-clé. "
+                "Dis-moi si tu veux plus d’infos ou une démo !"
+            )
+
+        # Appel à l'IA pour générer la réponse
         response_text = chat_with_gemini(context)
-        logger.info(f"Réponse générée par chat_with_gemini : {response_text}")
+        logger.info(f"Utilisateur {user.username} - Réponse générée par chat_with_gemini : {response_text[:100]}...", extra={'username': user.username})
 
         # Vérification et secours si la réponse IA est vide ou hors sujet
         if not response_text or any(phrase in response_text.lower() for phrase in ["je ne sais pas", "hors sujet", "erreur"]):
-            # Simulation de NLP : analyser le sentiment et proposer une réponse
             positive_words = ["merci", "super", "bien", "cool"]
             negative_words = ["problème", "erreur", "aide", "bug"]
             sentiment = "neutre"
@@ -857,11 +886,14 @@ def gemini_chat(request):
             else:
                 response_text = (
                     f"Hmm, {user.username}, '{user_input}' me laisse perplexe. Je suis GEDbot, ton IA à l’ESTI ! "
-                    "Essaie 'documents récents', 'partager', ou les 'règles LMD' !"
+                    "Essaie 'documents récents', 'partager', 'règles LMD', 'remarques profs', ou 'introduire fonction' !"
                 )
-            logger.warning(f"Réponse IA invalide, secours activé (sentiment: {sentiment})")
+            logger.warning(f"Utilisateur {user.username} - Réponse IA invalide, secours activé (sentiment: {sentiment})", extra={'username': user.username})
 
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'response': response_text})
+
+    execution_time = time() - start_time
+    logger.debug(f"Utilisateur {user.username} - Exécution terminée en {execution_time:.2f} secondes", extra={'username': user.username})
 
     return render(request, "app/gemini_chat.html", {"response": response_text})

@@ -1,0 +1,69 @@
+2025-07-02 19:51:23,272 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 19:51:36,384 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : commentaires profs (normalisé: commentaires profs)
+2025-07-02 19:51:41,067 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir si tes professeurs ont laissé des commentaires sur tes partages ! 
+
+Pour l'instan...
+2025-07-02 19:53:35,463 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 19:53:49,501 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : je veux savoir remarques enseignants (normalisé: je veux savoir remarques enseignants)
+2025-07-02 19:53:53,649 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Bonjour tsito ! Ravi de faire ta connaissance, je suis GEDbot, ton assistant IA dédié à l'applicatio...
+2025-07-02 19:54:20,986 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 19:54:24,677 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : feedback profs (normalisé: feedback profs)
+2025-07-02 19:54:29,183 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que les professeurs pensent de tes partages ! Parfait, je peux t'aider avec ça...
+2025-07-02 19:54:53,463 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : administrateur (normalisé: administrateur)
+2025-07-02 19:54:56,366 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir qui tient les rênes de la GED ? C'est simple : l'admin est M. Finoana. 
+
+Si tu as...
+2025-07-02 19:55:15,836 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : utilisateurs inscrits (normalisé: utilisateurs inscrits)
+2025-07-02 19:55:23,840 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu t'intéresses à la communauté ESTI sur la GED ! Voici la liste des utilisateurs enregistrés :
+...
+2025-07-02 19:55:51,952 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : demande de partage (normalisé: demande de partage)
+2025-07-02 19:55:59,417 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Super ! On dirait que tu as été très actif en partageant des documents récemment. 
+
+Pour récapituler...
+2025-07-02 19:56:20,739 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : documents recents (normalisé: documents recents)
+2025-07-02 19:56:25,877 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, je vois que tu t'intéresses à tes derniers ajouts ! Tes documents les plus récents sont donc :
+
+...
+2025-07-02 19:56:47,631 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : what are your skills (normalisé: what are your skills)
+2025-07-02 19:56:52,681 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ? Excellente question !
+
+Notr...
+2025-07-02 19:57:23,809 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 19:57:32,719 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : quels sont vos fonctionnalités (normalisé: quels sont vos fonctionnalites)
+2025-07-02 19:57:39,917 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, excellente question ! Je suis ravi que tu t'intéresses à ce que je peux faire pour toi. 
+
+En tan...
+2025-07-02 19:58:26,497 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : what can you do (normalisé: what can you do)
+2025-07-02 19:58:32,883 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ? Excellente question !
+
+Notr...
+2025-07-02 19:59:11,875 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : quels sont vos fonctionnalitéeeees (normalisé: quels sont vos fonctionnaliteeeees)
+2025-07-02 19:59:18,358 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi ? Excellente question ! Je suis là pour t'aider à n...
+2025-07-02 20:00:01,652 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : available functions (normalisé: available functions)
+2025-07-02 20:00:06,583 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ! Excellente question.
+
+Notre...
+2025-07-02 20:03:23,002 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 20:03:52,316 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : ocr (normalisé: ocr)
+2025-07-02 20:04:02,500 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent sujet. Tu veux en savoir plus sur la reconnaissance optique de caractères dans...
+2025-07-02 20:05:44,339 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : salut (normalisé: salut)
+2025-07-02 20:05:47,267 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de te voir ici. Je suis GEDbot, ton assistant pour naviguer dans l'application GED de l...
+2025-07-02 20:05:52,371 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 20:06:03,434 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : salut (normalisé: salut)
+2025-07-02 20:06:06,887 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de te voir ici. Je suis GEDbot, ton assistant pour naviguer dans l'application GED de l...
+2025-07-02 20:06:16,997 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 20:07:15,179 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 20:07:20,301 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : salut (normalisé: salut)
+2025-07-02 20:07:23,147 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de te voir ici. Je suis GEDbot, ton assistant pour naviguer dans l'application GED de l...
+2025-07-02 20:07:39,862 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 20:07:43,673 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : hey jude (normalisé: hey jude)
+2025-07-02 20:07:47,793 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! "Hey Jude" ? Une excellente chanson pour démarrer ! 😊 
+
+Mais je suis GEDbot, l'assistant de ...
+2025-07-02 20:08:02,512 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
+2025-07-02 20:08:07,316 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-02 20:08:10,494 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de t'aider à naviguer dans l'application GED de l'ESTI. Dis-moi, qu'est-ce qui t'amène ...
+2025-07-02 20:08:28,319 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : qui suis je (normalisé: qui suis je)
+2025-07-02 20:08:32,711 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, une question philosophique dès le début ! 😉 
+
+Tu es tsito, un étudiant de l'ESTI qui utilise not...
