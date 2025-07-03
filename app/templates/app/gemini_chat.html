@@ -57,6 +57,7 @@
         white-space: pre-wrap;
         font-size: 14px;
         animation: fadeIn 0.3s ease-in-out;
+        position: relative;
     }
 
     .user-message {
@@ -160,6 +161,27 @@
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    audio {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .audio-button {
+        background-color: var(--pharma-blue);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 5px 10px;
+        margin-top: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 12px;
+    }
+
+    .audio-button:hover {
+        background-color: #2678d8;
+    }
 </style>
 {% endblock %}
 
@@ -185,23 +207,19 @@
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
 
-        function addMessage(content, isUser, callback) {
+        function addMessage(content, isUser, hasAudioOption = false) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
-            chatMessages.appendChild(messageDiv);
-            typeWriter(messageDiv, content, 0, () => {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                if (callback) callback();
-            });
-        }
-
-        function typeWriter(element, text, index, callback) {
-            if (index < text.length) {
-                element.textContent += text.charAt(index);
-                setTimeout(() => typeWriter(element, text, index + 1, callback), 15); // 50ms par caractère
-            } else if (callback) {
-                callback();
+            messageDiv.textContent = content;
+            if (!isUser && hasAudioOption) {
+                const audioButton = document.createElement('button');
+                audioButton.classList.add('audio-button');
+                audioButton.textContent = 'Faire parler🗣️';
+                audioButton.onclick = () => convertToAudio(content, messageDiv);
+                messageDiv.appendChild(audioButton);
             }
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         function showTypingIndicator() {
@@ -242,6 +260,7 @@
         }
 
         async function sendMessageToServer(message) {
+            showTypingIndicator();
             try {
                 const response = await fetch('', {
                     method: 'POST',
@@ -252,13 +271,58 @@
                     },
                     body: `message=${encodeURIComponent(message)}`
                 });
-                return await response.json();
+
+                const data = await response.json();
+                if (data.response) {
+                    addMessage(data.response, false, true); // Ajoute l'option audio
+                } else {
+                    addMessage("Je n'ai pas reçu de réponse valide.", false);
+                }
             } catch (error) {
                 console.error('Error:', error);
-                return { response: "Désolé, une erreur s'est produite." };
+                addMessage("Désolé, une erreur s'est produite.", false);
+            } finally {
+                hideTypingIndicator();
             }
         }
 
+        async function convertToAudio(text, messageDiv) {
+            try {
+                const response = await fetch('/ged/generate-audio/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                if (response.headers.get('Content-Type') === 'audio/mpeg') {
+                    const blob = await response.blob();
+                    console.log('Blob size:', blob.size, 'bytes'); // Débogage
+                    const url = URL.createObjectURL(blob);
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = url;
+                    audio.onloadedmetadata = () => {
+                        console.log('Audio duration:', audio.duration, 'seconds'); // Vérifie la durée
+                    };
+                    messageDiv.appendChild(audio);
+                    messageDiv.querySelector('.audio-button').remove();
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else {
+                    const data = await response.json();
+                    if (data.error) {
+                        addMessage(`Erreur audio : ${data.error}`, false);
+                    }
+                }
+            } catch (error) {
+                console.error('Error converting to audio:', error);
+                addMessage("Erreur lors de la conversion en audio.", false);
+            }
+        }
+        
         async function processUserInput() {
             const message = userInput.value.trim();
             if (message === '') return;
@@ -266,24 +330,7 @@
             addMessage(message, true);
             userInput.value = '';
 
-            showTypingIndicator();
-
-            const startTime = Date.now();
-            const data = await sendMessageToServer(message);
-            const elapsedTime = Date.now() - startTime;
-            const minDisplayTime = 1000;
-
-            if (elapsedTime < minDisplayTime) {
-                await new Promise(resolve => setTimeout(resolve, minDisplayTime - elapsedTime));
-            }
-
-            hideTypingIndicator();
-
-            if (data.response) {
-                addMessage(data.response, false);
-            } else {
-                addMessage("Je n'ai pas reçu de réponse valide.", false);
-            }
+            await sendMessageToServer(message);
         }
 
         sendButton.addEventListener('click', processUserInput);

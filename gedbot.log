@@ -187,3 +187,393 @@ Alors, tu te demandes comment partager des documents via l'application GED de l'
 2025-07-03 16:14:15,986 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que les professeurs pensent de tes partages ? Parfait ! 
 
 D'après mes informat...
+2025-07-03 16:26:11,810 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 16:26:15,167 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 16:26:18,930 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! 
+
+Hey, ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'appl...
+2025-07-03 23:58:28,084 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 23:58:33,627 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 23:58:37,945 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! 
+
+Hey, ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'appl...
+2025-07-04 00:02:29,316 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-04 00:02:33,376 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-04 00:02:36,982 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Not Found: /generate-audio/
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Erreur avec ElevenLabs : a bytes-like object is required, not 'generator'
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Erreur avec ElevenLabs : a bytes-like object is required, not 'generator'
+E:\test\ged\app\views.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024232130970>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x00000242318F4540> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024232125300>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:15:30 GMT'), (b'server', b'uvicorn'), (b'request-id', b'BHjkJ4PQAtzJJgJA7ZnM'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'V7l2k06nCrRa5wls3rYb'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2760'), (b'Content-Length', b'251656'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'ead09207f2241a11db117c5d86ce1a87'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+E:\test\ged\app\views.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000255450F2380>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x00000255447EC8C0> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000025545166920>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:20:45 GMT'), (b'server', b'uvicorn'), (b'request-id', b'bqY9fys8DHhqg0tLY9Tp'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'm9qHWqsyMX27wjFRZaXV'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2762'), (b'Content-Length', b'252492'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'0b295319e0d572d9106c20d573df8eee'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 252492 octets
+Not Found: /favicon.ico
+E:\test\ged\GED\settings.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+E:\test\ged\GED\settings.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy (rôle: etudiant) a envoyé : documents recents (normalisé: documents recents)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que tu as récemment téléchargé ! Parfait. 
+
+Tes documents les plus récents son...
+Importing BlpImagePlugin
+Importing BmpImagePlugin
+Importing BufrStubImagePlugin
+Importing CurImagePlugin
+Importing DcxImagePlugin
+Importing DdsImagePlugin
+Importing EpsImagePlugin
+Importing FitsImagePlugin
+Importing FliImagePlugin
+Importing FpxImagePlugin
+Image: failed to import FpxImagePlugin: No module named 'olefile'
+Importing FtexImagePlugin
+Importing GbrImagePlugin
+Importing GifImagePlugin
+Importing GribStubImagePlugin
+Importing Hdf5StubImagePlugin
+Importing IcnsImagePlugin
+Importing IcoImagePlugin
+Importing ImImagePlugin
+Importing ImtImagePlugin
+Importing IptcImagePlugin
+Importing JpegImagePlugin
+Importing Jpeg2KImagePlugin
+Importing McIdasImagePlugin
+Importing MicImagePlugin
+Image: failed to import MicImagePlugin: No module named 'olefile'
+Importing MpegImagePlugin
+Importing MpoImagePlugin
+Importing MspImagePlugin
+Importing PalmImagePlugin
+Importing PcdImagePlugin
+Importing PcxImagePlugin
+Importing PdfImagePlugin
+Importing PixarImagePlugin
+Importing PngImagePlugin
+Importing PpmImagePlugin
+Importing PsdImagePlugin
+Importing QoiImagePlugin
+Importing SgiImagePlugin
+Importing SpiderImagePlugin
+Importing SunImagePlugin
+Importing TgaImagePlugin
+Importing TiffImagePlugin
+Importing WebPImagePlugin
+Importing WmfImagePlugin
+Importing XbmImagePlugin
+Importing XpmImagePlugin
+Importing XVThumbImagePlugin
+['C:\\Program Files\\Tesseract-OCR\\tesseract.exe', 'C:\\Users\\ADMIN\\AppData\\Local\\Temp\\tess_6wkjk8s4_input.JPEG', 'C:\\Users\\ADMIN\\AppData\\Local\\Temp\\tess_6wkjk8s4', '-l', 'fra', 'txt']
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024374EFDBA0>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x0000024371BF7040> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024374EFDC60>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:30:12 GMT'), (b'server', b'uvicorn'), (b'request-id', b'frtPLzWFnHXGM9Ypo8O6'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'kNBiAmaA5zDOQ1QFbl9E'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'163'), (b'tts-latency-ms', b'1829'), (b'Content-Length', b'147584'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'5a4dc1549bfd04749998a18a4ad7562a'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+E:\test\ged\GED\settings.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+E:\test\ged\app\views.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : documents recents (normalisé: documents recents)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux jeter un coup d'œil à ce que tu as récemment ajouté ! Parfait. 
+
+Voici tes derniers docu...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000021273D2C220>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x0000021272B88D40> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000212733B1BD0>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:34:39 GMT'), (b'server', b'uvicorn'), (b'request-id', b'qqOK26RBKULnfgoZbZAt'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'dTqLSfOaUTwU86qmNoP2'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'671'), (b'tts-latency-ms', b'3138'), (b'Content-Length', b'789151'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'871df926fab2afa757c65f8ae515ded3'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 789151 octets
+Not Found: /favicon.ico
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : salut (normalisé: salut)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000212734E0E50>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x00000212735556C0> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000212734E13C0>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:38:42 GMT'), (b'server', b'uvicorn'), (b'request-id', b'0cUFhXhhccBVY4WSUCXq'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'2oO1K1KV8GLNoY2LBpfk'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2460'), (b'Content-Length', b'304737'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'fbd3acae99d4ef832d2d0ff1f2315886'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 304737 octets
+Not Found: /favicon.ico
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Utilisateur Randy (rôle: etudiant) a envoyé : que faites vous (normalisé: que faites vous)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Je suis GEDbot, ton assistant dédié à l'application GED de l'ESTI. Je suis là pour t'aider à navigue...
+E:\test\ged\app\gemini_api.py changed, reloading.
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Utilisateur Randy (rôle: etudiant) a envoyé : que faites vous (normalisé: que faites vous)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Je suis GEDbot, ton assistant dédié à l'application GED de l'ESTI. Je suis là pour t'aider à navigue...
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : coucou (normalisé: coucou)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+"Coucou" c'est sympa ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui conc...
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3F6410>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x000001F85FBFC640> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3F64D0>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3E78B0>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x000001F85FBFC940> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3F6B30>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:54:48 GMT'), (b'server', b'uvicorn'), (b'request-id', b'JuXcufHKkdKSvCtGyM57'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'pK5szQlZlpJ5OCqGcKFD'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2552'), (b'Content-Length', b'322291'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'506c26489ed0449f160fc6e4cb5d62e6'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 322291 octets
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:54:51 GMT'), (b'server', b'uvicorn'), (b'request-id', b'bogx5niI2y7v2wBO4V54'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'VNoZkbYBZBko1l1OUWGY'), (b'current-concurrent-requests', b'2'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2523'), (b'Content-Length', b'298049'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'c4edcc7e1fd6010cfbddfab85f6de150'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 298049 octets
+Not Found: /favicon.ico
+Utilisateur Randy - Exécution terminée en 0.00 secondes
+Utilisateur Randy (rôle: etudiant) a envoyé : etes vous heureux (normalisé: etes vous heureux)
+Utilisateur Randy - Réponse générée par chat_with_gemini : Randy, quelle question intéressante ! En tant qu'IA, je n'éprouve pas le bonheur comme les humains. ...

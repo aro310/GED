@@ -3,7 +3,7 @@
 import google.generativeai as genai
 
 # Configurez votre clé API
-GOOGLE_API_KEY = "AIzaSyBgZqucc4f1QQo4VyHpmUxhsy5U29Y4_MY"
+GOOGLE_API_KEY = "AIzaSyC15PyLpKjHZPRPmqdxS2LYzbZKYQPQWIE"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Initialisez le modèle

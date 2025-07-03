@@ -726,9 +726,10 @@ def delete_entry(request):
 import logging
 import os
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, StreamingHttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from .models import Document, DocumentSharingRequest, DocumentRemark
 from .gemini_api import chat_with_gemini
 from .keywords import (
@@ -737,6 +738,8 @@ from .keywords import (
     remark_keywords, function_intro_keywords, normalize_text
 )
 from time import time
+from elevenlabs import ElevenLabs
+import io
 
 # Configurer le logging avec rotation
 logging.basicConfig(
@@ -861,7 +864,7 @@ def gemini_chat(request):
                 "Dis-moi si tu veux plus d’infos ou une démo !"
             )
 
-        # Appel à l'IA pour générer la réponse
+        # Appel à l'IA pour générer la réponse textuelle
         response_text = chat_with_gemini(context)
         logger.info(f"Utilisateur {user.username} - Réponse générée par chat_with_gemini : {response_text[:100]}...", extra={'username': user.username})
 
@@ -899,3 +902,41 @@ def gemini_chat(request):
     logger.debug(f"Utilisateur {user.username} - Exécution terminée en {execution_time:.2f} secondes", extra={'username': user.username})
 
     return render(request, "app/gemini_chat.html", {"response": response_text})
+
+@login_required
+def generate_audio(request):
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        text = request.POST.get("text", "")
+        api_key = settings.ELEVENLABS_API_KEY
+        if not api_key:
+            logger.error("Clé API ElevenLabs non trouvée dans settings.py.")
+            return JsonResponse({'error': "Clé API ElevenLabs manquante."})
+
+        client = ElevenLabs(api_key=api_key)
+        voice_id = "pNInz6obpgDQGcFmaJgB"  # Ton voice_id valide
+
+        try:
+            # Convertir le texte en audio (retourne un générateur)
+            audio_stream = client.text_to_speech.convert(
+                text=text,
+                voice_id=voice_id,
+                model_id="eleven_multilingual_v2",
+                output_format="mp3_44100_128"
+            )
+            # Consommer le générateur et collecter les bytes
+            audio_bytes = b"".join(audio_stream)
+            logger.info(f"Audio généré, taille : {len(audio_bytes)} octets")
+
+            audio_file = io.BytesIO(audio_bytes)
+            audio_file.seek(0)
+
+            def stream_audio():
+                yield audio_file.read()  # Lire tout le contenu en une fois
+
+            response = StreamingHttpResponse(stream_audio(), content_type="audio/mpeg")
+            response['Content-Disposition'] = 'inline; filename="gedbot_response.mp3"'
+            return response
+        except Exception as e:
+            logger.error(f"Erreur avec ElevenLabs : {str(e)}")
+            return JsonResponse({'error': f"Erreur audio : {str(e)}"})
+    return JsonResponse({'error': "Méthode non autorisée."})

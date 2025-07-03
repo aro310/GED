@@ -141,3 +141,31 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY', 'sk_6ac41ace41d5569923b6cd1e2f48461cdc146299e585b922')#sk_6ac41ace41d5569923b6cd1e2f48461cdc146299e585b922 sk_55524b9c3e4677f0e279ec7db556e1d9d9e3b90a5329e83e
+
+#Doué : sk_b15828ef829138a668570cf2e049bbee8b474c79dbc5e8e6
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'gedbot.log',
+            'maxBytes': 1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
