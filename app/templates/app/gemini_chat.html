@@ -198,7 +198,7 @@
         function typeWriter(element, text, index, callback) {
             if (index < text.length) {
                 element.textContent += text.charAt(index);
-                setTimeout(() => typeWriter(element, text, index + 1, callback), 17); // 50ms par caractère
+                setTimeout(() => typeWriter(element, text, index + 1, callback), 15); // 50ms par caractère
             } else if (callback) {
                 callback();
             }

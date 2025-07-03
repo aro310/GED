@@ -13,11 +13,15 @@ class ImageUploadForm(forms.Form):
         label="Type de document"
     )
     convertir_en_pdf = forms.BooleanField(
-        label="Convertir en PDF",
+        label="Transformer en PDF",
         required=False,
         initial=True
     )
-
+    convertir_en_audio = forms.BooleanField(
+        label="Convertir en audio",
+        required=False,
+        initial=True
+    )
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)  # Récupère l'utilisateur si fourni
@@ -25,8 +29,7 @@ class ImageUploadForm(forms.Form):
 
         # Si l'utilisateur est un étudiant, on retire le champ "etudiant"
         if user and user.groups.filter(name='Étudiants').exists():
-            self.fields.pop('etudiant')
-
+            self.fields.pop('etudiant', None)
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -80,4 +83,4 @@ class CustomUserCreationForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'role']
+        fields = ['username', 'email', 'role','photo']

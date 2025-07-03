@@ -70,7 +70,8 @@ def upload_image(request):
         if form.is_valid():
             image = form.cleaned_data['image']
             type_folder = form.cleaned_data.get('type_document', 'autre')
-            convertir_pdf = form.cleaned_data.get('convertir_en_pdf', True)
+            convertir_pdf = form.cleaned_data.get('convertir_en_pdf', False)
+            convertir_audio = form.cleaned_data.get('convertir_en_audio', False)
 
             # Chemin de base
             user_folder = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username, type_folder)
@@ -92,7 +93,7 @@ def upload_image(request):
                 if is_error or not texte:
                     raise Exception(texte or "Aucun texte extrait.")
 
-                # --- Création du fichier PDF si demandé ---
+                # --- Gestion du fichier selon l'option PDF ---
                 if convertir_pdf:
                     pdf_buffer = BytesIO()
                     pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
@@ -105,33 +106,34 @@ def upload_image(request):
 
                     pdf_name = image.name.rsplit('.', 1)[0] + '.pdf'
                     pdf_path = os.path.join(user_folder, pdf_name)
-
                     with open(pdf_path, 'wb') as f:
                         f.write(pdf_buffer.getvalue())
                     fichier_final = os.path.join('documents', request.user.username, type_folder, pdf_name)
-
                     pdf_buffer.close()
                 else:
-                    # Si on ne convertit pas en PDF, on garde l'image originale
+                    # Si pas de conversion en PDF, on garde l'image originale
                     final_image_path = os.path.join(user_folder, image.name)
                     with open(final_image_path, 'wb+') as f:
                         f.write(open(image_path, 'rb').read())
                     fichier_final = os.path.join('documents', request.user.username, type_folder, image.name)
 
-                # --- Génération Audio ---
-                audio_name = image.name.rsplit('.', 1)[0] + '.mp3'
-                audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', request.user.username, audio_name)
-                os.makedirs(os.path.dirname(audio_path), exist_ok=True)
+                # --- Génération Audio si demandé ---
+                audio_url = None
+                if convertir_audio:
+                    audio_name = image.name.rsplit('.', 1)[0] + '.mp3'
+                    audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', request.user.username, audio_name)
+                    os.makedirs(os.path.dirname(audio_path), exist_ok=True)
 
-                audio = client.text_to_speech.convert(
-                    text=texte,
-                    voice_id="pNInz6obpgDQGcFmaJgB",
-                    model_id="eleven_multilingual_v2",
-                    output_format="mp3_44100_128",
-                )
-                with open(audio_path, 'wb') as f:
-                    for chunk in audio:
-                        f.write(chunk)
+                    audio = client.text_to_speech.convert(
+                        text=texte,
+                        voice_id="aQROLel5sQbj1vuIVi6B",
+                        model_id="eleven_multilingual_v2",
+                        output_format="mp3_44100_128",
+                    )
+                    with open(audio_path, 'wb') as f:
+                        for chunk in audio:
+                            f.write(chunk)
+                    audio_url = os.path.join(settings.MEDIA_URL, 'audio', request.user.username, audio_name)
 
                 # --- Enregistrement en base de données ---
                 document = Document(
@@ -163,7 +165,7 @@ def upload_image(request):
                 return render(request, 'app/resultat.html', {
                     'document': document,
                     'texte': texte,
-                    'audio_url': os.path.join(settings.MEDIA_URL, 'audio', request.user.username, audio_name),
+                    'audio_url': audio_url,
                     'user_files': sorted(user_files_urls, key=lambda x: x['nom'].lower()),
                     'is_error': False
                 })

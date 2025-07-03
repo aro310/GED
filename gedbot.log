@@ -76,3 +76,114 @@ Tu es tsito, un étudiant de l'ESTI qui utilise not...
 2025-07-02 20:18:09,387 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu t'intéresses à ton CV ! Excellent réflexe de penser à le mettre à jour. 
 
 Dans l'application ...
+2025-07-02 21:36:06,278 [DEBUG] [User: ado] - Utilisateur ado - Exécution terminée en 0.00 secondes
+2025-07-02 21:36:13,059 [INFO] [User: ado] - Utilisateur ado (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-02 21:36:17,985 [INFO] [User: ado] - Utilisateur ado - Réponse générée par chat_with_gemini : Salut ado ! Ravi de te voir sur l'application GED de l'ESTI ! 🚀
+
+Je suis GEDbot, ton assistant IA dé...
+2025-07-02 22:10:28,802 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
+2025-07-02 22:10:39,507 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-02 22:10:42,928 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila ! 
+
+Ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'applicatio...
+2025-07-02 22:11:25,679 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : reglement esti (normalisé: reglement esti)
+2025-07-02 22:11:33,220 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, tu t'intéresses au règlement de l'ESTI ! C'est une excellente idée de bien le connaître pour évi...
+2025-07-02 22:27:29,384 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
+2025-07-02 22:27:34,668 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : kaiza (normalisé: kaiza)
+2025-07-02 22:27:40,435 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Bonjour Gila ! 👋
+
+Bienvenue dans l'univers de l'application GED de l'ESTI ! Je suis GEDbot, ton assi...
+2025-07-02 22:28:15,922 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : y a-t-il des remarques de mes professeurs (normalisé: y a-t-il des remarques de mes professeurs)
+2025-07-02 22:28:18,787 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, tu veux savoir si tes professeurs ont laissé des commentaires sur tes partages ? 
+
+Oui, Mr. Dina...
+2025-07-02 22:28:34,427 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : oui (normalisé: oui)
+2025-07-02 22:28:37,864 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Super ! Alors, tu as bien compris, tu veux savoir si je suis opérationnel ? La réponse est un grand ...
+2025-07-02 22:28:56,923 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : les regles lmd (normalisé: les regles lmd)
+2025-07-02 22:29:03,420 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, les règles LMD, un sujet crucial pour bien naviguer à l'ESTI ! Voici un résumé clair pour 2024-2...
+2025-07-03 15:31:01,651 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
+2025-07-03 15:31:06,036 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : salut (normalisé: salut)
+2025-07-03 15:31:11,253 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila !
+
+Hey, ravi de te rencontrer ! Je suis GEDbot, ton assistant IA dédié à l'application GE...
+2025-07-03 15:31:45,551 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : your skills (normalisé: your skills)
+2025-07-03 15:31:52,060 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je sais faire ? Excellente question ! 
+
+En tant que GEDbot, je suis ton as...
+2025-07-03 15:32:18,947 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : partage de fichier (normalisé: partage de fichier)
+2025-07-03 15:32:23,142 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, le partage de fichiers ! Je vois que tu as quelques demandes en attente. 
+
+Pour le moment, ton p...
+2025-07-03 15:33:00,394 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
+2025-07-03 15:33:04,424 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : ok (normalisé: ok)
+2025-07-03 15:33:09,333 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Super ! "Ok" est un bon point de départ. 😊 
+
+Alors, dis-moi, qu'est-ce que je peux faire pour toi au...
+2025-07-03 15:33:26,896 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 15:33:29,649 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila !
+
+Super de te voir ici ! Prête à dompter la GED de l'ESTI ? Dis-moi, qu'est-ce que je pe...
+2025-07-03 15:33:40,782 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 15:33:43,650 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila !
+
+Super de te voir ici ! Prête à dompter la GED de l'ESTI ? Dis-moi, qu'est-ce que je pe...
+2025-07-03 15:56:28,336 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 15:56:34,441 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 15:56:39,065 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! 
+
+Hey, ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'appl...
+2025-07-03 15:58:00,142 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : c'est quoi ocr ? (normalisé: c'est quoi ocr ?)
+2025-07-03 15:58:06,027 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, excellente question ! L'OCR, ou Reconnaissance Optique de Caractères, c'est un peu la magie qui ...
+2025-07-03 15:58:53,955 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : oui comment ocr (normalisé: oui comment ocr)
+2025-07-03 15:59:04,290 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent choix, ça peut vraiment te faire gagner du temps. 
+
+L'OCR (Optical Character R...
+2025-07-03 15:59:04,291 [WARNING] [User: Randy] - Utilisateur Randy - Réponse IA invalide, secours activé (sentiment: neutre)
+2025-07-03 15:59:15,996 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : ocr (normalisé: ocr)
+2025-07-03 15:59:21,373 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent sujet. Tu veux en savoir plus sur la reconnaissance optique de caractères dans...
+2025-07-03 15:59:55,052 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : your features (normalisé: your features)
+2025-07-03 15:59:59,593 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi ? L'application GED de l'ESTI est plutôt bien équip...
+2025-07-03 16:00:43,194 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 16:00:47,186 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 16:00:50,022 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+2025-07-03 16:01:02,204 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : ocr (normalisé: ocr)
+2025-07-03 16:01:10,421 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent sujet. Tu veux en savoir plus sur la reconnaissance optique de caractères dans...
+2025-07-03 16:01:10,421 [WARNING] [User: Randy] - Utilisateur Randy - Réponse IA invalide, secours activé (sentiment: neutre)
+2025-07-03 16:01:31,031 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : remarques profs (normalisé: remarques profs)
+2025-07-03 16:01:34,618 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir si tes professeurs ont laissé des remarques sur tes partages ! 
+
+Pour l'instant, ...
+2025-07-03 16:01:55,015 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 16:02:00,484 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+2025-07-03 16:02:03,289 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
+2025-07-03 16:02:15,090 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : your features (normalisé: your features)
+2025-07-03 16:02:19,972 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ? Excellente question !
+
+Notr...
+2025-07-03 16:02:51,855 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : une fonction spécifique. (normalisé: une fonction specifique.)
+2025-07-03 16:02:55,814 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Ah, tu veux en savoir plus sur une fonction spécifique de l'application GED de l'ESTI...
+2025-07-03 16:11:26,839 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 16:11:34,642 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : demande partage (normalisé: demande partage)
+2025-07-03 16:11:40,407 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Bonjour Randy ! 👋
+
+Super de te voir ici ! Je suis GEDbot, ton assistant IA dédié à l'application GED...
+2025-07-03 16:11:52,642 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 16:12:16,332 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : demande de partage (normalisé: demande de partage)
+2025-07-03 16:12:19,857 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! Super que tu utilises la GED pour partager tes CVs avec deba. 
+
+Je vois que tu as bien...
+2025-07-03 16:13:06,567 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : question concernant le partage de documents (normalisé: question concernant le partage de documents)
+2025-07-03 16:13:14,739 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+
+Alors, tu te demandes comment partager des documents via l'application GED de l'ESTI ...
+2025-07-03 16:13:22,868 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
+2025-07-03 16:14:11,802 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : donner moi avis profs (normalisé: donner moi avis profs)
+2025-07-03 16:14:15,986 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que les professeurs pensent de tes partages ? Parfait ! 
+
+D'après mes informat...
