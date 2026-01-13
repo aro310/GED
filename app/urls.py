@@ -19,5 +19,6 @@ urlpatterns = [
     path('admin/edit_user/<int:user_id>/', views.edit_user, name='edit_user'),
     path('admin/delete_entry/', views.delete_entry, name='delete_entry'),
     path('generate-audio/', views.generate_audio, name='generate_audio'),
+    path('graph/',views.graphique_documents_view, name='graphique'),
 ]
 

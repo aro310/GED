@@ -27,6 +27,42 @@ import pytesseract
 import traceback
 from elevenlabs.client import ElevenLabs
 from collections import defaultdict
+import logging
+import os
+from django.shortcuts import render
+from django.http import JsonResponse, StreamingHttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.conf import settings
+from .models import Document, DocumentSharingRequest, DocumentRemark
+from .gemini_api import chat_with_gemini
+from .keywords import (
+    recent_doc_keywords, sharing_keywords, regulation_keywords, greeting_keywords,
+    presentation_keywords, user_list_keywords, features_keywords, admin_keywords,
+    remark_keywords, function_intro_keywords, normalize_text
+)
+from time import time
+from elevenlabs import ElevenLabs
+import io
+from django.shortcuts import render
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from .forms import ImageUploadForm
+from .models import Document
+from PIL import Image
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+import os
+import traceback
+# Autres vues existantes...
+import os
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from .models import DocumentRemark
 
 # Configurer Tesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -51,17 +87,7 @@ def liste_fichiers(request):
     })
 
 # GED/app/views.py (extrait)
-from django.shortcuts import render
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from .forms import ImageUploadForm
-from .models import Document
-from PIL import Image
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-import os
-import traceback
+
 
 @login_required
 def upload_image(request):
@@ -244,14 +270,7 @@ def update_user_password(request, username):
             return render(request, 'app/password_updated.html', {'message': 'Utilisateur non trouvé'})
     return render(request, 'app/update_password.html', {'username': username})
 
-# Autres vues existantes...
-import os
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import render
-from django.contrib.auth import get_user_model
-from .models import DocumentRemark
+
 
 @login_required
 def admin_dashboard(request):
@@ -723,23 +742,7 @@ def delete_entry(request):
 
 
 
-import logging
-import os
-from django.shortcuts import render
-from django.http import JsonResponse, StreamingHttpResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.conf import settings
-from .models import Document, DocumentSharingRequest, DocumentRemark
-from .gemini_api import chat_with_gemini
-from .keywords import (
-    recent_doc_keywords, sharing_keywords, regulation_keywords, greeting_keywords,
-    presentation_keywords, user_list_keywords, features_keywords, admin_keywords,
-    remark_keywords, function_intro_keywords, normalize_text
-)
-from time import time
-from elevenlabs import ElevenLabs
-import io
+
 
 # Configurer le logging avec rotation
 logging.basicConfig(
@@ -940,3 +943,45 @@ def generate_audio(request):
             logger.error(f"Erreur avec ElevenLabs : {str(e)}")
             return JsonResponse({'error': f"Erreur audio : {str(e)}"})
     return JsonResponse({'error': "Méthode non autorisée."})
+
+
+import matplotlib.pyplot as plt
+import io
+import base64
+from django.shortcuts import render
+from .models import Document
+
+def graphique_documents_view(request):
+    # Statistiques : Nombre de documents par type
+    data = Document.objects.values('type_document')
+    type_counts = {}
+    for item in data:
+        type_doc = item['type_document']
+        type_counts[type_doc] = type_counts.get(type_doc, 0) + 1
+
+    # Préparer données pour matplotlib
+    labels = list(type_counts.keys())
+    values = list(type_counts.values())
+
+    # Générer le graphique
+    plt.figure(figsize=(8, 5))
+    plt.plot(labels, values, color='skyblue')
+    plt.title("Nombre de documents par type")
+    plt.xlabel("Type de document")
+    plt.ylabel("Nombre")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Sauvegarder dans un buffer
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+    plt.close()
+
+    # Encoder en base64 pour HTML
+    graphic = base64.b64encode(image_png).decode('utf-8')
+
+    # Renvoyer à un template HTML
+    return render(request, 'app/graphique_documents.html', {'graphic': graphic})

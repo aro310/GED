@@ -1,511 +1,217 @@
-2025-07-02 19:51:23,272 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 19:51:36,384 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : commentaires profs (normalisé: commentaires profs)
-2025-07-02 19:51:41,067 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir si tes professeurs ont laissé des commentaires sur tes partages ! 
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Utilisateur Aro - Exécution terminée en 0.00 secondes
+Utilisateur Aro (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Salut Aro !
 
-Pour l'instan...
-2025-07-02 19:53:35,463 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 19:53:49,501 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : je veux savoir remarques enseignants (normalisé: je veux savoir remarques enseignants)
-2025-07-02 19:53:53,649 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Bonjour tsito ! Ravi de faire ta connaissance, je suis GEDbot, ton assistant IA dédié à l'applicatio...
-2025-07-02 19:54:20,986 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 19:54:24,677 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : feedback profs (normalisé: feedback profs)
-2025-07-02 19:54:29,183 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que les professeurs pensent de tes partages ! Parfait, je peux t'aider avec ça...
-2025-07-02 19:54:53,463 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : administrateur (normalisé: administrateur)
-2025-07-02 19:54:56,366 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir qui tient les rênes de la GED ? C'est simple : l'admin est M. Finoana. 
+Hey, ravi de te voir sur l'application GED de l'ESTI ! Je suis GEDbot, ton assistant IA...
+Utilisateur Aro (rôle: etudiant) a envoyé : qui etes vous (normalisé: qui etes vous)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Ah, excellente question ! Je suis GEDbot, l'assistant IA conçu pour t'aider à naviguer dans l'applic...
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Utilisateur Aro - Exécution terminée en 0.00 secondes
+Utilisateur Aro (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Salut Aro !
 
-Si tu as...
-2025-07-02 19:55:15,836 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : utilisateurs inscrits (normalisé: utilisateurs inscrits)
-2025-07-02 19:55:23,840 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu t'intéresses à la communauté ESTI sur la GED ! Voici la liste des utilisateurs enregistrés :
-...
-2025-07-02 19:55:51,952 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : demande de partage (normalisé: demande de partage)
-2025-07-02 19:55:59,417 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Super ! On dirait que tu as été très actif en partageant des documents récemment. 
-
-Pour récapituler...
-2025-07-02 19:56:20,739 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : documents recents (normalisé: documents recents)
-2025-07-02 19:56:25,877 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, je vois que tu t'intéresses à tes derniers ajouts ! Tes documents les plus récents sont donc :
-
-...
-2025-07-02 19:56:47,631 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : what are your skills (normalisé: what are your skills)
-2025-07-02 19:56:52,681 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ? Excellente question !
-
-Notr...
-2025-07-02 19:57:23,809 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 19:57:32,719 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : quels sont vos fonctionnalités (normalisé: quels sont vos fonctionnalites)
-2025-07-02 19:57:39,917 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, excellente question ! Je suis ravi que tu t'intéresses à ce que je peux faire pour toi. 
-
-En tan...
-2025-07-02 19:58:26,497 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : what can you do (normalisé: what can you do)
-2025-07-02 19:58:32,883 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ? Excellente question !
-
-Notr...
-2025-07-02 19:59:11,875 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : quels sont vos fonctionnalitéeeees (normalisé: quels sont vos fonctionnaliteeeees)
-2025-07-02 19:59:18,358 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi ? Excellente question ! Je suis là pour t'aider à n...
-2025-07-02 20:00:01,652 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : available functions (normalisé: available functions)
-2025-07-02 20:00:06,583 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ! Excellente question.
-
-Notre...
-2025-07-02 20:03:23,002 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:03:52,316 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : ocr (normalisé: ocr)
-2025-07-02 20:04:02,500 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent sujet. Tu veux en savoir plus sur la reconnaissance optique de caractères dans...
-2025-07-02 20:05:44,339 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : salut (normalisé: salut)
-2025-07-02 20:05:47,267 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de te voir ici. Je suis GEDbot, ton assistant pour naviguer dans l'application GED de l...
-2025-07-02 20:05:52,371 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:06:03,434 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : salut (normalisé: salut)
-2025-07-02 20:06:06,887 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de te voir ici. Je suis GEDbot, ton assistant pour naviguer dans l'application GED de l...
-2025-07-02 20:06:16,997 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:07:15,179 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:07:20,301 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : salut (normalisé: salut)
-2025-07-02 20:07:23,147 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de te voir ici. Je suis GEDbot, ton assistant pour naviguer dans l'application GED de l...
-2025-07-02 20:07:39,862 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:07:43,673 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : hey jude (normalisé: hey jude)
-2025-07-02 20:07:47,793 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! "Hey Jude" ? Une excellente chanson pour démarrer ! 😊 
-
-Mais je suis GEDbot, l'assistant de ...
-2025-07-02 20:08:02,512 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:08:07,316 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-02 20:08:10,494 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut ! Ravi de t'aider à naviguer dans l'application GED de l'ESTI. Dis-moi, qu'est-ce qui t'amène ...
-2025-07-02 20:08:28,319 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : qui suis je (normalisé: qui suis je)
-2025-07-02 20:08:32,711 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, une question philosophique dès le début ! 😉 
-
-Tu es tsito, un étudiant de l'ESTI qui utilise not...
-2025-07-02 20:16:49,246 [DEBUG] [User: tsito] - Utilisateur tsito - Exécution terminée en 0.00 secondes
-2025-07-02 20:16:55,445 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : coucou (normalisé: coucou)
-2025-07-02 20:16:59,608 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Salut tsito !
-
-"Coucou" c'est sympa comme façon de commencer ! 😊 Dis-moi, qu'est-ce que je peux fair...
-2025-07-02 20:18:03,932 [INFO] [User: tsito] - Utilisateur tsito (rôle: etudiant) a envoyé : cv? (normalisé: cv?)
-2025-07-02 20:18:09,387 [INFO] [User: tsito] - Utilisateur tsito - Réponse générée par chat_with_gemini : Ah, tu t'intéresses à ton CV ! Excellent réflexe de penser à le mettre à jour. 
-
-Dans l'application ...
-2025-07-02 21:36:06,278 [DEBUG] [User: ado] - Utilisateur ado - Exécution terminée en 0.00 secondes
-2025-07-02 21:36:13,059 [INFO] [User: ado] - Utilisateur ado (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-02 21:36:17,985 [INFO] [User: ado] - Utilisateur ado - Réponse générée par chat_with_gemini : Salut ado ! Ravi de te voir sur l'application GED de l'ESTI ! 🚀
-
-Je suis GEDbot, ton assistant IA dé...
-2025-07-02 22:10:28,802 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
-2025-07-02 22:10:39,507 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-02 22:10:42,928 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila ! 
-
-Ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'applicatio...
-2025-07-02 22:11:25,679 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : reglement esti (normalisé: reglement esti)
-2025-07-02 22:11:33,220 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, tu t'intéresses au règlement de l'ESTI ! C'est une excellente idée de bien le connaître pour évi...
-2025-07-02 22:27:29,384 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
-2025-07-02 22:27:34,668 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : kaiza (normalisé: kaiza)
-2025-07-02 22:27:40,435 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Bonjour Gila ! 👋
-
-Bienvenue dans l'univers de l'application GED de l'ESTI ! Je suis GEDbot, ton assi...
-2025-07-02 22:28:15,922 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : y a-t-il des remarques de mes professeurs (normalisé: y a-t-il des remarques de mes professeurs)
-2025-07-02 22:28:18,787 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, tu veux savoir si tes professeurs ont laissé des commentaires sur tes partages ? 
-
-Oui, Mr. Dina...
-2025-07-02 22:28:34,427 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : oui (normalisé: oui)
-2025-07-02 22:28:37,864 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Super ! Alors, tu as bien compris, tu veux savoir si je suis opérationnel ? La réponse est un grand ...
-2025-07-02 22:28:56,923 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : les regles lmd (normalisé: les regles lmd)
-2025-07-02 22:29:03,420 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, les règles LMD, un sujet crucial pour bien naviguer à l'ESTI ! Voici un résumé clair pour 2024-2...
-2025-07-03 15:31:01,651 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
-2025-07-03 15:31:06,036 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : salut (normalisé: salut)
-2025-07-03 15:31:11,253 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila !
+Hey, ravi de te rencontrer ! Je suis GEDbot, ton assistant IA dédié à l'application GED...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000025084F0DA80>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x00000250861E7640> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000025084F0DB40>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Mon, 29 Sep 2025 12:31:35 GMT'), (b'server', b'uvicorn'), (b'request-id', b'k8QM4smSLXC11va8XBFd'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'9YMIRJSNCIZxKJwxZAKo'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'488'), (b'tts-latency-ms', b'2475'), (b'Content-Length', b'441409'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'bad4c253002fc74433d257fa8cf49b4b'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 441409 octets
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Utilisateur Aro - Exécution terminée en 0.00 secondes
+Utilisateur Aro (rôle: etudiant) a envoyé : salut (normalisé: salut)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Salut Aro ! 
 
 Hey, ravi de te rencontrer ! Je suis GEDbot, ton assistant IA dédié à l'application GE...
-2025-07-03 15:31:45,551 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : your skills (normalisé: your skills)
-2025-07-03 15:31:52,060 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je sais faire ? Excellente question ! 
-
-En tant que GEDbot, je suis ton as...
-2025-07-03 15:32:18,947 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : partage de fichier (normalisé: partage de fichier)
-2025-07-03 15:32:23,142 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Ah, le partage de fichiers ! Je vois que tu as quelques demandes en attente. 
-
-Pour le moment, ton p...
-2025-07-03 15:33:00,394 [DEBUG] [User: Gila] - Utilisateur Gila - Exécution terminée en 0.00 secondes
-2025-07-03 15:33:04,424 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : ok (normalisé: ok)
-2025-07-03 15:33:09,333 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Super ! "Ok" est un bon point de départ. 😊 
-
-Alors, dis-moi, qu'est-ce que je peux faire pour toi au...
-2025-07-03 15:33:26,896 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 15:33:29,649 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila !
-
-Super de te voir ici ! Prête à dompter la GED de l'ESTI ? Dis-moi, qu'est-ce que je pe...
-2025-07-03 15:33:40,782 [INFO] [User: Gila] - Utilisateur Gila (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 15:33:43,650 [INFO] [User: Gila] - Utilisateur Gila - Réponse générée par chat_with_gemini : Salut Gila !
-
-Super de te voir ici ! Prête à dompter la GED de l'ESTI ? Dis-moi, qu'est-ce que je pe...
-2025-07-03 15:56:28,336 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 15:56:34,441 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 15:56:39,065 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! 
-
-Hey, ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'appl...
-2025-07-03 15:58:00,142 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : c'est quoi ocr ? (normalisé: c'est quoi ocr ?)
-2025-07-03 15:58:06,027 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, excellente question ! L'OCR, ou Reconnaissance Optique de Caractères, c'est un peu la magie qui ...
-2025-07-03 15:58:53,955 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : oui comment ocr (normalisé: oui comment ocr)
-2025-07-03 15:59:04,290 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent choix, ça peut vraiment te faire gagner du temps. 
-
-L'OCR (Optical Character R...
-2025-07-03 15:59:04,291 [WARNING] [User: Randy] - Utilisateur Randy - Réponse IA invalide, secours activé (sentiment: neutre)
-2025-07-03 15:59:15,996 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : ocr (normalisé: ocr)
-2025-07-03 15:59:21,373 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent sujet. Tu veux en savoir plus sur la reconnaissance optique de caractères dans...
-2025-07-03 15:59:55,052 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : your features (normalisé: your features)
-2025-07-03 15:59:59,593 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi ? L'application GED de l'ESTI est plutôt bien équip...
-2025-07-03 16:00:43,194 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 16:00:47,186 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 16:00:50,022 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-2025-07-03 16:01:02,204 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : ocr (normalisé: ocr)
-2025-07-03 16:01:10,421 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, l'OCR ! Excellent sujet. Tu veux en savoir plus sur la reconnaissance optique de caractères dans...
-2025-07-03 16:01:10,421 [WARNING] [User: Randy] - Utilisateur Randy - Réponse IA invalide, secours activé (sentiment: neutre)
-2025-07-03 16:01:31,031 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : remarques profs (normalisé: remarques profs)
-2025-07-03 16:01:34,618 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir si tes professeurs ont laissé des remarques sur tes partages ! 
-
-Pour l'instant, ...
-2025-07-03 16:01:55,015 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 16:02:00,484 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 16:02:03,289 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-2025-07-03 16:02:15,090 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : your features (normalisé: your features)
-2025-07-03 16:02:19,972 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que je peux faire pour toi avec la GED de l'ESTI ? Excellente question !
-
-Notr...
-2025-07-03 16:02:51,855 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : une fonction spécifique. (normalisé: une fonction specifique.)
-2025-07-03 16:02:55,814 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Ah, tu veux en savoir plus sur une fonction spécifique de l'application GED de l'ESTI...
-2025-07-03 16:11:26,839 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 16:11:34,642 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : demande partage (normalisé: demande partage)
-2025-07-03 16:11:40,407 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Bonjour Randy ! 👋
-
-Super de te voir ici ! Je suis GEDbot, ton assistant IA dédié à l'application GED...
-2025-07-03 16:11:52,642 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 16:12:16,332 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : demande de partage (normalisé: demande de partage)
-2025-07-03 16:12:19,857 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! Super que tu utilises la GED pour partager tes CVs avec deba. 
-
-Je vois que tu as bien...
-2025-07-03 16:13:06,567 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : question concernant le partage de documents (normalisé: question concernant le partage de documents)
-2025-07-03 16:13:14,739 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Alors, tu te demandes comment partager des documents via l'application GED de l'ESTI ...
-2025-07-03 16:13:22,868 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 16:14:11,802 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : donner moi avis profs (normalisé: donner moi avis profs)
-2025-07-03 16:14:15,986 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que les professeurs pensent de tes partages ? Parfait ! 
-
-D'après mes informat...
-2025-07-03 16:26:11,810 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 16:26:15,167 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 16:26:18,930 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! 
-
-Hey, ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'appl...
-2025-07-03 23:58:28,084 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-03 23:58:33,627 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-03 23:58:37,945 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy ! 
-
-Hey, ravi de faire ta connaissance ! Je suis GEDbot, ton assistant IA dédié à l'appl...
-2025-07-04 00:02:29,316 [DEBUG] [User: Randy] - Utilisateur Randy - Exécution terminée en 0.00 secondes
-2025-07-04 00:02:33,376 [INFO] [User: Randy] - Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-2025-07-04 00:02:36,982 [INFO] [User: Randy] - Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Not Found: /generate-audio/
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Erreur avec ElevenLabs : a bytes-like object is required, not 'generator'
-Not Found: /.well-known/appspecific/com.chrome.devtools.json
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Not Found: /.well-known/appspecific/com.chrome.devtools.json
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Erreur avec ElevenLabs : a bytes-like object is required, not 'generator'
-E:\test\ged\app\views.py changed, reloading.
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Not Found: /.well-known/appspecific/com.chrome.devtools.json
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
 connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024232130970>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x00000242318F4540> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024232125300>
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3C03FD9C0>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x000001A3C0454740> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3C03FDA80>
 send_request_headers.started request=<Request [b'POST']>
 send_request_headers.complete
 send_request_body.started request=<Request [b'POST']>
 send_request_body.complete
 receive_response_headers.started request=<Request [b'POST']>
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:15:30 GMT'), (b'server', b'uvicorn'), (b'request-id', b'BHjkJ4PQAtzJJgJA7ZnM'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'V7l2k06nCrRa5wls3rYb'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2760'), (b'Content-Length', b'251656'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'ead09207f2241a11db117c5d86ce1a87'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
-HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
-receive_response_body.started request=<Request [b'POST']>
-receive_response_body.complete
-response_closed.started
-response_closed.complete
-Not Found: /.well-known/appspecific/com.chrome.devtools.json
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Not Found: /.well-known/appspecific/com.chrome.devtools.json
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-E:\test\ged\app\views.py changed, reloading.
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Not Found: /.well-known/appspecific/com.chrome.devtools.json
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
 connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000255450F2380>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x00000255447EC8C0> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000025545166920>
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3BFB9B070>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x000001A3C0454E40> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3BFB9ADD0>
 send_request_headers.started request=<Request [b'POST']>
 send_request_headers.complete
 send_request_body.started request=<Request [b'POST']>
 send_request_body.complete
 receive_response_headers.started request=<Request [b'POST']>
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:20:45 GMT'), (b'server', b'uvicorn'), (b'request-id', b'bqY9fys8DHhqg0tLY9Tp'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'm9qHWqsyMX27wjFRZaXV'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2762'), (b'Content-Length', b'252492'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'0b295319e0d572d9106c20d573df8eee'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
-HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
-receive_response_body.started request=<Request [b'POST']>
-receive_response_body.complete
-response_closed.started
-response_closed.complete
-Audio généré, taille : 252492 octets
-Not Found: /favicon.ico
-E:\test\ged\GED\settings.py changed, reloading.
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-E:\test\ged\GED\settings.py changed, reloading.
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy (rôle: etudiant) a envoyé : documents recents (normalisé: documents recents)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux savoir ce que tu as récemment téléchargé ! Parfait. 
-
-Tes documents les plus récents son...
-Importing BlpImagePlugin
-Importing BmpImagePlugin
-Importing BufrStubImagePlugin
-Importing CurImagePlugin
-Importing DcxImagePlugin
-Importing DdsImagePlugin
-Importing EpsImagePlugin
-Importing FitsImagePlugin
-Importing FliImagePlugin
-Importing FpxImagePlugin
-Image: failed to import FpxImagePlugin: No module named 'olefile'
-Importing FtexImagePlugin
-Importing GbrImagePlugin
-Importing GifImagePlugin
-Importing GribStubImagePlugin
-Importing Hdf5StubImagePlugin
-Importing IcnsImagePlugin
-Importing IcoImagePlugin
-Importing ImImagePlugin
-Importing ImtImagePlugin
-Importing IptcImagePlugin
-Importing JpegImagePlugin
-Importing Jpeg2KImagePlugin
-Importing McIdasImagePlugin
-Importing MicImagePlugin
-Image: failed to import MicImagePlugin: No module named 'olefile'
-Importing MpegImagePlugin
-Importing MpoImagePlugin
-Importing MspImagePlugin
-Importing PalmImagePlugin
-Importing PcdImagePlugin
-Importing PcxImagePlugin
-Importing PdfImagePlugin
-Importing PixarImagePlugin
-Importing PngImagePlugin
-Importing PpmImagePlugin
-Importing PsdImagePlugin
-Importing QoiImagePlugin
-Importing SgiImagePlugin
-Importing SpiderImagePlugin
-Importing SunImagePlugin
-Importing TgaImagePlugin
-Importing TiffImagePlugin
-Importing WebPImagePlugin
-Importing WmfImagePlugin
-Importing XbmImagePlugin
-Importing XpmImagePlugin
-Importing XVThumbImagePlugin
-['C:\\Program Files\\Tesseract-OCR\\tesseract.exe', 'C:\\Users\\ADMIN\\AppData\\Local\\Temp\\tess_6wkjk8s4_input.JPEG', 'C:\\Users\\ADMIN\\AppData\\Local\\Temp\\tess_6wkjk8s4', '-l', 'fra', 'txt']
-connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024374EFDBA0>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x0000024371BF7040> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000024374EFDC60>
-send_request_headers.started request=<Request [b'POST']>
-send_request_headers.complete
-send_request_body.started request=<Request [b'POST']>
-send_request_body.complete
-receive_response_headers.started request=<Request [b'POST']>
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:30:12 GMT'), (b'server', b'uvicorn'), (b'request-id', b'frtPLzWFnHXGM9Ypo8O6'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'kNBiAmaA5zDOQ1QFbl9E'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'163'), (b'tts-latency-ms', b'1829'), (b'Content-Length', b'147584'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'5a4dc1549bfd04749998a18a4ad7562a'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
-HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
-receive_response_body.started request=<Request [b'POST']>
-receive_response_body.complete
-response_closed.started
-response_closed.complete
-Not Found: /favicon.ico
-Not Found: /favicon.ico
-E:\test\ged\GED\settings.py changed, reloading.
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-E:\test\ged\app\views.py changed, reloading.
-Watching for file changes with StatReloader
-matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
-CONFIGDIR=C:\Users\ADMIN\.matplotlib
-interactive is False
-platform is win32
-CACHEDIR=C:\Users\ADMIN\.matplotlib
-Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
-Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-Creating converter from 7 to 5
-Creating converter from 5 to 7
-etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : documents recents (normalisé: documents recents)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Ah, tu veux jeter un coup d'œil à ce que tu as récemment ajouté ! Parfait. 
-
-Voici tes derniers docu...
-connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000021273D2C220>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x0000021272B88D40> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000212733B1BD0>
-send_request_headers.started request=<Request [b'POST']>
-send_request_headers.complete
-send_request_body.started request=<Request [b'POST']>
-send_request_body.complete
-receive_response_headers.started request=<Request [b'POST']>
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:34:39 GMT'), (b'server', b'uvicorn'), (b'request-id', b'qqOK26RBKULnfgoZbZAt'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'dTqLSfOaUTwU86qmNoP2'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'671'), (b'tts-latency-ms', b'3138'), (b'Content-Length', b'789151'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'871df926fab2afa757c65f8ae515ded3'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Fri, 03 Oct 2025 09:57:20 GMT'), (b'server', b'uvicorn'), (b'request-id', b'U0Ac2KlHoyiQ5aDGDFNi'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'o7beoWHkRvlsTX70UK26'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'574'), (b'tts-latency-ms', b'2609'), (b'Content-Length', b'536286'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'29074d37cc46681a615f4beab5af3452'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
 HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
 receive_response_body.started request=<Request [b'POST']>
 receive_response_body.complete
 response_closed.started
 response_closed.complete
-Audio généré, taille : 789151 octets
+Audio généré, taille : 536286 octets
 Not Found: /favicon.ico
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : salut (normalisé: salut)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000212734E0E50>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x00000212735556C0> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000212734E13C0>
-send_request_headers.started request=<Request [b'POST']>
-send_request_headers.complete
-send_request_body.started request=<Request [b'POST']>
-send_request_body.complete
-receive_response_headers.started request=<Request [b'POST']>
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:38:42 GMT'), (b'server', b'uvicorn'), (b'request-id', b'0cUFhXhhccBVY4WSUCXq'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'2oO1K1KV8GLNoY2LBpfk'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2460'), (b'Content-Length', b'304737'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'fbd3acae99d4ef832d2d0ff1f2315886'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Fri, 03 Oct 2025 09:57:26 GMT'), (b'server', b'uvicorn'), (b'request-id', b'oN1jPaeaw6GdGoRExQdR'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'DcjU6tCvGZ2NGvgDd3Hu'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'574'), (b'tts-latency-ms', b'2647'), (b'Content-Length', b'580172'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'92ea32047f94d17d8bf3c46f474ff642'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
 HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
 receive_response_body.started request=<Request [b'POST']>
 receive_response_body.complete
 response_closed.started
 response_closed.complete
-Audio généré, taille : 304737 octets
+Audio généré, taille : 580172 octets
 Not Found: /favicon.ico
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
+Utilisateur tsito - Exécution terminée en 0.00 secondes
+Utilisateur tsito (rôle: etudiant) a envoyé : hey (normalisé: hey)
+Utilisateur tsito - Réponse générée par chat_with_gemini : Salut tsito !
 
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Utilisateur Randy (rôle: etudiant) a envoyé : que faites vous (normalisé: que faites vous)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Je suis GEDbot, ton assistant dédié à l'application GED de l'ESTI. Je suis là pour t'aider à navigue...
-E:\test\ged\app\gemini_api.py changed, reloading.
+Hey, c'est super de te rencontrer ! Je suis GEDbot, ton assistant IA pour l'applicati...
+Utilisateur tsito (rôle: etudiant) a envoyé : what the fuck (normalisé: what the fuck)
+Utilisateur tsito - Réponse générée par chat_with_gemini : Oh là là... On dirait qu'on a un peu d'émotion ici ! 😉 
+
+Je suis là pour t'aider avec l'application ...
+Utilisateur tsito (rôle: etudiant) a envoyé : je t'aime (normalisé: je t'aime)
+Utilisateur tsito - Réponse générée par chat_with_gemini : Oh là là, tsito ! C'est... inattendu ! 😉 
+
+Je suis ravi que tu apprécies mon aide, mais je suis un a...
 Watching for file changes with StatReloader
 matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
 CONFIGDIR=C:\Users\ADMIN\.matplotlib
@@ -519,61 +225,7 @@ Creating converter from 5 to 7
 Creating converter from 7 to 5
 Creating converter from 5 to 7
 etils.epath was not found. Using pathlib for file I/O.
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Utilisateur Randy (rôle: etudiant) a envoyé : que faites vous (normalisé: que faites vous)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Je suis GEDbot, ton assistant dédié à l'application GED de l'ESTI. Je suis là pour t'aider à navigue...
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : coucou (normalisé: coucou)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-"Coucou" c'est sympa ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui conc...
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Salut Randy !
-
-Super de te voir par ici ! Dis-moi, qu'est-ce que je peux faire pour toi aujourd'hui ...
-connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3F6410>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x000001F85FBFC640> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3F64D0>
-send_request_headers.started request=<Request [b'POST']>
-send_request_headers.complete
-send_request_body.started request=<Request [b'POST']>
-send_request_body.complete
-receive_response_headers.started request=<Request [b'POST']>
-connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
-connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3E78B0>
-start_tls.started ssl_context=<ssl.SSLContext object at 0x000001F85FBFC940> server_hostname='api.elevenlabs.io' timeout=60
-start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001F85F3F6B30>
-send_request_headers.started request=<Request [b'POST']>
-send_request_headers.complete
-send_request_body.started request=<Request [b'POST']>
-send_request_body.complete
-receive_response_headers.started request=<Request [b'POST']>
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:54:48 GMT'), (b'server', b'uvicorn'), (b'request-id', b'JuXcufHKkdKSvCtGyM57'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'pK5szQlZlpJ5OCqGcKFD'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2552'), (b'Content-Length', b'322291'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'506c26489ed0449f160fc6e4cb5d62e6'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
-HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
-receive_response_body.started request=<Request [b'POST']>
-receive_response_body.complete
-response_closed.started
-response_closed.complete
-Audio généré, taille : 322291 octets
-receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 03 Jul 2025 21:54:51 GMT'), (b'server', b'uvicorn'), (b'request-id', b'bogx5niI2y7v2wBO4V54'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'VNoZkbYBZBko1l1OUWGY'), (b'current-concurrent-requests', b'2'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'336'), (b'tts-latency-ms', b'2523'), (b'Content-Length', b'298049'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'c4edcc7e1fd6010cfbddfab85f6de150'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
-HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
-receive_response_body.started request=<Request [b'POST']>
-receive_response_body.complete
-response_closed.started
-response_closed.complete
-Audio généré, taille : 298049 octets
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
 Not Found: /favicon.ico
-Utilisateur Randy - Exécution terminée en 0.00 secondes
-Utilisateur Randy (rôle: etudiant) a envoyé : etes vous heureux (normalisé: etes vous heureux)
-Utilisateur Randy - Réponse générée par chat_with_gemini : Randy, quelle question intéressante ! En tant qu'IA, je n'éprouve pas le bonheur comme les humains. ...
