@@ -229,3 +229,20 @@ pydot initializing
 pydot 4.0.1
 pydot core module initializing
 Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
