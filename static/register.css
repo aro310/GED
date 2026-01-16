@@ -63,10 +63,10 @@ form {
 .form-group select {
     width: 100%;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(215, 202, 202);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    color: var(--text-light);
+    color: rgb(36, 40, 105);
     font-size: 1rem;
     transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
 }

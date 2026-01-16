@@ -1,0 +1,248 @@
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Utilisateur Aro - Exécution terminée en 0.00 secondes
+Utilisateur Aro (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Salut Aro !
+
+Hey, ravi de te voir sur l'application GED de l'ESTI ! Je suis GEDbot, ton assistant IA...
+Utilisateur Aro (rôle: etudiant) a envoyé : qui etes vous (normalisé: qui etes vous)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Ah, excellente question ! Je suis GEDbot, l'assistant IA conçu pour t'aider à naviguer dans l'applic...
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Utilisateur Aro - Exécution terminée en 0.00 secondes
+Utilisateur Aro (rôle: etudiant) a envoyé : bonjour (normalisé: bonjour)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Salut Aro !
+
+Hey, ravi de te rencontrer ! Je suis GEDbot, ton assistant IA dédié à l'application GED...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000025084F0DA80>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x00000250861E7640> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000025084F0DB40>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Mon, 29 Sep 2025 12:31:35 GMT'), (b'server', b'uvicorn'), (b'request-id', b'k8QM4smSLXC11va8XBFd'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'9YMIRJSNCIZxKJwxZAKo'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'488'), (b'tts-latency-ms', b'2475'), (b'Content-Length', b'441409'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'bad4c253002fc74433d257fa8cf49b4b'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 441409 octets
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Utilisateur Aro - Exécution terminée en 0.00 secondes
+Utilisateur Aro (rôle: etudiant) a envoyé : salut (normalisé: salut)
+Utilisateur Aro - Réponse générée par chat_with_gemini : Salut Aro ! 
+
+Hey, ravi de te rencontrer ! Je suis GEDbot, ton assistant IA dédié à l'application GE...
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3C03FD9C0>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x000001A3C0454740> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3C03FDA80>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+connect_tcp.started host='api.elevenlabs.io' port=443 local_address=None timeout=60 socket_options=None
+connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3BFB9B070>
+start_tls.started ssl_context=<ssl.SSLContext object at 0x000001A3C0454E40> server_hostname='api.elevenlabs.io' timeout=60
+start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001A3BFB9ADD0>
+send_request_headers.started request=<Request [b'POST']>
+send_request_headers.complete
+send_request_body.started request=<Request [b'POST']>
+send_request_body.complete
+receive_response_headers.started request=<Request [b'POST']>
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Fri, 03 Oct 2025 09:57:20 GMT'), (b'server', b'uvicorn'), (b'request-id', b'U0Ac2KlHoyiQ5aDGDFNi'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'o7beoWHkRvlsTX70UK26'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'574'), (b'tts-latency-ms', b'2609'), (b'Content-Length', b'536286'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'29074d37cc46681a615f4beab5af3452'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 536286 octets
+Not Found: /favicon.ico
+receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Fri, 03 Oct 2025 09:57:26 GMT'), (b'server', b'uvicorn'), (b'request-id', b'oN1jPaeaw6GdGoRExQdR'), (b'access-control-expose-headers', b'request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests'), (b'history-item-id', b'DcjU6tCvGZ2NGvgDd3Hu'), (b'current-concurrent-requests', b'1'), (b'maximum-concurrent-requests', b'2'), (b'character-cost', b'574'), (b'tts-latency-ms', b'2647'), (b'Content-Length', b'580172'), (b'content-type', b'audio/mpeg'), (b'access-control-allow-origin', b'*'), (b'access-control-allow-headers', b'*'), (b'access-control-allow-methods', b'POST, PATCH, OPTIONS, DELETE, GET, PUT'), (b'access-control-max-age', b'600'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains'), (b'x-trace-id', b'92ea32047f94d17d8bf3c46f474ff642'), (b'x-region', b'us-central1'), (b'Via', b'1.1 google, 1.1 google'), (b'Alt-Svc', b'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000')])
+HTTP Request: POST https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB?output_format=mp3_44100_128 "HTTP/1.1 200 OK"
+receive_response_body.started request=<Request [b'POST']>
+receive_response_body.complete
+response_closed.started
+response_closed.complete
+Audio généré, taille : 580172 octets
+Not Found: /favicon.ico
+Utilisateur tsito - Exécution terminée en 0.00 secondes
+Utilisateur tsito (rôle: etudiant) a envoyé : hey (normalisé: hey)
+Utilisateur tsito - Réponse générée par chat_with_gemini : Salut tsito !
+
+Hey, c'est super de te rencontrer ! Je suis GEDbot, ton assistant IA pour l'applicati...
+Utilisateur tsito (rôle: etudiant) a envoyé : what the fuck (normalisé: what the fuck)
+Utilisateur tsito - Réponse générée par chat_with_gemini : Oh là là... On dirait qu'on a un peu d'émotion ici ! 😉 
+
+Je suis là pour t'aider avec l'application ...
+Utilisateur tsito (rôle: etudiant) a envoyé : je t'aime (normalisé: je t'aime)
+Utilisateur tsito - Réponse générée par chat_with_gemini : Oh là là, tsito ! C'est... inattendu ! 😉 
+
+Je suis ravi que tu apprécies mon aide, mais je suis un a...
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+matplotlib data path: E:\test\env\lib\site-packages\matplotlib\mpl-data
+CONFIGDIR=C:\Users\ADMIN\.matplotlib
+interactive is False
+platform is win32
+CACHEDIR=C:\Users\ADMIN\.matplotlib
+Using fontManager instance from C:\Users\ADMIN\.matplotlib\fontlist-v390.json
+Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+Creating converter from 7 to 5
+Creating converter from 5 to 7
+etils.epath was not found. Using pathlib for file I/O.
+pydot initializing
+pydot 4.0.1
+pydot core module initializing
+Not Found: /favicon.ico

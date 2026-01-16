@@ -1,4 +1,4 @@
-{% extends 'app/base.html' %}
+{% extends 'app/base2.html' %}
 {% load static %}
 
 {% block title %}Tableau de bord étudiant{% endblock %}
@@ -7,16 +7,39 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'etudiant.css' %}">
+<style>
+    .user-photo {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+    }
+</style>
 {% endblock %}
 
 {% block main_content %}
 <div class="dashboard-container">
-    <h1>Bienvenue, {{ user.username }} (Étudiant)</h1>
+    <div class="d-flex align-items-center mb-4">
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Photo de profil" class="user-photo me-3">
+        {% else %}
+            <img src="{% static 'default-avatar.png' %}" alt="Avatar par défaut" class="user-photo me-3">
+        {% endif %}
+        <h1 class="m-0">Bienvenue, {{ user.username }} (Étudiant)</h1>
+    </div>
     <p>Ceci est votre tableau de bord.</p>
+
+    <!-- Messages de succès ou d'erreur -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
 
     <!-- Bouton upload -->
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#uploadModal">
-        Téléverser 
+        Téléverser
     </button>
 
     <!-- Modal Upload -->
@@ -28,17 +51,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-muted">Sélectionnez une image scannée depuis votre ordinateur ou utilisez cette page depuis votre téléphone via l'IP de cet ordinateur.</p>
                     <form action="{% url 'upload_image' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-primary w-100">Téléverser</button>
                     </form>
-                    <p class="mt-3 text-center">
-                        <strong>IP locale :</strong> {{ request.get_host }}<br>
-                        Accédez à cette page depuis votre téléphone avec :
-                        <code>http://{{ request.get_host }}/ged/upload/</code>
-                    </p>
                 </div>
             </div>
         </div>
@@ -171,12 +188,12 @@
     {% else %}
         <div class="alert alert-warning mt-4">Aucun fichier audio trouvé.</div>
     {% endif %}
+
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('searchInput');
@@ -184,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
     const shareAudioModal = new bootstrap.Modal(document.getElementById('shareAudioModal'));
 
-    // Suggestions de recherche
     document.querySelectorAll('.share-btn').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
@@ -195,9 +211,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 bootstrap.Collapse.getInstance(collapse).hide();
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
-                setTimeout(() => {
-                    shareModal.show();
-                }, 300);
+            setTimeout(() => {
+                shareModal.show();
+            }, 300);
         });
     });
 
@@ -212,4 +228,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+<script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js" defer></script>
+<script src="https://files.bpcontent.cloud/2025/07/14/12/20250714125923-FBVCD6R3.js" defer></script>
+    
 {% endblock %}

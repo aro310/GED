@@ -7,32 +7,143 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'prof.css' %}">
+<style>
+    .user-photo {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+    }
+    .message-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    .request-card {
+        transition: all 0.3s ease;
+    }
+    .action-btn:disabled, .remark-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .toggle-file-list-btn {
+        margin-bottom: 10px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .toggle-file-list-btn:hover {
+        background-color: #5a6268;
+        transform: translateY(-1px);
+    }
+    .toggle-remarks-btn {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        color: #495057;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .toggle-remarks-btn:hover {
+        background-color: #e9ecef;
+        color: #212529;
+        text-decoration: none;
+    }
+    .remarks-container {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .remarks-container h5 {
+        color: #495057;
+        margin-bottom: 15px;
+    }
+    .remark-text {
+        color: #000000 !important;
+        margin-bottom: 0;
+    }
+    .alert-secondary {
+        background-color: #f8f9fa !important;
+        border-color: #dee2e6 !important;
+    }
+</style>
 {% endblock %}
 
 {% block main_content %}
 <div class="dashboard-container">
-    <h1>Bienvenue, {{ user.username }} (Professeur)</h1>
+    <div class="d-flex align-items-center mb-4">
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Photo de profil" class="user-photo me-3">
+        {% else %}
+            <img src="{% static 'default-avatar.png' %}" alt="Avatar par défaut" class="user-photo me-3">
+        {% endif %}
+        <h1 class="m-0">Bienvenue, {{ user.username }} (Professeur)</h1>
+    </div>
     <p>Ceci est votre tableau de bord.</p>
-    <!-- Liste des demandes de partage -->
+
+    <div class="message-container" id="message-container"></div>
+
     {% if sharing_requests %}
-        <div class="file-list">
+        <button id="toggleFileListBtn" class="btn toggle-file-list-btn" data-target="file-list-requests">
+            <i class="bi bi-eye-slash"></i> Cacher les demandes
+        </button>
+        <div class="file-list" id="file-list-requests">
             <h3>Demandes de partage reçues :</h3>
             {% for request in sharing_requests %}
-                <div class="card mb-3">
+                <div class="card mb-3 request-card" id="request-{{ request.id }}">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <strong>{{ request.sender.username }} - {{ request.document.fichier.name }}</strong>
-                        <span class="badge bg-{% if request.status == 'accepted' %}success{% elif request.status == 'rejected' %}danger{% else %}warning{% endif %}">{{ request.status }}</span>
+                        <strong>{{ request.sender.email }} - {{ request.document.fichier.name|default:"Fichier audio" }}</strong>
+                        <span class="badge bg-{% if request.status == 'accepted' %}success{% elif request.status == 'rejected' %}danger{% else %}warning{% endif %}" id="status-{{ request.id }}">{{ request.get_status_display }}</span>
                     </div>
-                    {% if request.status == 'pending' %}
-                        <div class="card-body">
-                            <form method="post" action="">
+                    <div class="card-body">
+                        {% if request.status == 'pending' %}
+                            <form class="action-form" data-request-id="{{ request.id }}">
                                 {% csrf_token %}
                                 <input type="hidden" name="request_id" value="{{ request.id }}">
-                                <button type="submit" name="accept_request" class="btn btn-success btn-sm me-2">Accepter</button>
-                                <button type="submit" name="reject_request" class="btn btn-danger btn-sm">Rejeter</button>
+                                <button type="button" name="accept_request" class="btn btn-success btn-sm me-2 action-btn" data-action="accept">Accepter</button>
+                                <button type="button" name="reject_request" class="btn btn-danger btn-sm action-btn" data-action="reject">Rejeter</button>
                             </form>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                        {% if request.status == 'accepted' %}
+                            <form class="remark-form" data-request-id="{{ request.id }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="request_id" value="{{ request.id }}">
+                                <input type="hidden" name="add_remark" value="true">
+                                <div class="mb-3">
+                                    <label for="remark_content_{{ request.id }}" class="form-label">Ajouter une remarque :</label>
+                                    <textarea class="form-control" id="remark_content_{{ request.id }}" name="remark_content" rows="3" placeholder="Écrivez votre remarque ici..." required></textarea>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm remark-btn">Envoyer la remarque</button>
+                            </form>
+
+                            {% if request.remarks.all %}
+                                <button type="button" class="toggle-remarks-btn" data-target="remarks-{{ request.id }}">
+                                    <i class="bi bi-chat-left-text"></i> Afficher les remarques
+                                </button>
+                                <div class="remarks-container mt-3 d-none" id="remarks-{{ request.id }}">
+                                    <h5>Remarques précédentes :</h5>
+                                    {% for remark in request.remarks.all %}
+                                        <div class="alert alert-secondary">
+                                            <p class="remark-text"><strong>{{ remark.author.username }}</strong> ({{ remark.created_at|date:"d/m/Y H:i" }}) : {{ remark.content }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="remarks-container mt-3 d-none" id="remarks-{{ request.id }}"></div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -40,7 +151,6 @@
         <div class="alert alert-info">Aucune demande de partage en attente.</div>
     {% endif %}
 
-    <!-- Liste des fichiers acceptés -->
     {% if accepted_files %}
         <div class="file-list mt-4">
             <h3>Fichiers acceptés :</h3>
@@ -59,22 +169,222 @@
     {% endif %}
 
     {% if accepted_audio %}
-    <h3>Audios partagés</h3>
-    <ul>
-    {% for audio in accepted_audio %}
-        <li>
-            {{ audio.name }}<br>
-            <audio controls>
-                <source src="{{ audio.url }}" type="audio/mpeg">
-            </audio>
-        </li>
-    {% endfor %}
-    </ul>
-{% endif %}
-
+        <div class="file-list mt-4">
+            <h3>Audios acceptés :</h3>
+            {% for audio in accepted_audio %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <span>{{ audio.name }}</span>
+                        <audio controls class="mt-2 w-100">
+                            <source src="{{ audio.url }}" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">Aucun fichier audio accepté pour le moment.</div>
+    {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Fonction pour afficher les messages
+    function showMessage(message, type) {
+        const container = document.getElementById('message-container');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        messageDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        container.appendChild(messageDiv);
+        setTimeout(() => {
+            messageDiv.classList.remove('show');
+            setTimeout(() => messageDiv.remove(), 300);
+        }, 5000);
+    }
+
+    // Gestion du bouton pour cacher/afficher les demandes
+    const toggleFileListBtn = document.getElementById('toggleFileListBtn');
+    if (toggleFileListBtn) {
+        toggleFileListBtn.addEventListener('click', function () {
+            const fileList = document.getElementById('file-list-requests');
+            const isHidden = fileList.classList.contains('d-none');
+            if (isHidden) {
+                fileList.classList.remove('d-none');
+                this.innerHTML = '<i class="bi bi-eye-slash"></i> Cacher les demandes';
+            } else {
+                fileList.classList.add('d-none');
+                this.innerHTML = '<i class="bi bi-eye"></i> Afficher les demandes';
+            }
+        });
+    }
+
+    // Gestion des boutons d'action (Accepter/Rejeter)
+    document.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (this.disabled) return;
+            this.disabled = true;
+            const form = this.closest('.action-form');
+            const requestId = form.dataset.requestId;
+            const action = this.dataset.action;
+            const formData = new FormData(form);
+            formData.append(action === 'accept' ? 'accept_request' : 'reject_request', 'true');
+
+            console.log(`Envoi de l'action ${action} pour la demande ${requestId}`);
+
+            fetch('/ged/prof/dashboard/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                console.log('Réponse reçue:', response.status);
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.disabled = false;
+                if (data.success) {
+                    const statusBadge = document.getElementById(`status-${requestId}`);
+                    statusBadge.textContent = data.status === 'accepted' ? 'Accepté' : 'Rejeté';
+                    statusBadge.className = `badge bg-${data.status === 'accepted' ? 'success' : 'danger'}`;
+                    showMessage(data.message, 'success');
+                    form.remove();
+
+                    if (data.status === 'accepted') {
+                        const cardBody = document.getElementById(`request-${requestId}`).querySelector('.card-body');
+                        const remarkForm = `
+                            <form class="remark-form" data-request-id="${requestId}">
+                                <input type="hidden" name="request_id" value="${requestId}">
+                                <input type="hidden" name="add_remark" value="true">
+                                <div class="mb-3">
+                                    <label for="remark_content_${requestId}" class="form-label">Ajouter une remarque :</label>
+                                    <textarea class="form-control" id="remark_content_${requestId}" name="remark_content" rows="3" placeholder="Écrivez votre remarque ici..." required></textarea>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm remark-btn">Envoyer la remarque</button>
+                            </form>
+                            <button type="button" class="toggle-remarks-btn" data-target="remarks-${requestId}">
+                                <i class="bi bi-chat-left-text"></i> Afficher les remarques
+                            </button>
+                            <div class="remarks-container mt-3 d-none" id="remarks-${requestId}"></div>
+                        `;
+                        cardBody.insertAdjacentHTML('beforeend', remarkForm);
+                        attachRemarkEvents();
+                        attachToggleEvents();
+                    }
+                } else {
+                    showMessage(data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                this.disabled = false;
+                showMessage('Erreur lors de la requête.', 'danger');
+                console.error('Erreur AJAX:', error);
+            });
+        });
+    });
+
+    // Gestion des boutons de remarque
+    function attachRemarkEvents() {
+        document.querySelectorAll('.remark-btn').forEach(button => {
+            button.removeEventListener('click', handleRemarkSubmit);
+            button.addEventListener('click', handleRemarkSubmit);
+            console.log('Écouteur attaché au bouton de remarque:', button);
+        });
+    }
+
+    // Gestion des soumissions de remarques
+    function handleRemarkSubmit(e) {
+        e.preventDefault();
+        if (this.disabled) return;
+        this.disabled = true;
+        const form = this.closest('.remark-form');
+        const requestId = form.dataset.requestId;
+        const formData = new FormData(form);
+
+        console.log('Envoi de la remarque pour la demande:', requestId);
+
+        fetch('/ged/prof/dashboard/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            console.log('Réponse reçue pour la remarque:', response.status);
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            this.disabled = false;
+            if (data.success) {
+                const remarksContainer = document.getElementById(`remarks-${requestId}`);
+                const remark = `
+                    <div class="alert alert-secondary">
+                        <p class="remark-text"><strong>${data.author}</strong> (${data.created_at}) : ${data.content}</p>
+                    </div>
+                `;
+                if (!remarksContainer.querySelector('h5')) {
+                    remarksContainer.insertAdjacentHTML('afterbegin', '<h5>Remarques précédentes :</h5>');
+                }
+                remarksContainer.insertAdjacentHTML('beforeend', remark);
+                form.querySelector('textarea').value = '';
+                showMessage(data.message, 'success');
+            } else {
+                showMessage(data.message, 'danger');
+            }
+        })
+        .catch(error => {
+            this.disabled = false;
+            showMessage('Erreur lors de l\'envoi de la remarque.', 'danger');
+            console.error('Erreur AJAX:', error);
+        });
+    }
+
+    // Gestion des boutons pour cacher/afficher les remarques
+    function attachToggleEvents() {
+        document.querySelectorAll('.toggle-remarks-btn').forEach(button => {
+            button.removeEventListener('click', toggleRemarkHandler);
+            button.addEventListener('click', toggleRemarkHandler);
+            console.log('Écouteur attaché au bouton toggle-remarks:', button);
+        });
+    }
+
+    function toggleRemarkHandler() {
+        const targetId = this.getAttribute('data-target');
+        const container = document.getElementById(targetId);
+        const isHidden = container.classList.contains('d-none');
+
+        console.log(`Basculement des remarques pour ${targetId}, caché: ${isHidden}`);
+
+        if (isHidden) {
+            container.classList.remove('d-none');
+            this.innerHTML = '<i class="bi bi-chat-left-text"></i> Cacher les remarques';
+        } else {
+            container.classList.add('d-none');
+            this.innerHTML = '<i class="bi bi-chat-left-text"></i> Afficher les remarques';
+        }
+    }
+
+    // Attacher les événements au chargement initial
+    attachRemarkEvents();
+    attachToggleEvents();
+});
+</script>
 {% endblock %}

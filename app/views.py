@@ -27,6 +27,42 @@ import pytesseract
 import traceback
 from elevenlabs.client import ElevenLabs
 from collections import defaultdict
+import logging
+import os
+from django.shortcuts import render
+from django.http import JsonResponse, StreamingHttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.conf import settings
+from .models import Document, DocumentSharingRequest, DocumentRemark
+from .gemini_api import chat_with_gemini
+from .keywords import (
+    recent_doc_keywords, sharing_keywords, regulation_keywords, greeting_keywords,
+    presentation_keywords, user_list_keywords, features_keywords, admin_keywords,
+    remark_keywords, function_intro_keywords, normalize_text
+)
+from time import time
+from elevenlabs import ElevenLabs
+import io
+from django.shortcuts import render
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from .forms import ImageUploadForm
+from .models import Document
+from PIL import Image
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+import os
+import traceback
+# Autres vues existantes...
+import os
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from .models import DocumentRemark
 
 # Configurer Tesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -51,17 +87,7 @@ def liste_fichiers(request):
     })
 
 # GED/app/views.py (extrait)
-from django.shortcuts import render
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from .forms import ImageUploadForm
-from .models import Document
-from PIL import Image
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-import os
-import traceback
+
 
 @login_required
 def upload_image(request):
@@ -70,7 +96,8 @@ def upload_image(request):
         if form.is_valid():
             image = form.cleaned_data['image']
             type_folder = form.cleaned_data.get('type_document', 'autre')
-            convertir_pdf = form.cleaned_data.get('convertir_en_pdf', True)
+            convertir_pdf = form.cleaned_data.get('convertir_en_pdf', False)
+            convertir_audio = form.cleaned_data.get('convertir_en_audio', False)
 
             # Chemin de base
             user_folder = os.path.join(settings.MEDIA_ROOT, 'documents', request.user.username, type_folder)
@@ -92,7 +119,7 @@ def upload_image(request):
                 if is_error or not texte:
                     raise Exception(texte or "Aucun texte extrait.")
 
-                # --- Création du fichier PDF si demandé ---
+                # --- Gestion du fichier selon l'option PDF ---
                 if convertir_pdf:
                     pdf_buffer = BytesIO()
                     pdf = canvas.Canvas(pdf_buffer, pagesize=A4)
@@ -105,33 +132,34 @@ def upload_image(request):
 
                     pdf_name = image.name.rsplit('.', 1)[0] + '.pdf'
                     pdf_path = os.path.join(user_folder, pdf_name)
-
                     with open(pdf_path, 'wb') as f:
                         f.write(pdf_buffer.getvalue())
                     fichier_final = os.path.join('documents', request.user.username, type_folder, pdf_name)
-
                     pdf_buffer.close()
                 else:
-                    # Si on ne convertit pas en PDF, on garde l'image originale
+                    # Si pas de conversion en PDF, on garde l'image originale
                     final_image_path = os.path.join(user_folder, image.name)
                     with open(final_image_path, 'wb+') as f:
                         f.write(open(image_path, 'rb').read())
                     fichier_final = os.path.join('documents', request.user.username, type_folder, image.name)
 
-                # --- Génération Audio ---
-                audio_name = image.name.rsplit('.', 1)[0] + '.mp3'
-                audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', request.user.username, audio_name)
-                os.makedirs(os.path.dirname(audio_path), exist_ok=True)
+                # --- Génération Audio si demandé ---
+                audio_url = None
+                if convertir_audio:
+                    audio_name = image.name.rsplit('.', 1)[0] + '.mp3'
+                    audio_path = os.path.join(settings.MEDIA_ROOT, 'audio', request.user.username, audio_name)
+                    os.makedirs(os.path.dirname(audio_path), exist_ok=True)
 
-                audio = client.text_to_speech.convert(
-                    text=texte,
-                    voice_id="pNInz6obpgDQGcFmaJgB",
-                    model_id="eleven_multilingual_v2",
-                    output_format="mp3_44100_128",
-                )
-                with open(audio_path, 'wb') as f:
-                    for chunk in audio:
-                        f.write(chunk)
+                    audio = client.text_to_speech.convert(
+                        text=texte,
+                        voice_id="aQROLel5sQbj1vuIVi6B",
+                        model_id="eleven_multilingual_v2",
+                        output_format="mp3_44100_128",
+                    )
+                    with open(audio_path, 'wb') as f:
+                        for chunk in audio:
+                            f.write(chunk)
+                    audio_url = os.path.join(settings.MEDIA_URL, 'audio', request.user.username, audio_name)
 
                 # --- Enregistrement en base de données ---
                 document = Document(
@@ -163,7 +191,7 @@ def upload_image(request):
                 return render(request, 'app/resultat.html', {
                     'document': document,
                     'texte': texte,
-                    'audio_url': os.path.join(settings.MEDIA_URL, 'audio', request.user.username, audio_name),
+                    'audio_url': audio_url,
                     'user_files': sorted(user_files_urls, key=lambda x: x['nom'].lower()),
                     'is_error': False
                 })
@@ -204,10 +232,11 @@ def login_view(request):
 def register_view(request):
     """Vue pour l'inscription d'un nouvel utilisateur."""
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            return redirect(admin_dashboard)
+        form = CustomUserCreationForm(request.POST, request.FILES)  # Inclure request.FILES
+        if  form.is_valid():
+            form.save()
+        else:
+            print("Erreurs du formulaire:", form.errors)  # Débogage des erreurs
     else:
         form = CustomUserCreationForm()
     return render(request, 'app/register.html', {'form': form})
@@ -241,7 +270,8 @@ def update_user_password(request, username):
             return render(request, 'app/password_updated.html', {'message': 'Utilisateur non trouvé'})
     return render(request, 'app/update_password.html', {'username': username})
 
-# Autres vues existantes...
+
+
 @login_required
 def admin_dashboard(request):
     if request.user.role != 'admin':
@@ -249,7 +279,7 @@ def admin_dashboard(request):
 
     # --- 1. Charger les utilisateurs ---
     CustomUser = get_user_model()
-    users = CustomUser.objects.exclude(id=request.user.id)  # éviter d'afficher l'admin lui-même
+    users = CustomUser.objects.exclude(id=request.user.id)  # ne pas afficher l'admin lui-même
 
     # --- 2. Gérer l’exploration de /media/documents/ ---
     base_path = os.path.join(settings.MEDIA_ROOT, 'documents')
@@ -258,7 +288,7 @@ def admin_dashboard(request):
     current_path = request.GET.get('path', '')
     abs_path = os.path.abspath(os.path.join(base_path, current_path))
 
-    # Sécurité : empêcher l'accès hors du dossier autorisé
+    # Sécurité : empêcher l'accès hors dossier autorisé
     if not abs_path.startswith(base_path):
         return HttpResponseForbidden("Chemin non autorisé.")
 
@@ -276,6 +306,16 @@ def admin_dashboard(request):
     except Exception as e:
         print("Erreur lecture documents :", e)
 
+    # --- 3. Gestion AJAX ---
+    if request.GET.get('ajax') == '1' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data = {
+            'folders': folders,
+            'files': files,
+            'current_path': current_path,
+        }
+        return JsonResponse(data)
+
+    # --- 4. Rendre la page complète ---
     return render(request, 'app/admin_dashboard.html', {
         'user': request.user,
         'users': users,
@@ -285,6 +325,8 @@ def admin_dashboard(request):
         'MEDIA_URL': settings.MEDIA_URL,
     })
 
+def is_ajax(request):
+    return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
 @login_required
 def profs_dashboard(request):
@@ -296,35 +338,109 @@ def profs_dashboard(request):
     accepted_files = [
         {
             'url': req.document.fichier.url,
-            'name': os.path.basename(req.document.fichier.name)
+            'name': os.path.basename(req.document.fichier.name),
+            'id': req.id
         }
         for req in sharing_requests if req.status == 'accepted' and req.document and req.document.fichier
     ]
 
     accepted_audio = [
-    {
-        'url': os.path.join(settings.MEDIA_URL, req.audio_path).replace('\\', '/'),
-        'name': os.path.basename(req.audio_path)
-    }
-    for req in sharing_requests if req.status == 'accepted' and req.audio_path
+        {
+            'url': os.path.join(settings.MEDIA_URL, req.audio_path).replace('\\', '/'),
+            'name': os.path.basename(req.audio_path),
+            'id': req.id
+        }
+        for req in sharing_requests if req.status == 'accepted' and req.audio_path
     ]
 
     if request.method == 'POST':
-        request_id = request.POST.get('request_id')
-        if 'accept_request' in request.POST:
+        # Gestion des requêtes AJAX
+        if is_ajax(request):
+            response_data = {'success': False, 'message': 'Erreur inconnue.'}
+            request_id = request.POST.get('request_id')
+
+            # Vérifier si la demande existe et éviter les doubles soumissions
             try:
                 request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+            except DocumentSharingRequest.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'Demande non trouvée.'})
+
+            if 'accept_request' in request.POST and request_obj.status == 'pending':
                 request_obj.status = 'accepted'
                 request_obj.save()
-            except DocumentSharingRequest.DoesNotExist:
-                print("Demande non trouvée")
-        elif 'reject_request' in request.POST:
-            try:
-                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                response_data = {
+                    'success': True,
+                    'message': 'Demande acceptée avec succès.',
+                    'status': 'accepted'
+                }
+            elif 'reject_request' in request.POST and request_obj.status == 'pending':
                 request_obj.status = 'rejected'
                 request_obj.save()
+                response_data = {
+                    'success': True,
+                    'message': 'Demande rejetée.',
+                    'status': 'rejected'
+                }
+            elif 'add_remark' in request.POST:
+                remark_content = request.POST.get('remark_content')
+                if remark_content:
+                    remark = DocumentRemark.objects.create(
+                        sharing_request=request_obj,
+                        author=request.user,
+                        content=remark_content
+                    )
+                    response_data = {
+                        'success': True,
+                        'message': 'Remarque ajoutée avec succès.',
+                        'author': remark.author.username,
+                        'content': remark.content,
+                        'created_at': remark.created_at.strftime('%d/%m/%Y %H:%M')
+                    }
+                else:
+                    response_data = {'success': False, 'message': 'Le contenu de la remarque est vide.'}
+            return JsonResponse(response_data)
+
+        # Gestion des requêtes non-AJAX (pour compatibilité)
+        if 'accept_request' in request.POST:
+            try:
+                request_id = request.POST.get('request_id')
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                if request_obj.status == 'pending':
+                    request_obj.status = 'accepted'
+                    request_obj.save()
+                    messages.success(request, "Demande acceptée avec succès.")
+                else:
+                    messages.error(request, "La demande a déjà été traitée.")
             except DocumentSharingRequest.DoesNotExist:
-                print("Demande non trouvée")
+                messages.error(request, "Demande non trouvée.")
+        elif 'reject_request' in request.POST:
+            try:
+                request_id = request.POST.get('request_id')
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                if request_obj.status == 'pending':
+                    request_obj.status = 'rejected'
+                    request_obj.save()
+                    messages.error(request, "Demande rejetée.")
+                else:
+                    messages.error(request, "La demande a déjà été traitée.")
+            except DocumentSharingRequest.DoesNotExist:
+                messages.error(request, "Demande non trouvée.")
+        elif 'add_remark' in request.POST:
+            request_id = request.POST.get('request_id')
+            remark_content = request.POST.get('remark_content')
+            try:
+                request_obj = DocumentSharingRequest.objects.get(id=request_id, receiver=request.user)
+                if remark_content:
+                    DocumentRemark.objects.create(
+                        sharing_request=request_obj,
+                        author=request.user,
+                        content=remark_content
+                    )
+                    messages.success(request, "Remarque ajoutée avec succès.")
+                else:
+                    messages.error(request, "Le contenu de la remarque est vide.")
+            except DocumentSharingRequest.DoesNotExist:
+                messages.error(request, "Demande non trouvée.")
 
     return render(request, 'app/prof_dashboard.html', {
         'user': request.user,
@@ -339,6 +455,8 @@ def profs_dashboard(request):
 def etudiant_dashboard(request):
     user = request.user
     query = request.GET.get('q', '').strip()
+
+    messages.get_messages(request).used = True
 
     grouped_files = defaultdict(list)
     grouped_audio_files = defaultdict(list)
@@ -398,6 +516,8 @@ def etudiant_dashboard(request):
         except Exception as e:
             print(f"Erreur lors de l'exploration de /audio : {e}")
 
+    sent_requests = DocumentSharingRequest.objects.filter(sender=user).select_related('document', 'receiver').order_by('-created_at')
+
     # ---------------------
     # 3. Partage de document
     if request.method == 'POST' and 'share_document' in request.POST:
@@ -447,7 +567,20 @@ def etudiant_dashboard(request):
         'media_url': settings.MEDIA_URL,
         'query': query,
         'all_files': ["/".join([key, f['nom']]) for key in grouped_files for f in grouped_files[key]],
-        'professors': professors
+        'professors': professors,
+        'sent_requests': sent_requests,
+    })
+
+@login_required
+def notifications(request):
+    user = request.user
+    # Récupérer les demandes de partage envoyées par l'étudiant
+    messages.get_messages(request).used = True
+    sent_requests = DocumentSharingRequest.objects.filter(sender=user).select_related('document', 'receiver').order_by('-created_at')
+
+    return render(request, 'app/notifications.html', {
+        'user': user,
+        'sent_requests': sent_requests,
     })
 
 @login_required
@@ -456,55 +589,6 @@ def secretariat_dashboard(request):
 
 from collections import defaultdict
 
-
-    
-# Configuration de MediaPipe FaceMesh
-mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh(
-    max_num_faces=1,
-    refine_landmarks=True,
-    min_detection_confidence=0.7,
-    min_tracking_confidence=0.7,
-    static_image_mode=False
-)
-
-def compute_landmark_distances(landmarks, img_shape=None):
-    """Calcule les distances normalisées entre les points clés du visage."""
-    if not landmarks:
-        return None
-        
-    # Points clés (yeux, nez, bouche, contour visage)
-    key_points = [33, 133, 362, 263, 1, 168, 199, 4, 5, 195, 197]
-    distances = []
-    
-    # Conversion en coordonnées pixels si l'image est fournie
-    if img_shape:
-        h, w = img_shape[:2]
-        landmarks = [(lm.x * w, lm.y * h) for lm in landmarks]
-    
-    # Calcul des distances euclidiennes
-    for i in range(len(key_points)):
-        for j in range(i + 1, len(key_points)):
-            p1 = landmarks[key_points[i]]
-            p2 = landmarks[key_points[j]]
-            
-            if img_shape:
-                dist = np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
-            else:
-                dist = np.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
-            
-            distances.append(dist)
-    
-    # Normalisation par la distance inter-oculaire
-    if img_shape:
-        left_eye = landmarks[33]
-        right_eye = landmarks[263]
-        norm_factor = np.sqrt((left_eye[0] - right_eye[0])**2 + (left_eye[1] - right_eye[1])**2)
-    else:
-        norm_factor = np.sqrt((landmarks[33].x - landmarks[263].x)**2 + 
-                              (landmarks[33].y - landmarks[263].y)**2)
-    
-    return np.array(distances) / (norm_factor + 1e-8)  # Évite la division par zéro
 
 @csrf_exempt
 def face_view(request):
@@ -658,3 +742,246 @@ def delete_entry(request):
 
 
 
+
+
+# Configurer le logging avec rotation
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] [User: %(username)s] - %(message)s',
+    handlers=[
+        logging.handlers.RotatingFileHandler(
+            'gedbot.log', maxBytes=1024*1024, backupCount=5, encoding='utf-8'
+        ),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+@login_required
+def gemini_chat(request):
+    start_time = time()  # Début du chronométrage
+    response_text = None
+    user = request.user
+
+    # Vérifier si c'est la première interaction
+    if 'first_interaction' not in request.session:
+        request.session['first_interaction'] = True
+    is_first_interaction = request.session.get('first_interaction', False)
+
+    if request.method == "POST":
+        user_input = request.POST.get("message", "").lower().strip()
+        normalized_input = normalize_text(user_input)
+        logger.info(f"Utilisateur {user.username} (rôle: {user.role}) a envoyé : {user_input} (normalisé: {normalized_input})", extra={'username': user.username})
+
+        # Mettre à jour le statut après la première interaction
+        if is_first_interaction:
+            request.session['first_interaction'] = False
+
+        # Préparer le contexte de base pour l'IA
+        if is_first_interaction:
+            context = f"Tu es GEDbot, un assistant IA amical de l'application GED de l'ESTI. C'est la première interaction avec {user.username} ({user.role}). Accueille avec 'Salut' ou 'Bonjour' et réponds en français, de manière engageante. Si hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD', 'remarques profs', 'introduire fonction'). Question : {user_input}"
+        else:
+            context = f"Tu es GEDbot, un assistant IA utile de l'application GED de l'ESTI. Réponds à {user.username} ({user.role}) en français, de manière engageante, sans salutation répétitive. Si hors sujet, invite à poser une question pertinente (ex. 'documents récents', 'partager', 'règles LMD', 'remarques profs', 'introduire fonction'). Question : {user_input}"
+
+        # Enrichir le contexte selon l'intention détectée
+        if any(keyword in normalized_input for keyword in greeting_keywords):
+            context += f"\nContexte : L'utilisateur te salue avec '{user_input}'. Réponds avec une salutation personnalisée comme 'Salut {user.username} !' ou 'Hey {user.username}, ravi de te voir !', en restant naturel et engageant."
+
+        elif any(keyword in normalized_input for keyword in presentation_keywords):
+            if is_first_interaction:
+                context += "\nContexte : L'utilisateur te demande de te présenter. Décris ton rôle à l'ESTI avec un 'Salut'."
+            else:
+                context += "\nContexte : L'utilisateur te demande de te présenter. Décris ton rôle à l'ESTI sans salutation."
+
+        elif any(keyword in normalized_input for keyword in user_list_keywords):
+            CustomUser = get_user_model()
+            users = CustomUser.objects.all()
+            if users.exists():
+                user_list = "\n".join(f"- {u.username} ({u.role})" for u in users)
+                context += f"\nDonnées : Liste des utilisateurs enregistrés à l'ESTI :\n{user_list}"
+            else:
+                context += "\nDonnées : Aucun utilisateur enregistré pour l’instant."
+
+        elif any(keyword in normalized_input for keyword in recent_doc_keywords):
+            docs = Document.objects.filter(uploaded_by=user).order_by("-date_ajout")[:5]
+            if docs.exists():
+                doc_list = "\n".join(
+                    f"- {os.path.basename(d.fichier.name)} ({d.date_ajout.strftime('%d/%m/%Y')}) [{d.get_type_document_display()}]"
+                    for d in docs
+                )
+                context += f"\nDonnées : Les documents récents de {user.username} sont :\n{doc_list}"
+            else:
+                context += f"\nDonnées : {user.username} n'a pas encore de documents récents."
+
+        elif any(keyword in normalized_input for keyword in sharing_keywords):
+            requests = DocumentSharingRequest.objects.filter(sender=user).order_by("-created_at")
+            if requests.exists():
+                req_list = "\n".join(
+                    f"- {req.receiver.username} ({req.status}) [{os.path.basename(req.document.fichier.name) if req.document else req.audio_path}]"
+                    for req in requests if req.document or req.audio_path
+                )
+                context += f"\nDonnées : Les demandes de partage de {user.username} sont :\n{req_list}"
+            else:
+                context += f"\nDonnées : {user.username} n'a pas encore de demandes de partage."
+
+        elif any(keyword in normalized_input for keyword in regulation_keywords):
+            context += (
+                "\nDonnées : Règles LMD à l’ESTI 2024-2025 :\n"
+                "✔️ Admis : Toutes les UE validées.\n"
+                "🟡 Admissible : Passage avec UE à rattraper.\n"
+                "🔁 Redoublement : Moyenne ≤ 10/20.\n"
+                "📌 UE validée si moyenne ≥ 10/20 (coefficient = crédits).\n"
+                "⚠️ Note < 5/20 annule la validation.\n"
+                "📈 Passage L2/L3 : Moyenne ≥ 10/20.\n"
+                "🎓 Parcours L2 : Réseaux/Systèmes ou Intégration/Développement."
+            )
+
+        elif any(keyword in normalized_input for keyword in features_keywords):
+            context += (
+                "\nContexte : L'utilisateur te demande tes fonctionnalités. Réponds : L'application GED est réputée pour la reconnaissance faciale par utilisateur, "
+                "mais cela nécessite l'approbation de l'admin, M. Finoana. De plus, elle peut transformer des images en PDF via OCR. Invite à demander de l'aide si pertinent."
+            )
+
+        elif any(keyword in normalized_input for keyword in admin_keywords):
+            context += "\nContexte : L'utilisateur te demande qui est l'admin. Réponds avec : L'admin est M. Finoana."
+
+        elif any(keyword in normalized_input for keyword in remark_keywords):
+            prof_remarks = DocumentRemark.objects.filter(
+                sharing_request__sender=user,
+                sharing_request__receiver__role='prof',
+                author__role='prof'
+            ).order_by('-created_at')[:3]
+            if prof_remarks.exists():
+                remark_list = "\n".join(
+                    f"- {r.author.username} ({r.created_at.strftime('%d/%m/%Y')}) : {r.content[:50]}..."
+                    for r in prof_remarks
+                )
+                context += f"\nDonnées : Remarques des profs sur les partages de {user.username} :\n{remark_list}"
+            else:
+                context += f"\nDonnées : Aucun commentaire de profs sur les partages de {user.username}."
+
+        elif any(keyword in normalized_input for keyword in function_intro_keywords):
+            context += (
+                "\nContexte : L'utilisateur demande à introduire une fonction. Réponds : Je peux introduire une nouvelle fonctionnalité ! "
+                "Par exemple, une fonction de recherche avancée de documents est en cours de développement. Elle te permettra de trouver rapidement tes fichiers par mot-clé. "
+                "Dis-moi si tu veux plus d’infos ou une démo !"
+            )
+
+        # Appel à l'IA pour générer la réponse textuelle
+        response_text = chat_with_gemini(context)
+        logger.info(f"Utilisateur {user.username} - Réponse générée par chat_with_gemini : {response_text[:100]}...", extra={'username': user.username})
+
+        # Vérification et secours si la réponse IA est vide ou hors sujet
+        if not response_text or any(phrase in response_text.lower() for phrase in ["je ne sais pas", "hors sujet", "erreur"]):
+            positive_words = ["merci", "super", "bien", "cool"]
+            negative_words = ["problème", "erreur", "aide", "bug"]
+            sentiment = "neutre"
+            if any(word in normalized_input for word in positive_words):
+                sentiment = "positif"
+            elif any(word in normalized_input for word in negative_words):
+                sentiment = "négatif"
+
+            if sentiment == "positif":
+                response_text = (
+                    f"Content que tu sois de bonne humeur, {user.username} ! 😄 Je n’ai pas compris '{user_input}', "
+                    "mais dis-m’en plus sur tes docs ou tes profs !"
+                )
+            elif sentiment == "négatif":
+                response_text = (
+                    f"Oups, {user.username}, un souci avec '{user_input}' ? Je suis là pour aider ! "
+                    "Parle-moi de tes documents ou d’un problème."
+                )
+            else:
+                response_text = (
+                    f"Hmm, {user.username}, '{user_input}' me laisse perplexe. Je suis GEDbot, ton IA à l’ESTI ! "
+                    "Essaie 'documents récents', 'partager', 'règles LMD', 'remarques profs', ou 'introduire fonction' !"
+                )
+            logger.warning(f"Utilisateur {user.username} - Réponse IA invalide, secours activé (sentiment: {sentiment})", extra={'username': user.username})
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'response': response_text})
+
+    execution_time = time() - start_time
+    logger.debug(f"Utilisateur {user.username} - Exécution terminée en {execution_time:.2f} secondes", extra={'username': user.username})
+
+    return render(request, "app/gemini_chat.html", {"response": response_text})
+
+@login_required
+def generate_audio(request):
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        text = request.POST.get("text", "")
+        api_key = settings.ELEVENLABS_API_KEY
+        if not api_key:
+            logger.error("Clé API ElevenLabs non trouvée dans settings.py.")
+            return JsonResponse({'error': "Clé API ElevenLabs manquante."})
+
+        client = ElevenLabs(api_key=api_key)
+        voice_id = "pNInz6obpgDQGcFmaJgB"  # Ton voice_id valide
+
+        try:
+            # Convertir le texte en audio (retourne un générateur)
+            audio_stream = client.text_to_speech.convert(
+                text=text,
+                voice_id=voice_id,
+                model_id="eleven_multilingual_v2",
+                output_format="mp3_44100_128"
+            )
+            # Consommer le générateur et collecter les bytes
+            audio_bytes = b"".join(audio_stream)
+            logger.info(f"Audio généré, taille : {len(audio_bytes)} octets")
+
+            audio_file = io.BytesIO(audio_bytes)
+            audio_file.seek(0)
+
+            def stream_audio():
+                yield audio_file.read()  # Lire tout le contenu en une fois
+
+            response = StreamingHttpResponse(stream_audio(), content_type="audio/mpeg")
+            response['Content-Disposition'] = 'inline; filename="gedbot_response.mp3"'
+            return response
+        except Exception as e:
+            logger.error(f"Erreur avec ElevenLabs : {str(e)}")
+            return JsonResponse({'error': f"Erreur audio : {str(e)}"})
+    return JsonResponse({'error': "Méthode non autorisée."})
+
+
+import matplotlib.pyplot as plt
+import io
+import base64
+from django.shortcuts import render
+from .models import Document
+
+def graphique_documents_view(request):
+    # Statistiques : Nombre de documents par type
+    data = Document.objects.values('type_document')
+    type_counts = {}
+    for item in data:
+        type_doc = item['type_document']
+        type_counts[type_doc] = type_counts.get(type_doc, 0) + 1
+
+    # Préparer données pour matplotlib
+    labels = list(type_counts.keys())
+    values = list(type_counts.values())
+
+    # Générer le graphique
+    plt.figure(figsize=(8, 5))
+    plt.plot(labels, values, color='skyblue')
+    plt.title("Nombre de documents par type")
+    plt.xlabel("Type de document")
+    plt.ylabel("Nombre")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Sauvegarder dans un buffer
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+    plt.close()
+
+    # Encoder en base64 pour HTML
+    graphic = base64.b64encode(image_png).decode('utf-8')
+
+    # Renvoyer à un template HTML
+    return render(request, 'app/graphique_documents.html', {'graphic': graphic})

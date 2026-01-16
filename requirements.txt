@@ -1,8 +1,19 @@
-Django
-opencv-python
-numpy
-mediapipe
-Pillow
-reportlab
-pytesseract
-elevenlabs
+asgiref==3.8.1
+Django==5.2.2
+face-recognition==1.3.0
+face-recognition-models==0.3.0
+google-generativeai==0.8.5
+matplotlib
+mediapipe>=0.10.30,<0.11
+numpy==1.26.4
+opencv-python==4.11.0.86
+pillow==10.2.0
+pytesseract==0.3.13
+reportlab==4.4.2
+sqlparse==0.5.3
+elevenlabs==2.3.0
+dlib @ https://github.com/aro310/GED/releases/download/v1.0/dlib_bin-20.0.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+gunicorn
+whitenoise
+#dlib @ file:///C:/Users/ADMIN/Downloads/dlib-19.22.99-cp310-cp310-win_amd64.whl #remplacez par lien du fichier whl du projet ged
+

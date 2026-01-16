@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS=[
+    "https://*.trycloudflare.com"
+]
+
 
 
 # Application definition
@@ -44,12 +48,15 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
 
 ROOT_URLCONF = 'GED.urls'
 
@@ -136,4 +143,32 @@ APPEND_SLASH = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY', 'sk_55524b9c3e4677f0e279ec7db556e1d9d9e3b90a5329e83e')
+ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY', 'sk_b15828ef829138a668570cf2e049bbee8b474c79dbc5e8e6')#sk_6ac41ace41d5569923b6cd1e2f48461cdc146299e585b922 sk_55524b9c3e4677f0e279ec7db556e1d9d9e3b90a5329e83e
+
+#Doué : sk_b15828ef829138a668570cf2e049bbee8b474c79dbc5e8e6
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'gedbot.log',
+            'maxBytes': 1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

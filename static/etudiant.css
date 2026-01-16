@@ -70,6 +70,14 @@ body {
 }
 
 /* Modal */
+.modal {
+    z-index: 1060 !important;
+}
+
+.modal-dialog {
+    margin: auto;
+}
+
 .modal-content {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
@@ -89,10 +97,10 @@ body {
 }
 
 .modal-body {
-padding: 1.5rem;
-background: rgba(20, 20, 40, 0.95);
-border-radius: 0 0 12px 12px;
-transition: background-color var(--transition-speed);
+    padding: 1.5rem;
+    background: rgba(20, 20, 40, 0.95);
+    border-radius: 0 0 12px 12px;
+    transition: background-color var(--transition-speed);
 }
 
 .modal-body .form-control, .modal-body .form-select {
@@ -110,25 +118,14 @@ transition: background-color var(--transition-speed);
     color: #aaa !important;
 }
 
-/* Correctif du backdrop */
-.modal-backdrop.show {
-    opacity: 0.3 !important;
-    background-color: #000 !important;
-    z-index: 1050;
-}
-
 .modal-body .form-select option {
-background: rgba(30, 30, 60, 0.9);
-color: white;
+    background: rgba(30, 30, 60, 0.9);
+    color: white;
 }
 
 .modal-body .form-select:focus {
-border-color: var(--pharma-blue);
-box-shadow: 0 0 0 0.25rem rgba(51, 153, 255, 0.25);
-}
-
-.modal {
-    z-index: 1060 !important;
+    border-color: var(--pharma-blue);
+    box-shadow: 0 0 0 0.25rem rgba(51, 153, 255, 0.25);
 }
 
 /* Barre de recherche */

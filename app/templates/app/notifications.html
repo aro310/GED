@@ -1,0 +1,85 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'etudiant.css' %}">
+<style>
+    .user-photo {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+    }
+    .dashboard-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .alert-secondary {
+        background-color: #c1b1b1 !important;
+        color: #ffffff !important;
+        border-color: #4c4646 !important;
+        border-radius: 5px;
+        padding: 15px;
+    }
+    .remark-text {
+        margin-bottom: 0;
+        color: #1d1c1c !important;
+    }
+    h5{
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="dashboard-container">
+    <div class="d-flex align-items-center mb-4">
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Photo de profil" class="user-photo me-3">
+        {% else %}
+            <img src="{% static 'default-avatar.png' %}" alt="Avatar par défaut" class="user-photo me-3">
+        {% endif %}
+        <h1 class="m-0">Notifications pour {{ user.username }}</h1>
+    </div>
+    <p>Vos demandes de partage et remarques reçues.</p>
+
+    <!-- Liste des demandes de partage -->
+    {% if sent_requests %}
+        <div class="file-list">
+            <h3>Vos demandes de partage :</h3>
+            {% for request in sent_requests %}
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <strong>Envoyé à {{ request.receiver.username }} - {{ request.document.fichier.name|default:request.audio_path }}</strong>
+                        <span class="badge bg-{% if request.status == 'accepted' %}success{% elif request.status == 'rejected' %}danger{% else %}warning{% endif %}">{{ request.get_status_display }}</span>
+                    </div>
+                    <div class="card-body">
+                        {% if request.remarks.all %}
+                            <h5>Remarques reçues :</h5>
+                            {% for remark in request.remarks.all %}
+                                <div class="alert alert-secondary">
+                                    <p class="remark-text"><strong>{{ remark.author.username }}</strong> ({{ remark.created_at|date:"d/m/Y H:i" }}) : {{ remark.content }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>Aucune remarque pour cette demande.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-4">Aucune demande de partage envoyée.</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
